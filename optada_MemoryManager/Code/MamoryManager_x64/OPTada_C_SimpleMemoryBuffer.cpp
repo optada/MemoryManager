@@ -1,8 +1,8 @@
-#include "OPTada_Memory_C_SimpleMemoryBuffer.h"
+#include "OPTada_C_SimpleMemoryBuffer.h"
 
-void * OPTada_Memory_C_SimpleMemoryBuffer::TakeMemoryMethod(size_t New_size_)
+void * OPTada_C_SimpleMemoryBuffer::TakeMemoryMethod(size_t New_size_)
 {
-	OPTada_Memory_S_CyclicMemoryElemsBufferElement * elem = FreeCells_Buffer;
+	OPTada_S_CyclicMemoryElemsBufferElement * elem = FreeCells_Buffer;
 	if (New_size_ < 1)
 		return NULL;
 
@@ -70,7 +70,7 @@ void * OPTada_Memory_C_SimpleMemoryBuffer::TakeMemoryMethod(size_t New_size_)
 			{ // если не ноль - обновить free €чейку и создать lock €чейку
 
 				// добавили новую €чейку дл€ дальнейшего делени€
-				OPTada_Memory_S_CyclicMemoryElemsBufferElement * new_elem = Elem_Buffer->Get_Element();
+				OPTada_S_CyclicMemoryElemsBufferElement * new_elem = Elem_Buffer->Get_Element();
 				if (new_elem == NULL)
 					return NULL;
 
@@ -133,11 +133,11 @@ void * OPTada_Memory_C_SimpleMemoryBuffer::TakeMemoryMethod(size_t New_size_)
 }
 
 
-OPTada_Memory_C_SimpleMemoryBuffer::OPTada_Memory_C_SimpleMemoryBuffer(size_t Size_, size_t Elem_Buffer_Size_, size_t Cell_Size_)
+OPTada_C_SimpleMemoryBuffer::OPTada_C_SimpleMemoryBuffer(size_t Size_, size_t Elem_Buffer_Size_, size_t Cell_Size_)
 {
 	Buffer = (char *)malloc(Size_); // создание буффера
-	Elem_Buffer = (OPTada_Memory_C_CyclicMemoryElemsBuffer *)malloc(sizeof(OPTada_Memory_C_CyclicMemoryElemsBuffer)); // создание дополнительного класса-буффера
-	Elem_Buffer->OPTada_Memory_C_CyclicMemoryElemsBuffer::OPTada_Memory_C_CyclicMemoryElemsBuffer(Elem_Buffer_Size_);
+	Elem_Buffer = (OPTada_C_CyclicMemoryElemsBuffer *)malloc(sizeof(OPTada_C_CyclicMemoryElemsBuffer)); // создание дополнительного класса-буффера
+	Elem_Buffer->OPTada_C_CyclicMemoryElemsBuffer::OPTada_C_CyclicMemoryElemsBuffer(Elem_Buffer_Size_);
 	Buffer_Length = Size_;
 	Locked = 0;
 	LockedCells_Buffer = NULL;
@@ -157,11 +157,11 @@ OPTada_Memory_C_SimpleMemoryBuffer::OPTada_Memory_C_SimpleMemoryBuffer(size_t Si
 	}
 }
 
-OPTada_Memory_C_SimpleMemoryBuffer::~OPTada_Memory_C_SimpleMemoryBuffer()
+OPTada_C_SimpleMemoryBuffer::~OPTada_C_SimpleMemoryBuffer()
 {
 	if (Elem_Buffer != NULL)
 	{
-		Elem_Buffer->~OPTada_Memory_C_CyclicMemoryElemsBuffer();
+		Elem_Buffer->~OPTada_C_CyclicMemoryElemsBuffer();
 		free(Elem_Buffer);
 		Elem_Buffer = NULL;
 	}
@@ -169,10 +169,10 @@ OPTada_Memory_C_SimpleMemoryBuffer::~OPTada_Memory_C_SimpleMemoryBuffer()
 		free(Buffer);
 }
 
-bool OPTada_Memory_C_SimpleMemoryBuffer::Clear_Buffer()
+bool OPTada_C_SimpleMemoryBuffer::Clear_Buffer()
 {
 	// проходим по всем €чейкам и возвращаем их
-	OPTada_Memory_S_CyclicMemoryElemsBufferElement * cellDell = FirstCell_Buffer->Next_el; // передаем ¬“ќ–ќ… элемент
+	OPTada_S_CyclicMemoryElemsBufferElement * cellDell = FirstCell_Buffer->Next_el; // передаем ¬“ќ–ќ… элемент
 
 	if (!Elem_Buffer) // если нету буффера
 		return false;
@@ -209,16 +209,16 @@ bool OPTada_Memory_C_SimpleMemoryBuffer::Clear_Buffer()
 	return true;
 }
 
-void * OPTada_Memory_C_SimpleMemoryBuffer::GetMemory(size_t New_Length_)
+void * OPTada_C_SimpleMemoryBuffer::GetMemory(size_t New_Length_)
 {
 	return TakeMemoryMethod(New_Length_);
 }
 
-bool OPTada_Memory_C_SimpleMemoryBuffer::ReturnMemory(void * Link_)
+bool OPTada_C_SimpleMemoryBuffer::ReturnMemory(void * Link_)
 {
 	if (Link_ != NULL && (Link_ >= Buffer && Link_ <= &Buffer[Buffer_Length]))
 	{ // нашло ссылку в нашем диапазоне буффера
-		OPTada_Memory_S_CyclicMemoryElemsBufferElement * elem = LockedCells_Buffer;
+		OPTada_S_CyclicMemoryElemsBufferElement * elem = LockedCells_Buffer;
 		while (elem)
 		{
 			if (elem->Link == Link_)
@@ -255,7 +255,7 @@ bool OPTada_Memory_C_SimpleMemoryBuffer::ReturnMemory(void * Link_)
 				Locked -= elem->Size; // освободили размер
 				elem->free = true;
 
-				OPTada_Memory_S_CyclicMemoryElemsBufferElement * dell_elem = NULL;
+				OPTada_S_CyclicMemoryElemsBufferElement * dell_elem = NULL;
 
 				// ищем соседей дл€ слити€ (если не нашли - просто перенос в free) - kill sam sel f :(
 				if (elem->Previous_el) // поиск элемента слева (предидущий)
@@ -356,7 +356,7 @@ bool OPTada_Memory_C_SimpleMemoryBuffer::ReturnMemory(void * Link_)
 	}
 }
 
-bool OPTada_Memory_C_SimpleMemoryBuffer::Get_TestBuffer()
+bool OPTada_C_SimpleMemoryBuffer::Get_TestBuffer()
 {
 	if (Buffer != NULL && Buffer_Length > 0 && FirstCell_Buffer != NULL && FreeCells_Buffer != NULL && Elem_Buffer != NULL && Cell_Size > 0)
 	{
@@ -368,7 +368,7 @@ bool OPTada_Memory_C_SimpleMemoryBuffer::Get_TestBuffer()
 	}
 }
 
-size_t OPTada_Memory_C_SimpleMemoryBuffer::Get_LockedMemory()
+size_t OPTada_C_SimpleMemoryBuffer::Get_LockedMemory()
 {
 	if (Buffer_Length > 0)
 		return Locked;
@@ -376,7 +376,7 @@ size_t OPTada_Memory_C_SimpleMemoryBuffer::Get_LockedMemory()
 		return 0;
 }
 
-size_t OPTada_Memory_C_SimpleMemoryBuffer::Get_AllModulesLockedMemory()
+size_t OPTada_C_SimpleMemoryBuffer::Get_AllModulesLockedMemory()
 {
 	if (Buffer_Length > 0)
 		return (Elem_Buffer->Get_LockedAllMemory() + Buffer_Length);
@@ -384,7 +384,7 @@ size_t OPTada_Memory_C_SimpleMemoryBuffer::Get_AllModulesLockedMemory()
 		return 0;
 }
 
-size_t OPTada_Memory_C_SimpleMemoryBuffer::Get_Size()
+size_t OPTada_C_SimpleMemoryBuffer::Get_Size()
 {
 	return Buffer_Length;
 }

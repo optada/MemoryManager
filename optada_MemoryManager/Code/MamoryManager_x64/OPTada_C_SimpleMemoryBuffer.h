@@ -1,19 +1,19 @@
 #pragma once
 
-#include "OPTada_Memory_C_TemplateMemoryBuffer.h"
+#include "OPTada_C_TemplateMemoryBuffer.h"
 
 
 // Класс - стандартный буффер памяти 
 // Желательно использовать для одноразовой загрузки данных или для данных на полную перезапись 
 // При запроссе пытается найти ячейку с достаточным объемом, отделяет от нее необходимый кусок и выдает пользователю
-class OPTada_Memory_C_SimpleMemoryBuffer : public OPTada_Memory_C_TemplateMemoryBuffer
+class OPTada_C_SimpleMemoryBuffer : public OPTada_C_TemplateMemoryBuffer
 {
 protected:
 
-	OPTada_Memory_S_CyclicMemoryElemsBufferElement * FirstCell_Buffer = NULL;   // Указатель на первую ячейку
-	OPTada_Memory_S_CyclicMemoryElemsBufferElement * FreeCells_Buffer = NULL;   // Буфеер свободных ячеек
-	OPTada_Memory_S_CyclicMemoryElemsBufferElement * LockedCells_Buffer = NULL; // Буффер заблокированных ячеек
-	OPTada_Memory_C_CyclicMemoryElemsBuffer * Elem_Buffer = NULL; // Буффер с ячейками - элементами (для выдачи и получения)
+	OPTada_S_CyclicMemoryElemsBufferElement * FirstCell_Buffer = NULL;   // Указатель на первую ячейку
+	OPTada_S_CyclicMemoryElemsBufferElement * FreeCells_Buffer = NULL;   // Буфеер свободных ячеек
+	OPTada_S_CyclicMemoryElemsBufferElement * LockedCells_Buffer = NULL; // Буффер заблокированных ячеек
+	OPTada_C_CyclicMemoryElemsBuffer * Elem_Buffer = NULL; // Буффер с ячейками - элементами (для выдачи и получения)
 
 	size_t Cell_Size = 0; // коэфициент деления инфрормации (для уменьшения фрагментации) (байт)
 
@@ -27,10 +27,10 @@ public:
 	// [in] size_t Size_ // Размер создаваемого буффера (байт)
 	// [in] size_t Elem_Buffer_Size_ // Размер буффера элементов (дополнительный буффер) (колличество элементов)
 	// [in] size_t Cell_Size_ // Размер ячейки (коэфициента деления) для уменьшения фрагментации
-	OPTada_Memory_C_SimpleMemoryBuffer(size_t Size_, size_t Elem_Buffer_Size_, size_t Cell_Size_);
+	OPTada_C_SimpleMemoryBuffer(size_t Size_, size_t Elem_Buffer_Size_, size_t Cell_Size_);
 
 	//Деструктор OPTada_Memory_C_SimpleMemoryBuffer
-	~OPTada_Memory_C_SimpleMemoryBuffer();
+	~OPTada_C_SimpleMemoryBuffer();
 
 
 	// !!! ВНИМАНИЕ !!! память помечается свободной и не вызывает деструктор(ы)

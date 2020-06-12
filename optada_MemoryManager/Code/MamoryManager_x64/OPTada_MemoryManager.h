@@ -1,8 +1,8 @@
 #pragma once
 
-#include "OPTada_Memory_C_TemplateMemoryBuffer.h"
-#include "OPTada_Memory_C_SimpleMemoryBuffer.h"
-#include "OPTada_Memory_C_MultithreadedSimpleMemoryBuffer.h"
+#include "OPTada_C_TemplateMemoryBuffer.h"
+#include "OPTada_C_SimpleMemoryBuffer.h"
+#include "OPTada_C_MultithreadedSimpleMemoryBuffer.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // ВНИМАНИЕ!!! ПРОВЕРКИ НА ОШИБКИ ЕСТЬ, НО НЕТУ ЛОГИКИ ДЕЙСТВИЙ ПРИ ОШИБКАХ В КОНСТРУКТОРАХ!!! //
@@ -25,7 +25,7 @@ struct OPTada_Memory_S_MemoryManedger
 struct OPTada_Memory_S_MemoryManagerElement_Memory
 {
 public:
-	OPTada_Memory_C_TemplateMemoryBuffer * Buffer = NULL; // ссылка на общий класс (элемент - буффер)
+	OPTada_C_TemplateMemoryBuffer * Buffer = NULL; // ссылка на общий класс (элемент - буффер)
 	bool Element_locked = false; // false - ячейка свободна | true - заблокирована (занята)
 	int BufferType = 0; // тип буффера
 };

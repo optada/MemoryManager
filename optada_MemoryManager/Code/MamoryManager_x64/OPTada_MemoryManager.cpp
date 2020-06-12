@@ -20,9 +20,9 @@ bool OPTada_MemoryManager::Init_Mamager(int Size_buff_)
 	new_elem_ = &Elem_buffer[0];
 	new_elem_->BufferType = 2; // установка для первого буфера тип стандартного ячеистого
 	new_elem_->Element_locked = true;
-	new_elem_->Buffer = (OPTada_Memory_C_TemplateMemoryBuffer *)malloc(sizeof(OPTada_Memory_C_MultithreadedSimpleMemoryBuffer)); // запрос памяти
+	new_elem_->Buffer = (OPTada_C_TemplateMemoryBuffer *)malloc(sizeof(OPTada_C_MultithreadedSimpleMemoryBuffer)); // запрос памяти
 	// создали и инициализировали
-	((OPTada_Memory_C_MultithreadedSimpleMemoryBuffer *)new_elem_->Buffer)->OPTada_Memory_C_MultithreadedSimpleMemoryBuffer::OPTada_Memory_C_MultithreadedSimpleMemoryBuffer(OPTada_Memory_DEF_StandartSizeNewBuffer, OPTada_Memory_DEF_StandartSizeNewBufferElems, OPTada_Memory_DEF_StandartSizeNewBufferCellSize);
+	((OPTada_C_MultithreadedSimpleMemoryBuffer *)new_elem_->Buffer)->OPTada_C_MultithreadedSimpleMemoryBuffer::OPTada_C_MultithreadedSimpleMemoryBuffer(OPTada_Memory_DEF_StandartSizeNewBuffer, OPTada_Memory_DEF_StandartSizeNewBufferElems, OPTada_Memory_DEF_StandartSizeNewBufferCellSize);
 	if (!new_elem_->Buffer->Get_TestBuffer())
 		return false;
 

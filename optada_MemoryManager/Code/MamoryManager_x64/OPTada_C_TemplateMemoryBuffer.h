@@ -1,9 +1,9 @@
 #pragma once
 
-#include "OPTada_Memory_C_CyclicMemoryElemsBuffer.h"
+#include "OPTada_C_CyclicMemoryElemsBuffer.h"
 
 // класс - шаблон для различных буфферов +
-class OPTada_Memory_C_TemplateMemoryBuffer
+class OPTada_C_TemplateMemoryBuffer
 {
 protected:
 

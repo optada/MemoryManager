@@ -1,12 +1,12 @@
 #pragma once
 
-#include "OPTada_Memory_C_SimpleMemoryBuffer.h"
+#include "OPTada_C_SimpleMemoryBuffer.h"
 
 
 // Класс - стандартный буффер памяти с защитой данных для многопоточности
 // Желательно использовать для одноразовой загрузки данных или для данных на полную перезапись 
 // При запроссе пытается найти ячейку с достаточным объемом, отделяет от нее необходимый кусок и выдает пользователю
-class OPTada_Memory_C_MultithreadedSimpleMemoryBuffer : public OPTada_Memory_C_SimpleMemoryBuffer
+class OPTada_C_MultithreadedSimpleMemoryBuffer : public OPTada_C_SimpleMemoryBuffer
 {
 protected:
 
@@ -18,7 +18,7 @@ protected:
 
 		EnterCriticalSection(&ThreadSynchronization); // запрет на доступ (для синхронизации)
 
-		OPTada_Memory_S_CyclicMemoryElemsBufferElement * elem = FreeCells_Buffer;
+		OPTada_S_CyclicMemoryElemsBufferElement * elem = FreeCells_Buffer;
 		if (New_size_ < 1)
 		{
 			LeaveCriticalSection(&ThreadSynchronization); // разрешили доступ следующему потоку
@@ -90,7 +90,7 @@ protected:
 				{ // если не ноль - обновить free ячейку и создать lock ячейку
 
 				  // добавили новую ячейку для дальнейшего деления
-					OPTada_Memory_S_CyclicMemoryElemsBufferElement * new_elem = Elem_Buffer->Get_Element();
+					OPTada_S_CyclicMemoryElemsBufferElement * new_elem = Elem_Buffer->Get_Element();
 					if (new_elem == NULL)
 					{
 						LeaveCriticalSection(&ThreadSynchronization); // разрешили доступ следующему потоку
@@ -165,13 +165,13 @@ public:
 	// [in] size_t Size_ // Размер создаваемого буффера (байт)
 	// [in] size_t Elem_Buffer_Size_ // Размер буффера элементов (дополнительный буффер) (колличество элементов)
 	// [in] size_t Cell_Size_ // Размер ячейки (коэфициента деления) для уменьшения фрагментации
-	OPTada_Memory_C_MultithreadedSimpleMemoryBuffer(size_t Size_, size_t Elem_Buffer_Size_, size_t Cell_Size_) : OPTada_Memory_C_SimpleMemoryBuffer(Size_, Elem_Buffer_Size_, Cell_Size_)
+	OPTada_C_MultithreadedSimpleMemoryBuffer(size_t Size_, size_t Elem_Buffer_Size_, size_t Cell_Size_) : OPTada_C_SimpleMemoryBuffer(Size_, Elem_Buffer_Size_, Cell_Size_)
 	{
 		InitializeCriticalSection(&ThreadSynchronization); // инициализация критической секции
 	}
 
 	// Деструктор OPTada_Memory_C_MultithreadedSimpleMemoryBuffer
-	~OPTada_Memory_C_MultithreadedSimpleMemoryBuffer()
+	~OPTada_C_MultithreadedSimpleMemoryBuffer()
 	{
 		DeleteCriticalSection(&ThreadSynchronization); // удаление критической секции
 	}
@@ -185,7 +185,7 @@ public:
 		EnterCriticalSection(&ThreadSynchronization); // запрет на доступ (для синхронизации)
 
 		// проходим по всем ячейкам и возвращаем их
-		OPTada_Memory_S_CyclicMemoryElemsBufferElement * cellDell = FirstCell_Buffer->Next_el; // передаем ВТОРОЙ элемент
+		OPTada_S_CyclicMemoryElemsBufferElement * cellDell = FirstCell_Buffer->Next_el; // передаем ВТОРОЙ элемент
 
 		if (!Elem_Buffer) // если нету буффера
 		{
@@ -246,7 +246,7 @@ public:
 
 		if (Link_ != NULL && (Link_ >= Buffer && Link_ <= &Buffer[Buffer_Length]))
 		{ // нашло ссылку в нашем диапазоне буффера
-			OPTada_Memory_S_CyclicMemoryElemsBufferElement * elem = LockedCells_Buffer;
+			OPTada_S_CyclicMemoryElemsBufferElement * elem = LockedCells_Buffer;
 			while (elem)
 			{
 				if (elem->Link == Link_)
@@ -283,7 +283,7 @@ public:
 					Locked -= elem->Size; // освободили размер
 					elem->free = true;
 
-					OPTada_Memory_S_CyclicMemoryElemsBufferElement * dell_elem = NULL;
+					OPTada_S_CyclicMemoryElemsBufferElement * dell_elem = NULL;
 
 					// ищем соседей для слития (если не нашли - просто перенос в free) - kill sam sel f :(
 					if (elem->Previous_el) // поиск элемента слева (предидущий)

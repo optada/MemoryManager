@@ -21,34 +21,34 @@
     <ClCompile Include="Code\Source.cpp">
       <Filter>Main</Filter>
     </ClCompile>
-    <ClCompile Include="Code\MamoryManager_x64\OPTada_Memory_C_SimpleMemoryBuffer.cpp">
-      <Filter>MemoryManager\SupportBuffers\.cpp</Filter>
-    </ClCompile>
-    <ClCompile Include="Code\MamoryManager_x64\OPTada_Memory_C_CyclicMemoryElemsBuffer.cpp">
-      <Filter>MemoryManager\SupportBuffers\.cpp</Filter>
-    </ClCompile>
     <ClCompile Include="Code\MamoryManager_x64\OPTada_MemoryManager.cpp">
       <Filter>MemoryManager</Filter>
     </ClCompile>
+    <ClCompile Include="Code\MamoryManager_x64\OPTada_C_SimpleMemoryBuffer.cpp">
+      <Filter>MemoryManager\SupportBuffers\.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\MamoryManager_x64\OPTada_C_CyclicMemoryElemsBuffer.cpp">
+      <Filter>MemoryManager\SupportBuffers\.cpp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Code\MamoryManager_x64\OPTada_Memory_C_CyclicMemoryElemsBuffer.h">
-      <Filter>MemoryManager\SupportBuffers\.h</Filter>
-    </ClInclude>
-    <ClInclude Include="Code\MamoryManager_x64\OPTada_Memory_C_MultithreadedSimpleMemoryBuffer.h">
-      <Filter>MemoryManager\SupportBuffers\.h</Filter>
-    </ClInclude>
-    <ClInclude Include="Code\MamoryManager_x64\OPTada_Memory_C_SimpleMemoryBuffer.h">
-      <Filter>MemoryManager\SupportBuffers\.h</Filter>
-    </ClInclude>
-    <ClInclude Include="Code\MamoryManager_x64\OPTada_Memory_C_TemplateMemoryBuffer.h">
-      <Filter>MemoryManager\SupportBuffers\.h</Filter>
-    </ClInclude>
-    <ClInclude Include="Code\MamoryManager_x64\MemoryManager_Settings.h">
-      <Filter>MemoryManager</Filter>
-    </ClInclude>
     <ClInclude Include="Code\MamoryManager_x64\OPTada_MemoryManager.h">
       <Filter>MemoryManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\MamoryManager_x64\OPTada_MemoryManager_Settings.h">
+      <Filter>MemoryManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\MamoryManager_x64\OPTada_C_TemplateMemoryBuffer.h">
+      <Filter>MemoryManager\SupportBuffers\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\MamoryManager_x64\OPTada_C_SimpleMemoryBuffer.h">
+      <Filter>MemoryManager\SupportBuffers\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\MamoryManager_x64\OPTada_C_MultithreadedSimpleMemoryBuffer.h">
+      <Filter>MemoryManager\SupportBuffers\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\MamoryManager_x64\OPTada_C_CyclicMemoryElemsBuffer.h">
+      <Filter>MemoryManager\SupportBuffers\.h</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

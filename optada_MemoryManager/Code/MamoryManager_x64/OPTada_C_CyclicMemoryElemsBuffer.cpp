@@ -1,21 +1,21 @@
 #include "OPTada_Memory_C_CyclicMemoryElemsBuffer.h"
 
-OPTada_Memory_S_CyclicMemoryElemsBufferElement::OPTada_Memory_S_CyclicMemoryElemsBufferElement()
+OPTada_S_CyclicMemoryElemsBufferElement::OPTada_S_CyclicMemoryElemsBufferElement()
 {
 	Size = 0;
 }
 
 
-OPTada_Memory_C_CyclicMemoryElemsBuffer::OPTada_Memory_C_CyclicMemoryElemsBuffer(size_t Size_)
+OPTada_C_CyclicMemoryElemsBuffer::OPTada_C_CyclicMemoryElemsBuffer(size_t Size_)
 {
-	Buffer = (OPTada_Memory_S_CyclicMemoryElemsBufferElement *)malloc(sizeof(OPTada_Memory_S_CyclicMemoryElemsBufferElement) * Size_);
+	Buffer = (OPTada_S_CyclicMemoryElemsBufferElement *)malloc(sizeof(OPTada_S_CyclicMemoryElemsBufferElement) * Size_);
 	Length = Size_;
 	Locked = 0;
 	Index = 0;
 	if (Buffer != NULL)
 	{
 		for (int i = 0; i < Length; i++) // запуск конструкторов дл€ элемента-структуры
-			Buffer[i] = OPTada_Memory_S_CyclicMemoryElemsBufferElement();
+			Buffer[i] = OPTada_S_CyclicMemoryElemsBufferElement();
 		Buffer_last = &Buffer[Length];
 	}
 	else
@@ -26,7 +26,7 @@ OPTada_Memory_C_CyclicMemoryElemsBuffer::OPTada_Memory_C_CyclicMemoryElemsBuffer
 	}
 }
 
-OPTada_Memory_C_CyclicMemoryElemsBuffer::~OPTada_Memory_C_CyclicMemoryElemsBuffer()
+OPTada_C_CyclicMemoryElemsBuffer::~OPTada_C_CyclicMemoryElemsBuffer()
 {
 	if (Buffer != NULL)
 	{
@@ -35,7 +35,7 @@ OPTada_Memory_C_CyclicMemoryElemsBuffer::~OPTada_Memory_C_CyclicMemoryElemsBuffe
 	}
 }
 
-OPTada_Memory_S_CyclicMemoryElemsBufferElement * OPTada_Memory_C_CyclicMemoryElemsBuffer::Get_Element()
+OPTada_S_CyclicMemoryElemsBufferElement * OPTada_C_CyclicMemoryElemsBuffer::Get_Element()
 {
 	if (Length > Locked) // есть свободна€ €чейка
 	{
@@ -43,7 +43,7 @@ OPTada_Memory_S_CyclicMemoryElemsBufferElement * OPTada_Memory_C_CyclicMemoryEle
 		{
 			if (Buffer[Index].Size == 0) // нашло свободную €чейку
 			{
-				OPTada_Memory_S_CyclicMemoryElemsBufferElement * FElem = &Buffer[Index];
+				OPTada_S_CyclicMemoryElemsBufferElement * FElem = &Buffer[Index];
 				FElem->Size = 1; // чтоб следующий поток не успел найти ету €чейку и ее не определило свободной
 				FElem->free = true;
 				Locked++;
@@ -64,7 +64,7 @@ OPTada_Memory_S_CyclicMemoryElemsBufferElement * OPTada_Memory_C_CyclicMemoryEle
 	}
 }
 
-bool OPTada_Memory_C_CyclicMemoryElemsBuffer::Return_Element(OPTada_Memory_S_CyclicMemoryElemsBufferElement * Elem_)
+bool OPTada_C_CyclicMemoryElemsBuffer::Return_Element(OPTada_S_CyclicMemoryElemsBufferElement * Elem_)
 {
 	if (Elem_ != NULL && (Elem_ >= Buffer && Elem_ <= Buffer_last)) // есть така€ ссылка и она находитс€ в данном буффере
 	{
@@ -79,7 +79,7 @@ bool OPTada_Memory_C_CyclicMemoryElemsBuffer::Return_Element(OPTada_Memory_S_Cyc
 	}
 }
 
-size_t OPTada_Memory_C_CyclicMemoryElemsBuffer::Get_LockedAllMemory()
+size_t OPTada_C_CyclicMemoryElemsBuffer::Get_LockedAllMemory()
 {
-	return (sizeof(OPTada_Memory_C_CyclicMemoryElemsBuffer) + sizeof(OPTada_Memory_S_CyclicMemoryElemsBufferElement) * Length);
+	return (sizeof(OPTada_C_CyclicMemoryElemsBuffer) + sizeof(OPTada_S_CyclicMemoryElemsBufferElement) * Length);
 }
