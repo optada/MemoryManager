@@ -1,0 +1,12 @@
+﻿  Memory_file.cpp
+D:\GIT\optada_MemoryManager\Code\MamoryManager_x64\Memory_file.h(37,7): error C2143: syntax error: missing ';' before '<class-head>'
+D:\GIT\optada_MemoryManager\Code\MamoryManager_x64\Memory_file.h(38,1): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+D:\GIT\optada_MemoryManager\Code\MamoryManager_x64\Memory_file.cpp(46,61): error C2065: 'ыыы': undeclared identifier
+D:\GIT\optada_MemoryManager\Code\MamoryManager_x64\Memory_file.cpp(47,5): error C2146: syntax error: missing ';' before identifier 'free'
+  OPTada_Memory_C_CyclicMemoryElemsBuffer.cpp
+  OPTada_Memory_C_SimpleMemoryBuffer.cpp
+  Source.cpp
+D:\GIT\optada_MemoryManager\Code\MamoryManager_x64\Memory_file.h(37,7): error C2143: syntax error: missing ';' before '<class-head>'
+D:\GIT\optada_MemoryManager\Code\MamoryManager_x64\Memory_file.h(38,1): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+D:\GIT\optada_MemoryManager\Code\Source.cpp(115,1): warning C4326: return type of 'main' should be 'int' instead of 'void'
+  Generating Code...

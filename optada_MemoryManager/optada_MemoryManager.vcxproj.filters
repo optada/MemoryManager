@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Main">
+      <UniqueIdentifier>{27b103bc-2480-4198-9d0d-45475a36e686}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MemoryManager">
+      <UniqueIdentifier>{a3d1c9ef-a385-47d6-8d7e-61cc375913b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MemoryManager\SupportBuffers">
+      <UniqueIdentifier>{fe15b7e9-0417-4891-8866-6622a166da3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MemoryManager\SupportBuffers\.h">
+      <UniqueIdentifier>{d1b1a048-062f-43f7-a49c-61181fbc3186}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MemoryManager\SupportBuffers\.cpp">
+      <UniqueIdentifier>{141adaf4-1197-4577-8cef-95c37f4d0529}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Code\Source.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\MamoryManager_x64\OPTada_Memory_C_SimpleMemoryBuffer.cpp">
+      <Filter>MemoryManager\SupportBuffers\.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\MamoryManager_x64\OPTada_Memory_C_CyclicMemoryElemsBuffer.cpp">
+      <Filter>MemoryManager\SupportBuffers\.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\MamoryManager_x64\OPTada_MemoryManager.cpp">
+      <Filter>MemoryManager</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Code\MamoryManager_x64\OPTada_Memory_C_CyclicMemoryElemsBuffer.h">
+      <Filter>MemoryManager\SupportBuffers\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\MamoryManager_x64\OPTada_Memory_C_MultithreadedSimpleMemoryBuffer.h">
+      <Filter>MemoryManager\SupportBuffers\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\MamoryManager_x64\OPTada_Memory_C_SimpleMemoryBuffer.h">
+      <Filter>MemoryManager\SupportBuffers\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\MamoryManager_x64\OPTada_Memory_C_TemplateMemoryBuffer.h">
+      <Filter>MemoryManager\SupportBuffers\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\MamoryManager_x64\MemoryManager_Settings.h">
+      <Filter>MemoryManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\MamoryManager_x64\OPTada_MemoryManager.h">
+      <Filter>MemoryManager</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
