@@ -12,7 +12,7 @@ class OPTadaC_MemoryCells_StaticCyclicBuffer
 {
 private:
 
-	OPTadaS_MemoryCellElement* buffer = NULL;      // element buffer
+	OPTadaS_MemoryCellElement* buffer      = NULL; // element buffer
 	OPTadaS_MemoryCellElement* buffer_last = NULL; // pointer to the beginning of the last element in the buffer
 
 	size_t length = 0; // total number of cells
@@ -21,8 +21,8 @@ private:
 
 public:
 
-	// [in] size_t size_               // buffer Size - Number of Cells Created
-	// [in] bool& initDoneWithNoErrors // to verify the creation of the buffer
+	// [in]  size_t size_                // buffer Size - Number of Cells Created
+	// [out] bool&  initDoneWithNoErrors // to verify the creation of the buffer
 	OPTadaC_MemoryCells_StaticCyclicBuffer(size_t size_, bool& initDoneWithNoErrors_);
 
 	~OPTadaC_MemoryCells_StaticCyclicBuffer();
@@ -33,7 +33,7 @@ public:
 	OPTadaS_MemoryCellElement* Get_Element();
 
 	// Returns an item (free it) !- trash remains in the cell -!
-	// [in] OPTadaS_MemoryCellElement* Elem_ // Element pointer
+	// [in] OPTadaS_MemoryCellElement* elem_ // Element pointer
 	// return = true - done | false - error
 	bool Return_Element(OPTadaS_MemoryCellElement* elem_);
 

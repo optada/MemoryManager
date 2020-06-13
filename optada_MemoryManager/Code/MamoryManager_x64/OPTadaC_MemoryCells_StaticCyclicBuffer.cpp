@@ -1,7 +1,7 @@
 // Created by OPTada // Free for use //
 // - - - - - - - - - - - - - - - - - //
 
-#include "OPTada_C_CyclicMemoryElemsBuffer.h"
+#include "OPTadaC_MemoryCells_StaticCyclicBuffer.h"
 
 
 OPTadaC_MemoryCells_StaticCyclicBuffer::OPTadaC_MemoryCells_StaticCyclicBuffer(size_t size_, bool& initDoneWithNoErrors_)

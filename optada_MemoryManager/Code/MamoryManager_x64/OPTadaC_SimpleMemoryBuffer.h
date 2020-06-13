@@ -1,0 +1,71 @@
+// Created by OPTada // Free for use //
+// - - - - - - - - - - - - - - - - - //
+
+#pragma once
+
+#include "OPTadaC_TemplateOfMemoryBuffer.h"
+
+
+// class - standard memory buffer
+// Upon request, it tries to find a cell with sufficient volume, separates the necessary piece from it and gives it to the user
+// Has automatic defragmentation tools for free areas
+class OPTadaC_SimpleMemoryBuffer : public OPTadaC_TemplateOfMemoryBuffer
+{
+protected:
+
+	OPTadaC_MemoryCells_StaticCyclicBuffer* cellBuffer = NULL; // Buffer with elements - cells
+
+	OPTadaS_MemoryCellElement* firstCell_Buffer   = NULL; // Pointer to the first cell
+	OPTadaS_MemoryCellElement* freeCells_Buffer   = NULL; // Free Cell Buffer
+	OPTadaS_MemoryCellElement* lockedCells_Buffer = NULL; // Locked Cell Buffer
+
+	size_t cellOfDefragmentation_Size = 0; // coefficient of division of information (to reduce fragmentation) (byte)
+
+
+	// The method searches for free memory, if found, does all the work and allocates
+	void* TakeMemoryMethod(size_t new_size_);
+
+public:
+
+	// The memory will be requested from the OS, an additional buffer will be created
+	// [in] size_t size_                       // The size of the created buffer (bytes)
+	// [in] size_t cellBuffer_Size_            // Size of additional buffer elements (number of elements)
+	// [in] size_t cellOfDefragmentation_Size_ // Cell size (division ratio) to reduce fragmentation
+	OPTadaC_SimpleMemoryBuffer(size_t size_, size_t cellBuffer_Size_, size_t cellOfDefragmentation_Size_);
+
+	~OPTadaC_SimpleMemoryBuffer();
+
+
+	// !- memory is marked free and does not call destructors -!
+	// The method clears all the memory in the buffer for further work with it again
+	// return = true - successful | false - error
+	bool Clear_Buffer();
+
+	// !- not initialized, only memory allocated -!
+	// The method will try to find the closest piece of memory and return it (allocated for use) not an array
+	// [in] size_t new_Length_ // requested memory length (in bytes)
+	// return = returns a pointer to memory | NULL - if failed
+	void* GetMemory(size_t new_Length_);
+
+	// !- the destructor is not called, the memory is marked as "free" -!
+	// The method will mark the specified memory location as "free"
+	// [in] void * link_ // Memory pointer to free
+	// return = true - successful | false - error
+	bool ReturnMemory(void* link_);
+
+	// The method tests the buffer for errors when creating
+	// return = true - the buffer is successful | false - creating buffer failed
+	bool TestBuffer();
+
+	// The method returns the count of locked memory in the buffer (in bytes)
+	// return = count of memory used (locked) in this buffer
+	size_t Get_LockedMemory();
+
+	// The method returns the amount of occupied memory of self (+ additional buffers) (in bytes)
+	// return = number - the amount of memory used by the system and its components (in bytes)
+	size_t Get_AllCapturedMemory();
+
+	// The method returns the size of the memory buffer (in bytes)
+	// return = number - buffer size(in bytes) | 0 - buffer not created / error
+	size_t Get_BufferOfMemorySize();
+};

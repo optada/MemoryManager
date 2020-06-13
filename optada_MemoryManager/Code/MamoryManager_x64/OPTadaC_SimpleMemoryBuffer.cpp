@@ -1,19 +1,19 @@
-#include "OPTada_C_SimpleMemoryBuffer.h"
+#include "OPTadaC_SimpleMemoryBuffer.h"
 
-void * OPTada_C_SimpleMemoryBuffer::TakeMemoryMethod(size_t New_size_)
+void * OPTadaC_SimpleMemoryBuffer::TakeMemoryMethod(size_t New_size_)
 {
-	OPTadaS_MemoryCellElement * elem = FreeCells_Buffer;
+	OPTadaS_MemoryCellElement * elem = freeCells_Buffer;
 	if (New_size_ < 1)
 		return NULL;
 
 	// добавление коэфициента к размеру
-	size_t test_cell_size = New_size_ % Cell_Size;
+	size_t test_cell_size = New_size_ % cellOfDefragmentation_Size;
 	if (test_cell_size)
 	{
-		New_size_ += Cell_Size - test_cell_size;
+		New_size_ += cellOfDefragmentation_Size - test_cell_size;
 	}
 
-	while (FreeCells_Buffer)
+	while (freeCells_Buffer)
 	{
 		if (elem->size >= New_size_)
 		{ // нашли нужный размер, начинаем делить...
@@ -37,31 +37,31 @@ void * OPTada_C_SimpleMemoryBuffer::TakeMemoryMethod(size_t New_size_)
 				{ // нету элемента (ближе к началу)
 					if (elem->next_link)
 					{ // есть следующий элемент
-						FreeCells_Buffer = elem->next_link;
+						freeCells_Buffer = elem->next_link;
 						elem->next_link->previous_link = NULL;
 					}
 					else
 					{ // нету следующего элемента
-						FreeCells_Buffer = NULL;
+						freeCells_Buffer = NULL;
 					}
 				}
 
 				// сохранение размера зан€той пам€ти
-				Locked += New_size_;
+				lockedMemory += New_size_;
 				elem->isfree = false;
 				// перенос в заблокированые
-				if (LockedCells_Buffer)
+				if (lockedCells_Buffer)
 				{ // если не NULL
-					LockedCells_Buffer->previous_link = elem;
+					lockedCells_Buffer->previous_link = elem;
 					elem->previous_link = NULL;
-					elem->next_link = LockedCells_Buffer;
-					LockedCells_Buffer = elem;
+					elem->next_link = lockedCells_Buffer;
+					lockedCells_Buffer = elem;
 				}
 				else
 				{ // если NULL - просто добавить 
 					elem->next_link = NULL;
 					elem->previous_link = NULL;
-					LockedCells_Buffer = elem;
+					lockedCells_Buffer = elem;
 				}
 
 				return elem->link;
@@ -70,7 +70,7 @@ void * OPTada_C_SimpleMemoryBuffer::TakeMemoryMethod(size_t New_size_)
 			{ // если не ноль - обновить free €чейку и создать lock €чейку
 
 				// добавили новую €чейку дл€ дальнейшего делени€
-				OPTadaS_MemoryCellElement * new_elem = Elem_Buffer->Get_Element();
+				OPTadaS_MemoryCellElement * new_elem = cellBuffer->Get_Element();
 				if (new_elem == NULL)
 					return NULL;
 
@@ -86,7 +86,7 @@ void * OPTada_C_SimpleMemoryBuffer::TakeMemoryMethod(size_t New_size_)
 					new_elem->next_el = elem;
 					elem->previous_el = new_elem;
 					new_elem->previous_el = NULL;
-					FirstCell_Buffer = new_elem;
+					firstCell_Buffer = new_elem;
 				}
 				
 				// отдел€ем кусочек и мен€ем ссылки в основном элементе
@@ -96,22 +96,22 @@ void * OPTada_C_SimpleMemoryBuffer::TakeMemoryMethod(size_t New_size_)
 				elem->link = &elem->link[New_size_];
 
 				// сохранение размера зан€той пам€ти
-				Locked += New_size_;
+				lockedMemory += New_size_;
 				new_elem->isfree = false;
 
 				// перенос в заблокированые
-				if (LockedCells_Buffer)
+				if (lockedCells_Buffer)
 				{ // если не NULL
-					LockedCells_Buffer->previous_link = new_elem;
+					lockedCells_Buffer->previous_link = new_elem;
 					new_elem->previous_link = NULL;
-					new_elem->next_link = LockedCells_Buffer;
-					LockedCells_Buffer = new_elem;
+					new_elem->next_link = lockedCells_Buffer;
+					lockedCells_Buffer = new_elem;
 				}
 				else
 				{ // если NULL - просто добавить 
 					new_elem->next_link = NULL;
 					new_elem->previous_link = NULL;
-					LockedCells_Buffer = new_elem;
+					lockedCells_Buffer = new_elem;
 				}
 
 				return new_elem->link;
@@ -133,48 +133,48 @@ void * OPTada_C_SimpleMemoryBuffer::TakeMemoryMethod(size_t New_size_)
 }
 
 
-OPTada_C_SimpleMemoryBuffer::OPTada_C_SimpleMemoryBuffer(size_t Size_, size_t Elem_Buffer_Size_, size_t Cell_Size_)
+OPTadaC_SimpleMemoryBuffer::OPTadaC_SimpleMemoryBuffer(size_t Size_, size_t Elem_Buffer_Size_, size_t Cell_Size_)
 {
-	Buffer = (char *)malloc(Size_); // создание буффера
-	Elem_Buffer = (OPTadaC_MemoryCells_StaticCyclicBuffer *)malloc(sizeof(OPTadaC_MemoryCells_StaticCyclicBuffer)); // создание дополнительного класса-буффера
-	Elem_Buffer->OPTadaC_MemoryCells_StaticCyclicBuffer::OPTadaC_MemoryCells_StaticCyclicBuffer(Elem_Buffer_Size_);
-	Buffer_Length = Size_;
-	Locked = 0;
-	LockedCells_Buffer = NULL;
-	Cell_Size = Cell_Size_;
+	buffer = (char *)malloc(Size_); // создание буффера
+	cellBuffer = (OPTadaC_MemoryCells_StaticCyclicBuffer *)malloc(sizeof(OPTadaC_MemoryCells_StaticCyclicBuffer)); // создание дополнительного класса-буффера
+	cellBuffer->OPTadaC_MemoryCells_StaticCyclicBuffer::OPTadaC_MemoryCells_StaticCyclicBuffer(Elem_Buffer_Size_);
+	buffer_Length = Size_;
+	lockedMemory = 0;
+	lockedCells_Buffer = NULL;
+	cellOfDefragmentation_Size = Cell_Size_;
 
 	// все установленно, настройка первой €чейки
-	FreeCells_Buffer = Elem_Buffer->Get_Element();
-	FirstCell_Buffer = FreeCells_Buffer;
-	if (FreeCells_Buffer)
+	freeCells_Buffer = cellBuffer->Get_Element();
+	firstCell_Buffer = freeCells_Buffer;
+	if (freeCells_Buffer)
 	{
-		FreeCells_Buffer->link = Buffer;
-		FreeCells_Buffer->next_el = NULL;
-		FreeCells_Buffer->previous_el = NULL;
-		FreeCells_Buffer->next_link = NULL;
-		FreeCells_Buffer->previous_link = NULL;
-		FreeCells_Buffer->size = Size_;
+		freeCells_Buffer->link = buffer;
+		freeCells_Buffer->next_el = NULL;
+		freeCells_Buffer->previous_el = NULL;
+		freeCells_Buffer->next_link = NULL;
+		freeCells_Buffer->previous_link = NULL;
+		freeCells_Buffer->size = Size_;
 	}
 }
 
-OPTada_C_SimpleMemoryBuffer::~OPTada_C_SimpleMemoryBuffer()
+OPTadaC_SimpleMemoryBuffer::~OPTadaC_SimpleMemoryBuffer()
 {
-	if (Elem_Buffer != NULL)
+	if (cellBuffer != NULL)
 	{
-		Elem_Buffer->~OPTadaC_MemoryCells_StaticCyclicBuffer();
-		free(Elem_Buffer);
-		Elem_Buffer = NULL;
+		cellBuffer->~OPTadaC_MemoryCells_StaticCyclicBuffer();
+		free(cellBuffer);
+		cellBuffer = NULL;
 	}
-	if (Buffer != NULL)
-		free(Buffer);
+	if (buffer != NULL)
+		free(buffer);
 }
 
-bool OPTada_C_SimpleMemoryBuffer::Clear_Buffer()
+bool OPTadaC_SimpleMemoryBuffer::Clear_Buffer()
 {
 	// проходим по всем €чейкам и возвращаем их
-	OPTadaS_MemoryCellElement * cellDell = FirstCell_Buffer->next_el; // передаем ¬“ќ–ќ… элемент
+	OPTadaS_MemoryCellElement * cellDell = firstCell_Buffer->next_el; // передаем ¬“ќ–ќ… элемент
 
-	if (!Elem_Buffer) // если нету буффера
+	if (!cellBuffer) // если нету буффера
 		return false;
 
 	while (cellDell)
@@ -182,43 +182,43 @@ bool OPTada_C_SimpleMemoryBuffer::Clear_Buffer()
 		if (cellDell->next_el) // если существует след элемент
 		{
 			cellDell = cellDell->next_el;
-			Elem_Buffer->Return_Element(cellDell->previous_el);
+			cellBuffer->Return_Element(cellDell->previous_el);
 		}
 		else // если ето последний элемент
 		{
-			Elem_Buffer->Return_Element(cellDell);
+			cellBuffer->Return_Element(cellDell);
 		}
 	}
 
 	// теперь настройка буфферов заново
-	LockedCells_Buffer = NULL;
-	FreeCells_Buffer = FirstCell_Buffer;
+	lockedCells_Buffer = NULL;
+	freeCells_Buffer = firstCell_Buffer;
 
 	// настройка стартовой €чеки заново
-	if (!FreeCells_Buffer)
+	if (!freeCells_Buffer)
 	{
-		FreeCells_Buffer->isfree = true;
-		FreeCells_Buffer->link = Buffer;
-		FreeCells_Buffer->next_el = NULL;
-		FreeCells_Buffer->previous_el = NULL;
-		FreeCells_Buffer->next_link = NULL;
-		FreeCells_Buffer->previous_link = NULL;
-		FreeCells_Buffer->size = Buffer_Length;
+		freeCells_Buffer->isfree = true;
+		freeCells_Buffer->link = buffer;
+		freeCells_Buffer->next_el = NULL;
+		freeCells_Buffer->previous_el = NULL;
+		freeCells_Buffer->next_link = NULL;
+		freeCells_Buffer->previous_link = NULL;
+		freeCells_Buffer->size = buffer_Length;
 	}
 
 	return true;
 }
 
-void * OPTada_C_SimpleMemoryBuffer::GetMemory(size_t New_Length_)
+void * OPTadaC_SimpleMemoryBuffer::GetMemory(size_t New_Length_)
 {
 	return TakeMemoryMethod(New_Length_);
 }
 
-bool OPTada_C_SimpleMemoryBuffer::ReturnMemory(void * Link_)
+bool OPTadaC_SimpleMemoryBuffer::ReturnMemory(void * Link_)
 {
-	if (Link_ != NULL && (Link_ >= Buffer && Link_ <= &Buffer[Buffer_Length]))
+	if (Link_ != NULL && (Link_ >= buffer && Link_ <= &buffer[buffer_Length]))
 	{ // нашло ссылку в нашем диапазоне буффера
-		OPTadaS_MemoryCellElement * elem = LockedCells_Buffer;
+		OPTadaS_MemoryCellElement * elem = lockedCells_Buffer;
 		while (elem)
 		{
 			if (elem->link == Link_)
@@ -241,18 +241,18 @@ bool OPTada_C_SimpleMemoryBuffer::ReturnMemory(void * Link_)
 				{ // нету элемента (ближе к началу)
 					if (elem->next_link)
 					{ // есть следующий элемент
-						LockedCells_Buffer = elem->next_link;
+						lockedCells_Buffer = elem->next_link;
 						elem->next_link->previous_link = NULL;
 					}
 					else
 					{ // нету следующего элемента
-						LockedCells_Buffer = NULL;
+						lockedCells_Buffer = NULL;
 					}
 				}
 
 				elem->next_link = NULL;
 				elem->previous_link = NULL;
-				Locked -= elem->size; // освободили размер
+				lockedMemory -= elem->size; // освободили размер
 				elem->isfree = true;
 
 				OPTadaS_MemoryCellElement * dell_elem = NULL;
@@ -269,7 +269,7 @@ bool OPTada_C_SimpleMemoryBuffer::ReturnMemory(void * Link_)
 						elem->previous_el->size += elem->size; // изменили общий размер
 						dell_elem = elem;
 						elem = elem->previous_el;
-						Elem_Buffer->Return_Element(dell_elem); // удал€ем элемент
+						cellBuffer->Return_Element(dell_elem); // удал€ем элемент
 					}
 				}
 				if (elem->next_el)
@@ -297,12 +297,12 @@ bool OPTada_C_SimpleMemoryBuffer::ReturnMemory(void * Link_)
 							{ // нету элемента (ближе к началу)
 								if (elem->next_link)
 								{ // есть следующий элемент
-									FreeCells_Buffer = elem->next_link;
+									freeCells_Buffer = elem->next_link;
 									elem->next_link->previous_link = NULL;
 								}
 								else
 								{ // нету следующего элемента
-									FreeCells_Buffer = NULL;
+									freeCells_Buffer = NULL;
 								}
 							}
 						}
@@ -315,29 +315,29 @@ bool OPTada_C_SimpleMemoryBuffer::ReturnMemory(void * Link_)
 						if (elem->previous_el != NULL)
 							elem->previous_el->next_el = elem;
 						else
-							FirstCell_Buffer = elem;
+							firstCell_Buffer = elem;
 
 						elem->size += dell_elem->size; // изменили общий размер
 						elem->link = dell_elem->link;
 						
-						Elem_Buffer->Return_Element(dell_elem); // удал€ем элемент
+						cellBuffer->Return_Element(dell_elem); // удал€ем элемент
 
 					}
 				}
 				if (!dell_elem) // если слить нескем - запихиваем в free
 				{ // перенос в free
-					if (FreeCells_Buffer)
+					if (freeCells_Buffer)
 					{ // если не NULL
-						FreeCells_Buffer->previous_link = elem;
+						freeCells_Buffer->previous_link = elem;
 						elem->previous_link = NULL;
-						elem->next_link = FreeCells_Buffer;
-						FreeCells_Buffer = elem;
+						elem->next_link = freeCells_Buffer;
+						freeCells_Buffer = elem;
 					}
 					else
 					{ // если NULL - просто добавить 
 						elem->next_link = NULL;
 						elem->previous_link = NULL;
-						FreeCells_Buffer = elem;
+						freeCells_Buffer = elem;
 					}
 				}
 
@@ -356,9 +356,9 @@ bool OPTada_C_SimpleMemoryBuffer::ReturnMemory(void * Link_)
 	}
 }
 
-bool OPTada_C_SimpleMemoryBuffer::Get_TestBuffer()
+bool OPTadaC_SimpleMemoryBuffer::TestBuffer()
 {
-	if (Buffer != NULL && Buffer_Length > 0 && FirstCell_Buffer != NULL && FreeCells_Buffer != NULL && Elem_Buffer != NULL && Cell_Size > 0)
+	if (buffer != NULL && buffer_Length > 0 && firstCell_Buffer != NULL && freeCells_Buffer != NULL && cellBuffer != NULL && cellOfDefragmentation_Size > 0)
 	{
 		return true;
 	}
@@ -368,23 +368,23 @@ bool OPTada_C_SimpleMemoryBuffer::Get_TestBuffer()
 	}
 }
 
-size_t OPTada_C_SimpleMemoryBuffer::Get_LockedMemory()
+size_t OPTadaC_SimpleMemoryBuffer::Get_LockedMemory()
 {
-	if (Buffer_Length > 0)
-		return Locked;
+	if (buffer_Length > 0)
+		return lockedMemory;
 	else
 		return 0;
 }
 
-size_t OPTada_C_SimpleMemoryBuffer::Get_AllModulesLockedMemory()
+size_t OPTadaC_SimpleMemoryBuffer::Get_AllCapturedMemory()
 {
-	if (Buffer_Length > 0)
-		return (Elem_Buffer->Get_AllCapturedMemory() + Buffer_Length);
+	if (buffer_Length > 0)
+		return (cellBuffer->Get_AllCapturedMemory() + buffer_Length);
 	else
 		return 0;
 }
 
-size_t OPTada_C_SimpleMemoryBuffer::Get_Size()
+size_t OPTadaC_SimpleMemoryBuffer::Get_BufferOfMemorySize()
 {
-	return Buffer_Length;
+	return buffer_Length;
 }

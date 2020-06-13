@@ -25,7 +25,7 @@ struct OPTada_Memory_S_MemoryManedger
 struct OPTada_Memory_S_MemoryManagerElement_Memory
 {
 public:
-	OPTada_C_TemplateMemoryBuffer * Buffer = NULL; // ссылка на общий класс (элемент - буффер)
+	OPTadaC_TemplateOfMemoryBuffer * Buffer = NULL; // ссылка на общий класс (элемент - буффер)
 	bool Element_locked = false; // false - €чейка свободна | true - заблокирована (зан€та)
 	int BufferType = 0; // тип буффера
 };
