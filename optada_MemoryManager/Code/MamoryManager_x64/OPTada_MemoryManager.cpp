@@ -43,7 +43,7 @@ bool OPTada_MemoryManager::Free_Manager()
 			if (elem_->Buffer != NULL)
 			{
 				elem_->Buffer->Clear_Buffer();
-				elem_->Buffer->~OPTada_Memory_C_TemplateMemoryBuffer(); ыыы // не корректный вызов???
+				//TODO elem_->Buffer->~OPTada_Memory_C_TemplateMemoryBuffer(); //TODO ыыы // не корректный вызов???
 				free(elem_->Buffer);
 			}
 			elem_->BufferType = 0;

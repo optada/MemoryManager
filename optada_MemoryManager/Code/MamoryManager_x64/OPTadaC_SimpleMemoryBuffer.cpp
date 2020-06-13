@@ -2,7 +2,7 @@
 
 void * OPTadaC_SimpleMemoryBuffer::TakeMemoryMethod(size_t New_size_)
 {
-	OPTadaS_MemoryCellElement * elem = freeCells_Buffer;
+	OPTadaS_MemoryCell_Element * elem = freeCells_Buffer;
 	if (New_size_ < 1)
 		return NULL;
 
@@ -70,7 +70,7 @@ void * OPTadaC_SimpleMemoryBuffer::TakeMemoryMethod(size_t New_size_)
 			{ // если не ноль - обновить free €чейку и создать lock €чейку
 
 				// добавили новую €чейку дл€ дальнейшего делени€
-				OPTadaS_MemoryCellElement * new_elem = cellBuffer->Get_Element();
+				OPTadaS_MemoryCell_Element * new_elem = cellBuffer->Get_Element();
 				if (new_elem == NULL)
 					return NULL;
 
@@ -137,7 +137,8 @@ OPTadaC_SimpleMemoryBuffer::OPTadaC_SimpleMemoryBuffer(size_t Size_, size_t Elem
 {
 	buffer = (char *)malloc(Size_); // создание буффера
 	cellBuffer = (OPTadaC_MemoryCells_StaticCyclicBuffer *)malloc(sizeof(OPTadaC_MemoryCells_StaticCyclicBuffer)); // создание дополнительного класса-буффера
-	cellBuffer->OPTadaC_MemoryCells_StaticCyclicBuffer::OPTadaC_MemoryCells_StaticCyclicBuffer(Elem_Buffer_Size_);
+	bool asdadas = false; //TODO убрать нахер
+	cellBuffer->OPTadaC_MemoryCells_StaticCyclicBuffer::OPTadaC_MemoryCells_StaticCyclicBuffer(Elem_Buffer_Size_, asdadas); //TODO доделать проверку на ошибку
 	buffer_Length = Size_;
 	lockedMemory = 0;
 	lockedCells_Buffer = NULL;
@@ -172,7 +173,7 @@ OPTadaC_SimpleMemoryBuffer::~OPTadaC_SimpleMemoryBuffer()
 bool OPTadaC_SimpleMemoryBuffer::Clear_Buffer()
 {
 	// проходим по всем €чейкам и возвращаем их
-	OPTadaS_MemoryCellElement * cellDell = firstCell_Buffer->next_el; // передаем ¬“ќ–ќ… элемент
+	OPTadaS_MemoryCell_Element * cellDell = firstCell_Buffer->next_el; // передаем ¬“ќ–ќ… элемент
 
 	if (!cellBuffer) // если нету буффера
 		return false;
@@ -218,7 +219,7 @@ bool OPTadaC_SimpleMemoryBuffer::ReturnMemory(void * Link_)
 {
 	if (Link_ != NULL && (Link_ >= buffer && Link_ <= &buffer[buffer_Length]))
 	{ // нашло ссылку в нашем диапазоне буффера
-		OPTadaS_MemoryCellElement * elem = lockedCells_Buffer;
+		OPTadaS_MemoryCell_Element * elem = lockedCells_Buffer;
 		while (elem)
 		{
 			if (elem->link == Link_)
@@ -255,7 +256,7 @@ bool OPTadaC_SimpleMemoryBuffer::ReturnMemory(void * Link_)
 				lockedMemory -= elem->size; // освободили размер
 				elem->isfree = true;
 
-				OPTadaS_MemoryCellElement * dell_elem = NULL;
+				OPTadaS_MemoryCell_Element * dell_elem = NULL;
 
 				// ищем соседей дл€ слити€ (если не нашли - просто перенос в free) - kill sam sel f :(
 				if (elem->previous_el) // поиск элемента слева (предидущий)

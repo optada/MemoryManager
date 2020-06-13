@@ -139,15 +139,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Code\MamoryManager_x64\OPTada_MemoryManager.cpp" />
     <ClCompile Include="Code\MamoryManager_x64\OPTadaC_MemoryCells_StaticCyclicBuffer.cpp" />
     <ClCompile Include="Code\MamoryManager_x64\OPTadaC_SimpleMemoryBuffer.cpp" />
+    <ClCompile Include="Code\MamoryManager_x64\OPTada_MemoryManager.cpp" />
     <ClCompile Include="Code\Source.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Code\MamoryManager_x64\OPTadaS_MemoryCellElement.h" />
-    <ClInclude Include="Code\MamoryManager_x64\OPTada_MemoryManager_Settings.h" />
+    <ClInclude Include="Code\MamoryManager_x64\OPTadaS_MemoryCell_Element.h" />
     <ClInclude Include="Code\MamoryManager_x64\OPTada_MemoryManager.h" />
+    <ClInclude Include="Code\MamoryManager_x64\OPTada_MemoryManager_Settings.h" />
     <ClInclude Include="Code\MamoryManager_x64\OPTadaC_MemoryCells_StaticCyclicBuffer.h" />
     <ClInclude Include="Code\MamoryManager_x64\OPTada_C_MultithreadedSimpleMemoryBuffer.h" />
     <ClInclude Include="Code\MamoryManager_x64\OPTadaC_SimpleMemoryBuffer.h" />

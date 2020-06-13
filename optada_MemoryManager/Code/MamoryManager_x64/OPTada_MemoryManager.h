@@ -1,7 +1,7 @@
 #pragma once
 
-#include "OPTada_C_TemplateMemoryBuffer.h"
-#include "OPTada_C_SimpleMemoryBuffer.h"
+#include "OPTadaC_TemplateOfMemoryBuffer.h"
+#include "OPTadaC_SimpleMemoryBuffer.h"
 #include "OPTada_C_MultithreadedSimpleMemoryBuffer.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -30,7 +30,7 @@ public:
 	int BufferType = 0; // тип буффера
 };
 
-sss // добавить контроль многопоточности при создании новых буферов
+//TODO // добавить контроль многопоточности при создании новых буферов
 
 // менеджер памяти
 // !! требует инициализации !!

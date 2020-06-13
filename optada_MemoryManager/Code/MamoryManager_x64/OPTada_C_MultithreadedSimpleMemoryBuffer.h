@@ -1,6 +1,6 @@
 #pragma once
 
-#include "OPTada_C_SimpleMemoryBuffer.h"
+#include "OPTadaC_SimpleMemoryBuffer.h"
 
 
 //  ласс - стандартный буффер пам€ти с защитой данных дл€ многопоточности
@@ -18,7 +18,7 @@ protected:
 
 		EnterCriticalSection(&ThreadSynchronization); // запрет на доступ (дл€ синхронизации)
 
-		OPTadaS_MemoryCellElement * elem = freeCells_Buffer;
+		OPTadaS_MemoryCell_Element * elem = freeCells_Buffer;
 		if (New_size_ < 1)
 		{
 			LeaveCriticalSection(&ThreadSynchronization); // разрешили доступ следующему потоку
@@ -90,7 +90,7 @@ protected:
 				{ // если не ноль - обновить free €чейку и создать lock €чейку
 
 				  // добавили новую €чейку дл€ дальнейшего делени€
-					OPTadaS_MemoryCellElement * new_elem = cellBuffer->Get_Element();
+					OPTadaS_MemoryCell_Element * new_elem = cellBuffer->Get_Element();
 					if (new_elem == NULL)
 					{
 						LeaveCriticalSection(&ThreadSynchronization); // разрешили доступ следующему потоку
@@ -185,7 +185,7 @@ public:
 		EnterCriticalSection(&ThreadSynchronization); // запрет на доступ (дл€ синхронизации)
 
 		// проходим по всем €чейкам и возвращаем их
-		OPTadaS_MemoryCellElement * cellDell = firstCell_Buffer->next_el; // передаем ¬“ќ–ќ… элемент
+		OPTadaS_MemoryCell_Element * cellDell = firstCell_Buffer->next_el; // передаем ¬“ќ–ќ… элемент
 
 		if (!cellBuffer) // если нету буффера
 		{
@@ -211,7 +211,7 @@ public:
 		freeCells_Buffer = firstCell_Buffer;
 
 		// настройка стартовой €чеки заново
-		if (!freeCells_Buffer)
+		if (!freeCells_Buffer) //TODO проверить логику
 		{
 			freeCells_Buffer->isfree = true;
 			freeCells_Buffer->link = buffer;
@@ -246,7 +246,7 @@ public:
 
 		if (Link_ != NULL && (Link_ >= buffer && Link_ <= &buffer[buffer_Length]))
 		{ // нашло ссылку в нашем диапазоне буффера
-			OPTadaS_MemoryCellElement * elem = lockedCells_Buffer;
+			OPTadaS_MemoryCell_Element * elem = lockedCells_Buffer;
 			while (elem)
 			{
 				if (elem->link == Link_)
@@ -283,7 +283,7 @@ public:
 					lockedMemory -= elem->size; // освободили размер
 					elem->isfree = true;
 
-					OPTadaS_MemoryCellElement * dell_elem = NULL;
+					OPTadaS_MemoryCell_Element * dell_elem = NULL;
 
 					// ищем соседей дл€ слити€ (если не нашли - просто перенос в free) - kill sam sel f :(
 					if (elem->previous_el) // поиск элемента слева (предидущий)

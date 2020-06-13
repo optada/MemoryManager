@@ -1,0 +1,2 @@
+D:\GIT\MamoryManager\optada_MemoryManager\x64\Debug\optada_MemoryManager.exe
+D:\GIT\MamoryManager\optada_MemoryManager\x64\Debug\optada_MemoryManager.pdb

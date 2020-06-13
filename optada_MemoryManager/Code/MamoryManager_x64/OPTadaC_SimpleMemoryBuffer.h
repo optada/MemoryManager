@@ -15,9 +15,9 @@ protected:
 
 	OPTadaC_MemoryCells_StaticCyclicBuffer* cellBuffer = NULL; // Buffer with elements - cells
 
-	OPTadaS_MemoryCellElement* firstCell_Buffer   = NULL; // Pointer to the first cell
-	OPTadaS_MemoryCellElement* freeCells_Buffer   = NULL; // Free Cell Buffer
-	OPTadaS_MemoryCellElement* lockedCells_Buffer = NULL; // Locked Cell Buffer
+	OPTadaS_MemoryCell_Element* firstCell_Buffer   = NULL; // Pointer to the first cell
+	OPTadaS_MemoryCell_Element* freeCells_Buffer   = NULL; // Free Cell Buffer
+	OPTadaS_MemoryCell_Element* lockedCells_Buffer = NULL; // Locked Cell Buffer
 
 	size_t cellOfDefragmentation_Size = 0; // coefficient of division of information (to reduce fragmentation) (byte)
 

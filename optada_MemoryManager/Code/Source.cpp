@@ -1,5 +1,10 @@
 
-#include "MamoryManager_x64\OPTada_MemoryManager.h"
+// #include "MamoryManager_x64\OPTada_MemoryManager.h"
+
+
+// tested
+//#include "MamoryManager_x64\OPTadaC_MemoryCells_StaticCyclicBuffer.h"
+
 
 #include <iostream>
 #include <stdio.h>
@@ -8,6 +13,74 @@
 
 using namespace std;
 
+
+// test for OPTadaC_MemoryCells_StaticCyclicBuffer | OK
+/*
+void testFor_OPTadaC_MemoryCells_StaticCyclicBuffer()
+{
+	bool del = false;
+	OPTadaC_MemoryCells_StaticCyclicBuffer Buffer = OPTadaC_MemoryCells_StaticCyclicBuffer(5, del);
+
+	cout << endl << del;
+	cout << endl << Buffer.Get_AllCapturedMemory();
+	
+	void* element1 = NULL;
+	void* element2 = NULL;
+	void* element3 = NULL;
+	void* element4 = NULL;
+	void* element5 = NULL;
+	void* element6 = NULL;
+
+	element1 = Buffer.Get_Element();
+	element2 = Buffer.Get_Element();
+	element3 = Buffer.Get_Element();
+	element4 = Buffer.Get_Element();
+	element5 = Buffer.Get_Element();
+	element6 = Buffer.Get_Element();
+
+	Buffer.Return_Element((OPTadaS_MemoryCell_Element*)element2);
+
+	element2 = Buffer.Get_Element();
+}
+*/
+
+
+
+void test()
+{
+
+}
+
+
+
+void main()
+{
+	cout << "MAIN enter point" << endl;
+
+	test();
+
+	cout << endl << "- - - - - - - - END - - - - - - - - -" << endl;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 
 OPTada_MemoryManager MemoryManager; // инициализированный менеджер (перенести в глобальные)
 
@@ -65,7 +138,7 @@ int timer()
 	one->Length = 4;
 	one->Size = 1;
 
-	asd.Return_Element(tree);*/
+	asd.Return_Element(tree);
 
 	//OPTada_Memory_C_SimpleMemoryBuffer * buf = (OPTada_Memory_C_SimpleMemoryBuffer *)malloc(sizeof(OPTada_Memory_C_SimpleMemoryBuffer));
 	//buf->OPTada_Memory_C_SimpleMemoryBuffer::OPTada_Memory_C_SimpleMemoryBuffer(10000000, 10000000);
@@ -92,14 +165,17 @@ int timer()
 	/*tree = asd.Get_Element();
 	tree->Length = 8;
 	tree->Size = 3;*/
+/*
 	//for (int i = 0; i < 10000000; i++)
 	//{
 	//	/*ff = new OPTada_S_CiclicBufferElement;
-	//	delete (ff);*/
+	//	delete (ff);
 	//}
-	/* Код, время выполнения которого нужно измерить */
-	/*  */
+	// Код, время выполнения которого нужно измерить 
+	
 
+*/
+/*
 	end = clock();
 
 	printf("The above code block was executed in %.4f second(s)\n", ((double)end - start) / ((double)CLOCKS_PER_SEC));
@@ -124,7 +200,7 @@ void main()
 
 	/*OPTada_Memory_C_MultithreadedSimpleMemoryBuffer * a = new OPTada_Memory_C_MultithreadedSimpleMemoryBuffer(120, 120);
 	delete(a);*/
-
+/*
 	//OPTada_Memory_C_SimpleMemoryBuffer * buf = (OPTada_Memory_C_SimpleMemoryBuffer *)malloc(sizeof(OPTada_Memory_C_SimpleMemoryBuffer));
 	//buf->OPTada_Memory_C_SimpleMemoryBuffer::OPTada_Memory_C_SimpleMe
 	//memoryBuffer(31, 10);
@@ -210,21 +286,20 @@ void main()
 	//bu->ReturnMemory(link2);
 	//bu->ReturnMemoryMass(link1);
 
-
 	timer();
 	
 	/*OPTada_C_TemplateBuffer * g = NULL;
 	g = (OPTada_C_TemplateBuffer *) new B();
 	B * r;
-	r = (B *) g;*/
+	r = (B *) g;
 
 	//// создание класса
 	//LOLO * keke = (LOLO *)malloc(sizeof(LOLO) * 1); // запрос памяти
 	////new(keke) LOLO; // вызов конструктора !!! 
 	//keke->LOLO::LOLO(); // тоже вызов конструктора (запутался)
 	//// работа с объектом
-
-	/*int re = sizeof(OPTada_S_CiclicBufferElement);
+*/
+/*int re = sizeof(OPTada_S_CiclicBufferElement);
 	OPTada_C_CiclicBuffer_Memory asd(100000);
 
 	OPTada_S_CiclicBufferElement* one = NULL;
@@ -248,20 +323,12 @@ void main()
 		fore->Size = 4;
 	}
 	asd.Return_Element(two);*/
-
-
-
-
-
-	//class1 * keke = получение памяти
+//class1 * keke = получение памяти
 	//keke->class1::class1(); // вызов конструктора
 	////
 	//keke->~LOLO(); // вызов деструктора (удаление)
 	//free(keke); // освобождение памяти
 	//// завершение
-
-
-
 	//OPTada_C_CiclicBuffer_Memory Test(5);
 	//OPTada_S_CiclicBufferElement* el = Test.Get_Element();
 	//el->Link = malloc(sizeof(rt));
@@ -269,7 +336,7 @@ void main()
 	//*(dt*)(el->Link) = dt(); // корректный вызов конструктора
 	//((dt*)(el->Link))->~dt(); // корректный вызов деструктора
 	//free(el->Link);
-
+/*
 }
 
 
@@ -278,3 +345,6 @@ void main()
 // адресация в памяти (сохранение \ размер)
 
 //->Link = T::~T();   tamplate<class T> !!! учи идиот!
+
+
+*/
