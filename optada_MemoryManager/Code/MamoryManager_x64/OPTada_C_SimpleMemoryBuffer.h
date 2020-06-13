@@ -10,10 +10,10 @@ class OPTada_C_SimpleMemoryBuffer : public OPTada_C_TemplateMemoryBuffer
 {
 protected:
 
-	OPTada_S_CyclicMemoryElemsBufferElement * FirstCell_Buffer = NULL;   // ”казатель на первую €чейку
-	OPTada_S_CyclicMemoryElemsBufferElement * FreeCells_Buffer = NULL;   // Ѕуфеер свободных €чеек
-	OPTada_S_CyclicMemoryElemsBufferElement * LockedCells_Buffer = NULL; // Ѕуффер заблокированных €чеек
-	OPTada_C_CyclicMemoryElemsBuffer * Elem_Buffer = NULL; // Ѕуффер с €чейками - элементами (дл€ выдачи и получени€)
+	OPTadaS_MemoryCellElement * FirstCell_Buffer = NULL;   // ”казатель на первую €чейку
+	OPTadaS_MemoryCellElement * FreeCells_Buffer = NULL;   // Ѕуфеер свободных €чеек
+	OPTadaS_MemoryCellElement * LockedCells_Buffer = NULL; // Ѕуффер заблокированных €чеек
+	OPTadaC_MemoryCells_StaticCyclicBuffer * Elem_Buffer = NULL; // Ѕуффер с €чейками - элементами (дл€ выдачи и получени€)
 
 	size_t Cell_Size = 0; // коэфициент делени€ инфрормации (дл€ уменьшени€ фрагментации) (байт)
 

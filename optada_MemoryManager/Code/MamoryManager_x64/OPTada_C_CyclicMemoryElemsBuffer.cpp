@@ -1,85 +1,78 @@
-#include "OPTada_Memory_C_CyclicMemoryElemsBuffer.h"
+// Created by OPTada // Free for use //
+// - - - - - - - - - - - - - - - - - //
 
-OPTada_S_CyclicMemoryElemsBufferElement::OPTada_S_CyclicMemoryElemsBufferElement()
+#include "OPTada_C_CyclicMemoryElemsBuffer.h"
+
+
+OPTadaC_MemoryCells_StaticCyclicBuffer::OPTadaC_MemoryCells_StaticCyclicBuffer(size_t size_, bool& initDoneWithNoErrors_)
 {
-	Size = 0;
-}
+	buffer = (OPTadaS_MemoryCellElement*)malloc(sizeof(OPTadaS_MemoryCellElement) * size_);
+	length = size_;
+	locked = 0;
+	index = 0;
 
-
-OPTada_C_CyclicMemoryElemsBuffer::OPTada_C_CyclicMemoryElemsBuffer(size_t Size_)
-{
-	Buffer = (OPTada_S_CyclicMemoryElemsBufferElement *)malloc(sizeof(OPTada_S_CyclicMemoryElemsBufferElement) * Size_);
-	Length = Size_;
-	Locked = 0;
-	Index = 0;
-	if (Buffer != NULL)
-	{
-		for (int i = 0; i < Length; i++) // запуск конструкторов дл€ элемента-структуры
-			Buffer[i] = OPTada_S_CyclicMemoryElemsBufferElement();
-		Buffer_last = &Buffer[Length];
+	if (buffer != NULL) {
+		for (int i = 0; i < length; i++) // use constructor for all cell structures
+			buffer[i] = OPTadaS_MemoryCellElement();
+		buffer_last = &buffer[length];
+		initDoneWithNoErrors_ = true;
 	}
-	else
-	{
-		Buffer_last = NULL;
-		Length = 0;
-		Index = 0;
-	}
-}
-
-OPTada_C_CyclicMemoryElemsBuffer::~OPTada_C_CyclicMemoryElemsBuffer()
-{
-	if (Buffer != NULL)
-	{
-		free(Buffer);
-		Buffer = NULL;
+	else {
+		buffer_last = NULL;
+		length = 0;
+		index = 0;
+		initDoneWithNoErrors_ = false; // can not get memory for buffer
 	}
 }
 
-OPTada_S_CyclicMemoryElemsBufferElement * OPTada_C_CyclicMemoryElemsBuffer::Get_Element()
+OPTadaC_MemoryCells_StaticCyclicBuffer::~OPTadaC_MemoryCells_StaticCyclicBuffer()
 {
-	if (Length > Locked) // есть свободна€ €чейка
-	{
-		do
-		{
-			if (Buffer[Index].Size == 0) // нашло свободную €чейку
-			{
-				OPTada_S_CyclicMemoryElemsBufferElement * FElem = &Buffer[Index];
-				FElem->Size = 1; // чтоб следующий поток не успел найти ету €чейку и ее не определило свободной
-				FElem->free = true;
-				Locked++;
+	if (buffer != NULL) {
+		free(buffer);
+		buffer = NULL;
+	}
+}
 
-				return FElem; // вот и €чейка
+OPTadaS_MemoryCellElement * OPTadaC_MemoryCells_StaticCyclicBuffer::Get_Element()
+{
+	if (length > locked) { // we have free cell
+		do {
+			// we are looking for a free cell
+			if (buffer[index].size == 0) { // cell is free
+				OPTadaS_MemoryCellElement* FElem = &buffer[index];
+				FElem->size = 1;
+				FElem->isfree = true;
+				locked++;
+
+				return FElem; // free cell ready
 			}
-			else // €чейка зан€та, поиск следующей
-			{
-				Index++;
-				if (Index >= Length) // чтоб не вышло за придел массива
-					Index = 0;
+			else { // cell is locked
+				index++;
+				if (index >= length) { // search cycle check
+					index = 0;
+				}
 			}
 		} while (true);
 	}
-	else // нету свободной €чейки
-	{
+	else { // we have no free cell
 		return NULL; 
 	}
 }
 
-bool OPTada_C_CyclicMemoryElemsBuffer::Return_Element(OPTada_S_CyclicMemoryElemsBufferElement * Elem_)
+bool OPTadaC_MemoryCells_StaticCyclicBuffer::Return_Element(OPTadaS_MemoryCellElement* Elem_)
 {
-	if (Elem_ != NULL && (Elem_ >= Buffer && Elem_ <= Buffer_last)) // есть така€ ссылка и она находитс€ в данном буффере
-	{
-		Elem_->Size = 0; // если 0 - €чейка свободна
-		Locked--;
-		// !! в €чейке остаетс€ мусор!
+	if (Elem_ != NULL && (Elem_ >= buffer && Elem_ <= buffer_last)) { // there is such a link
+		Elem_->size = 0; // cell is free now
+		locked--;
+
 		return true;
 	}
-	else // NULL - ссылка или ето €чейка не из етого массива
-	{
+	else { // NULL - there is no such cell in this array
 		return false;
 	}
 }
 
-size_t OPTada_C_CyclicMemoryElemsBuffer::Get_LockedAllMemory()
+size_t OPTadaC_MemoryCells_StaticCyclicBuffer::Get_AllCapturedMemory()
 {
-	return (sizeof(OPTada_C_CyclicMemoryElemsBuffer) + sizeof(OPTada_S_CyclicMemoryElemsBufferElement) * Length);
+	return (sizeof(OPTadaC_MemoryCells_StaticCyclicBuffer) + sizeof(OPTadaS_MemoryCellElement) * length);
 }

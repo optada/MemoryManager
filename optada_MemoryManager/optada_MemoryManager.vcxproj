@@ -145,6 +145,7 @@
     <ClCompile Include="Code\Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Code\MamoryManager_x64\OPTadaS_MemoryCellElement.h" />
     <ClInclude Include="Code\MamoryManager_x64\OPTada_MemoryManager_Settings.h" />
     <ClInclude Include="Code\MamoryManager_x64\OPTada_MemoryManager.h" />
     <ClInclude Include="Code\MamoryManager_x64\OPTada_C_CyclicMemoryElemsBuffer.h" />

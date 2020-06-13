@@ -1,59 +1,43 @@
+// Created by OPTada // Free for use //
+// - - - - - - - - - - - - - - - - - //
+
 #pragma once
 
 #include "OPTada_MemoryManager_Settings.h"
-
-// структура - элемент для создания связaных списков (56 Б)
-struct OPTada_S_CyclicMemoryElemsBufferElement
-{
-public:
-	size_t Size = 0;    // длина буфера в байтах (если 0 - буффер свободен)
-	char * Link = NULL; // указатель на память
-	bool free = true;   // переменная обазначающая тип памяти (свободна?\нет?)
-
-	OPTada_S_CyclicMemoryElemsBufferElement * Next_el = NULL;     // указатель на следующий элемент
-	OPTada_S_CyclicMemoryElemsBufferElement * Previous_el = NULL; // указатель на предидущий элемент 
-
-	OPTada_S_CyclicMemoryElemsBufferElement * Next_link = NULL;     // указатель на следующий элемент (во втором буффере)
-	OPTada_S_CyclicMemoryElemsBufferElement * Previous_link = NULL; // указатель на предидущий элемент (во втором буффере)
-
-	// Конструктор OPTada_S_CiclicBufferElement
-	OPTada_S_CyclicMemoryElemsBufferElement();
-};
+#include "OPTadaS_MemoryCellElement.h"
 
 
-
-// проводить тест после создания для контроля ошибок
-// класс - цыклический буффер хранящий ячейки OPTada_Memory_S_CyclicMemoryElemsBufferElement (для создания связаных списков буфферов менеджера памяти)
-class OPTada_C_CyclicMemoryElemsBuffer
+// class - cyclic buffer storing cells OPTadaS_MemoryCellElement (to create linked memory manager buffer lists)
+class OPTadaC_MemoryCells_StaticCyclicBuffer
 {
 private:
 
-	OPTada_S_CyclicMemoryElemsBufferElement * Buffer = NULL;      // буфер элементов
-	OPTada_S_CyclicMemoryElemsBufferElement * Buffer_last = NULL; // указатель на начало последнего элемента в буффере
-	size_t Length = 0; // Общеее колличество ячеек
-	size_t Locked = 0; // колличество захваченых ячеек
-	size_t Index  = 0; // указатель на текущий элемент в буффере (на ближайшей свободной, иначе 0)	
+	OPTadaS_MemoryCellElement* buffer = NULL;      // element buffer
+	OPTadaS_MemoryCellElement* buffer_last = NULL; // pointer to the beginning of the last element in the buffer
+
+	size_t length = 0; // total number of cells
+	size_t locked = 0; // number of captured cells
+	size_t index  = 0; // pointer to the current element in the buffer (on the free, or 0)	
 
 public:
 
-	// Конструктор OPTada_Memory_C_CyclicMemoryElemsBuffer
-	// [in] size_t Size_ // Размер создаваемого буффера - колличество создаваемых ячеек
-	OPTada_C_CyclicMemoryElemsBuffer(size_t Size_);
+	// [in] size_t size_               // buffer Size - Number of Cells Created
+	// [in] bool& initDoneWithNoErrors // to verify the creation of the buffer
+	OPTadaC_MemoryCells_StaticCyclicBuffer(size_t size_, bool& initDoneWithNoErrors_);
 
-	// Деструктор OPTada_Memory_C_CyclicMemoryElemsBuffer
-	~OPTada_C_CyclicMemoryElemsBuffer();
+	~OPTadaC_MemoryCells_StaticCyclicBuffer();
 
 
-	// Запрос на свободный элемент
-	// return = ссылка на элемент | NULL - выдать элемент невозможно (ошибка)
-	OPTada_S_CyclicMemoryElemsBufferElement * Get_Element(); 
+	// Request for a free item
+	// return = link on the element | NULL - can not take element (error)
+	OPTadaS_MemoryCellElement* Get_Element();
 
-	// Возвращает элемент в кучу (освобождает его) - !! в ячейке остается мусор !!
-	// [in] OPTada_Memory_S_CyclicMemoryElemsBufferElement * Elem_ // Указатель на элемент
-	// return = true - успешно | false - ошибка
-	bool Return_Element(OPTada_Memory_S_CyclicMemoryElemsBufferElement * Elem_);
+	// Returns an item (free it) !- trash remains in the cell -!
+	// [in] OPTadaS_MemoryCellElement* Elem_ // Element pointer
+	// return = true - done | false - error
+	bool Return_Element(OPTadaS_MemoryCellElement* elem_);
 
-	// Возвращает колличество памяти потребляемое етим классом (+ захваченая память)
-	// return = колличество захваченой памяти етим классом (включая захваченую) (в байтах)
-	size_t Get_LockedAllMemory();
+	// Returns the amount of memory consumed by this class (+ captured memory)
+	// return = Returns the amount of memory consumed by this class (+ captured memory) (in bytes)
+	size_t Get_AllCapturedMemory();
 };
