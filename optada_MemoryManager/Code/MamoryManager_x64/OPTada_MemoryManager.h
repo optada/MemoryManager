@@ -1,7 +1,7 @@
 #pragma once
 
-#include "OPTada_C_TemplateMemoryBuffer.h"
-#include "OPTada_C_SimpleMemoryBuffer.h"
+#include "OPTadaC_TemplateOfMemoryBuffer.h"
+#include "OPTadaC_SimpleMemoryBuffer.h"
 #include "OPTada_C_MultithreadedSimpleMemoryBuffer.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -25,12 +25,12 @@ struct OPTada_Memory_S_MemoryManedger
 struct OPTada_Memory_S_MemoryManagerElement_Memory
 {
 public:
-	OPTada_C_TemplateMemoryBuffer * Buffer = NULL; // ссылка на общий класс (элемент - буффер)
+	OPTadaC_TemplateOfMemoryBuffer * Buffer = NULL; // ссылка на общий класс (элемент - буффер)
 	bool Element_locked = false; // false - €чейка свободна | true - заблокирована (зан€та)
 	int BufferType = 0; // тип буффера
 };
 
-sss // добавить контроль многопоточности при создании новых буферов
+//TODO // добавить контроль многопоточности при создании новых буферов
 
 // менеджер пам€ти
 // !! требует инициализации !!

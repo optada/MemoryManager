@@ -1,5 +1,10 @@
 
-#include "MamoryManager_x64\OPTada_MemoryManager.h"
+// #include "MamoryManager_x64\OPTada_MemoryManager.h"
+
+
+// tested
+//#include "MamoryManager_x64\OPTadaC_MemoryCells_StaticCyclicBuffer.h"
+//#include "MamoryManager_x64\OPTadaC_SimpleMemoryBuffer.h"
 
 #include <iostream>
 #include <stdio.h>
@@ -8,6 +13,152 @@
 
 using namespace std;
 
+
+// test for OPTadaC_MemoryCells_StaticCyclicBuffer | OK
+/*
+void testFor_OPTadaC_MemoryCells_StaticCyclicBuffer()
+{
+	bool del = false;
+	OPTadaC_MemoryCells_StaticCyclicBuffer Buffer = OPTadaC_MemoryCells_StaticCyclicBuffer(5, del);
+
+	cout << endl << del;
+	cout << endl << Buffer.Get_AllCapturedMemory();
+	
+	void* element1 = NULL;
+	void* element2 = NULL;
+	void* element3 = NULL;
+	void* element4 = NULL;
+	void* element5 = NULL;
+	void* element6 = NULL;
+
+	element1 = Buffer.Get_Element();
+	element2 = Buffer.Get_Element();
+	element3 = Buffer.Get_Element();
+	element4 = Buffer.Get_Element();
+	element5 = Buffer.Get_Element();
+	element6 = Buffer.Get_Element();
+
+	Buffer.Return_Element((OPTadaS_MemoryCell_Element*)element2);
+
+	element2 = Buffer.Get_Element();
+
+	Buffer.Return_Element((OPTadaS_MemoryCell_Element*)element1);
+	Buffer.Return_Element((OPTadaS_MemoryCell_Element*)element2);
+	Buffer.Return_Element((OPTadaS_MemoryCell_Element*)element3);
+	Buffer.Return_Element((OPTadaS_MemoryCell_Element*)element4);
+	Buffer.Return_Element((OPTadaS_MemoryCell_Element*)element5);
+	Buffer.Return_Element((OPTadaS_MemoryCell_Element*)element6);
+}
+*/
+
+// test for OPTadaC_SimpleMemoryBuffer | OK
+/*
+void testFor_OPTadaC_SimpleMemoryBuffer()
+{
+	bool initDoneWithNoErrors_ = false;
+	OPTadaC_SimpleMemoryBuffer Buffer = OPTadaC_SimpleMemoryBuffer(10, 5, 2, initDoneWithNoErrors_);
+
+	cout << "initDoneWithNoErrors_ - " << initDoneWithNoErrors_ << endl;
+	cout << "test buffer - " << Buffer.TestBuffer() << endl;
+	cout << "All locked memory :" << Buffer.Get_AllModulesLockedMemory() << endl;
+	cout << "Memory size :" << Buffer.Get_BufferMemorySize() << endl;
+	cout << "Locked memory :" << Buffer.Get_LockedMemory() << endl;
+
+	void* pok1 = NULL;
+	void* pok2 = NULL;
+	void* pok3 = NULL;
+	void* pok4 = NULL;
+	void* pok5 = NULL;
+	void* pok6 = NULL;
+
+	// incorrect or specifick input
+	pok1 = Buffer.GetMemory(-1);
+	pok1 = Buffer.GetMemory(1000000);
+	pok1 = Buffer.GetMemory(1000001);
+	
+	// incorrect reff
+	int a;
+	pok1 = &a;
+	Buffer.ReturnMemory(pok1);
+	pok1 = NULL;
+	Buffer.ReturnMemory(pok1);
+
+	// try get memory errors
+	pok1 = Buffer.GetMemory(8);
+	// low memory
+	pok2 = Buffer.GetMemory(3); // we have 2 now
+	// have no enaght memory
+	pok3 = Buffer.GetMemory(11); // we have 10 max
+
+	// refresh buffer
+	Buffer.Clear_Buffer();
+	pok1 = NULL;
+	pok2 = NULL;
+	pok3 = NULL;
+
+	// fragmentaion mamory error +
+	pok1 = Buffer.GetMemory(4); // XX XX 00 00 00
+	pok2 = Buffer.GetMemory(2); // XX XX XX 00 00
+	pok3 = Buffer.GetMemory(4); // XX XX XX XX XX
+	Buffer.ReturnMemory(pok1); // 00 00 XX XX XX
+	Buffer.ReturnMemory(pok3); // 00 00 XX 00 00 
+	// now we have 8 memory (2 * 4 cells)
+	pok4 = Buffer.GetMemory(8); // error
+
+	// refresh buffer
+	Buffer.Clear_Buffer();
+	pok1 = NULL;
+	pok2 = NULL;
+	pok3 = NULL;
+	pok4 = NULL;
+
+	// marege free memory +
+	pok1 = Buffer.GetMemory(4); // XX XX 00 00 00
+	pok2 = Buffer.GetMemory(2); // XX XX XX 00 00
+	pok3 = Buffer.GetMemory(4); // XX XX XX XX XX
+	Buffer.ReturnMemory(pok1); // 00 00 XX XX XX
+	Buffer.ReturnMemory(pok3); // 00 00 XX 00 00 
+	Buffer.ReturnMemory(pok2); // 00 00-00-00 00
+
+	// refresh buffer
+	Buffer.Clear_Buffer();
+	pok1 = NULL;
+	pok2 = NULL;
+	pok3 = NULL;
+	pok4 = NULL;
+
+}
+*/
+
+
+void main()
+{
+	cout << "MAIN enter point" << endl;
+
+	//testFor_OPTadaC_SimpleMemoryBuffer();
+
+	cout << endl << "- - - - - - - - END - - - - - - - - -" << endl;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 
 OPTada_MemoryManager MemoryManager; // инициализированный менеджер (перенести в глобальные)
 
@@ -63,7 +214,7 @@ int timer()
 	one->Length = 4;
 	one->Size = 1;
 
-	asd.Return_Element(tree);*/
+	asd.Return_Element(tree);
 
 	//OPTada_Memory_C_SimpleMemoryBuffer * buf = (OPTada_Memory_C_SimpleMemoryBuffer *)malloc(sizeof(OPTada_Memory_C_SimpleMemoryBuffer));
 	//buf->OPTada_Memory_C_SimpleMemoryBuffer::OPTada_Memory_C_SimpleMemoryBuffer(10000000, 10000000);
@@ -90,14 +241,17 @@ int timer()
 	/*tree = asd.Get_Element();
 	tree->Length = 8;
 	tree->Size = 3;*/
+/*
 	//for (int i = 0; i < 10000000; i++)
 	//{
 	//	/*ff = new OPTada_S_CiclicBufferElement;
-	//	delete (ff);*/
+	//	delete (ff);
 	//}
-	/* Код, время выполнения которого нужно измерить */
-	/*  */
+	// Код, время выполнения которого нужно измерить 
+	
 
+*/
+/*
 	end = clock();
 
 	printf("The above code block was executed in %.4f second(s)\n", ((double)end - start) / ((double)CLOCKS_PER_SEC));
@@ -122,7 +276,7 @@ void main()
 
 	/*OPTada_Memory_C_MultithreadedSimpleMemoryBuffer * a = new OPTada_Memory_C_MultithreadedSimpleMemoryBuffer(120, 120);
 	delete(a);*/
-
+/*
 	//OPTada_Memory_C_SimpleMemoryBuffer * buf = (OPTada_Memory_C_SimpleMemoryBuffer *)malloc(sizeof(OPTada_Memory_C_SimpleMemoryBuffer));
 	//buf->OPTada_Memory_C_SimpleMemoryBuffer::OPTada_Memory_C_SimpleMe
 	//memoryBuffer(31, 10);
@@ -208,21 +362,20 @@ void main()
 	//bu->ReturnMemory(link2);
 	//bu->ReturnMemoryMass(link1);
 
-
 	timer();
 	
 	/*OPTada_C_TemplateBuffer * g = NULL;
 	g = (OPTada_C_TemplateBuffer *) new B();
 	B * r;
-	r = (B *) g;*/
+	r = (B *) g;
 
 	//// создание класса
 	//LOLO * keke = (LOLO *)malloc(sizeof(LOLO) * 1); // запрос памяти
 	////new(keke) LOLO; // вызов конструктора !!! 
 	//keke->LOLO::LOLO(); // тоже вызов конструктора (запутался)
 	//// работа с объектом
-
-	/*int re = sizeof(OPTada_S_CiclicBufferElement);
+*/
+/*int re = sizeof(OPTada_S_CiclicBufferElement);
 	OPTada_C_CiclicBuffer_Memory asd(100000);
 
 	OPTada_S_CiclicBufferElement* one = NULL;
@@ -246,20 +399,12 @@ void main()
 		fore->Size = 4;
 	}
 	asd.Return_Element(two);*/
-
-
-
-
-
-	//class1 * keke = получение памяти
+//class1 * keke = получение памяти
 	//keke->class1::class1(); // вызов конструктора
 	////
 	//keke->~LOLO(); // вызов деструктора (удаление)
 	//free(keke); // освобождение памяти
 	//// завершение
-
-
-
 	//OPTada_C_CiclicBuffer_Memory Test(5);
 	//OPTada_S_CiclicBufferElement* el = Test.Get_Element();
 	//el->Link = malloc(sizeof(rt));
@@ -267,7 +412,7 @@ void main()
 	//*(dt*)(el->Link) = dt(); // корректный вызов конструктора
 	//((dt*)(el->Link))->~dt(); // корректный вызов деструктора
 	//free(el->Link);
-
+/*
 }
 
 
@@ -276,3 +421,6 @@ void main()
 // адресация в памяти (сохранение \ размер)
 
 //->Link = T::~T();   tamplate<class T> !!! учи идиот!
+
+
+*/

@@ -1,42 +1,6 @@
-﻿  OPTada_MemoryManager.cpp
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_C_CyclicMemoryElemsBuffer.h(54,69): error C2061: syntax error: identifier 'OPTada_Memory_S_CyclicMemoryElemsBufferElement'
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_C_MultithreadedSimpleMemoryBuffer.h(201,1): error C2660: 'OPTada_C_CyclicMemoryElemsBuffer::Return_Element': function does not take 1 arguments
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_C_CyclicMemoryElemsBuffer.h(54,7): message : see declaration of 'OPTada_C_CyclicMemoryElemsBuffer::Return_Element'
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_C_MultithreadedSimpleMemoryBuffer.h(205,1): error C2660: 'OPTada_C_CyclicMemoryElemsBuffer::Return_Element': function does not take 1 arguments
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_C_CyclicMemoryElemsBuffer.h(54,7): message : see declaration of 'OPTada_C_CyclicMemoryElemsBuffer::Return_Element'
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_C_MultithreadedSimpleMemoryBuffer.h(300,1): error C2660: 'OPTada_C_CyclicMemoryElemsBuffer::Return_Element': function does not take 1 arguments
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_C_CyclicMemoryElemsBuffer.h(54,7): message : see declaration of 'OPTada_C_CyclicMemoryElemsBuffer::Return_Element'
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_C_MultithreadedSimpleMemoryBuffer.h(351,1): error C2660: 'OPTada_C_CyclicMemoryElemsBuffer::Return_Element': function does not take 1 arguments
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_C_CyclicMemoryElemsBuffer.h(54,7): message : see declaration of 'OPTada_C_CyclicMemoryElemsBuffer::Return_Element'
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_MemoryManager.h(37,7): error C2143: syntax error: missing ';' before '<class-head>'
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_MemoryManager.h(38,1): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_MemoryManager.cpp(46,57): error C2300: 'OPTada_C_TemplateMemoryBuffer': class does not have a destructor called '~OPTada_Memory_C_TemplateMemoryBuffer'
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_MemoryManager.cpp(46,61): error C2065: 'ыыы': undeclared identifier
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_MemoryManager.cpp(47,5): error C2146: syntax error: missing ';' before identifier 'free'
-  OPTada_C_CyclicMemoryElemsBuffer.cpp
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_C_CyclicMemoryElemsBuffer.cpp(1,10): fatal error C1083: Cannot open include file: 'OPTada_Memory_C_CyclicMemoryElemsBuffer.h': No such file or directory
-  OPTada_C_SimpleMemoryBuffer.cpp
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_C_CyclicMemoryElemsBuffer.h(54,69): error C2061: syntax error: identifier 'OPTada_Memory_S_CyclicMemoryElemsBufferElement'
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_C_SimpleMemoryBuffer.cpp(185,53): error C2660: 'OPTada_C_CyclicMemoryElemsBuffer::Return_Element': function does not take 1 arguments
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_C_CyclicMemoryElemsBuffer.h(54,7): message : see declaration of 'OPTada_C_CyclicMemoryElemsBuffer::Return_Element'
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_C_SimpleMemoryBuffer.cpp(189,40): error C2660: 'OPTada_C_CyclicMemoryElemsBuffer::Return_Element': function does not take 1 arguments
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_C_CyclicMemoryElemsBuffer.h(54,7): message : see declaration of 'OPTada_C_CyclicMemoryElemsBuffer::Return_Element'
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_C_SimpleMemoryBuffer.cpp(272,44): error C2660: 'OPTada_C_CyclicMemoryElemsBuffer::Return_Element': function does not take 1 arguments
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_C_CyclicMemoryElemsBuffer.h(54,7): message : see declaration of 'OPTada_C_CyclicMemoryElemsBuffer::Return_Element'
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_C_SimpleMemoryBuffer.cpp(323,44): error C2660: 'OPTada_C_CyclicMemoryElemsBuffer::Return_Element': function does not take 1 arguments
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_C_CyclicMemoryElemsBuffer.h(54,7): message : see declaration of 'OPTada_C_CyclicMemoryElemsBuffer::Return_Element'
+﻿  OPTadaC_SimpleMemoryBuffer.cpp
+  OPTada_MemoryManager.cpp
   Source.cpp
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_C_CyclicMemoryElemsBuffer.h(54,69): error C2061: syntax error: identifier 'OPTada_Memory_S_CyclicMemoryElemsBufferElement'
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_C_MultithreadedSimpleMemoryBuffer.h(201,1): error C2660: 'OPTada_C_CyclicMemoryElemsBuffer::Return_Element': function does not take 1 arguments
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_C_CyclicMemoryElemsBuffer.h(54,7): message : see declaration of 'OPTada_C_CyclicMemoryElemsBuffer::Return_Element'
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_C_MultithreadedSimpleMemoryBuffer.h(205,1): error C2660: 'OPTada_C_CyclicMemoryElemsBuffer::Return_Element': function does not take 1 arguments
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_C_CyclicMemoryElemsBuffer.h(54,7): message : see declaration of 'OPTada_C_CyclicMemoryElemsBuffer::Return_Element'
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_C_MultithreadedSimpleMemoryBuffer.h(300,1): error C2660: 'OPTada_C_CyclicMemoryElemsBuffer::Return_Element': function does not take 1 arguments
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_C_CyclicMemoryElemsBuffer.h(54,7): message : see declaration of 'OPTada_C_CyclicMemoryElemsBuffer::Return_Element'
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_C_MultithreadedSimpleMemoryBuffer.h(351,1): error C2660: 'OPTada_C_CyclicMemoryElemsBuffer::Return_Element': function does not take 1 arguments
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_C_CyclicMemoryElemsBuffer.h(54,7): message : see declaration of 'OPTada_C_CyclicMemoryElemsBuffer::Return_Element'
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_MemoryManager.h(37,7): error C2143: syntax error: missing ';' before '<class-head>'
-D:\GIT\MamoryManager\optada_MemoryManager\Code\MamoryManager_x64\OPTada_MemoryManager.h(38,1): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-D:\GIT\MamoryManager\optada_MemoryManager\Code\Source.cpp(115,1): warning C4326: return type of 'main' should be 'int' instead of 'void'
-D:\GIT\MamoryManager\optada_MemoryManager\Code\Source.cpp(117,26): error C2065: 'OPTada_Memory_S_CyclicMemoryElemsBufferElement': undeclared identifier
+D:\GIT\MamoryManager\optada_MemoryManager\Code\Source.cpp(135,1): warning C4326: return type of 'main' should be 'int' instead of 'void'
   Generating Code...
+  optada_MemoryManager.vcxproj -> D:\GIT\MamoryManager\optada_MemoryManager\x64\Debug\optada_MemoryManager.exe

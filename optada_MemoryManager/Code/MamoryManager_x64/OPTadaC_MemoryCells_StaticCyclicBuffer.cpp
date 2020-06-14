@@ -1,20 +1,20 @@
 // Created by OPTada // Free for use //
 // - - - - - - - - - - - - - - - - - //
 
-#include "OPTada_C_CyclicMemoryElemsBuffer.h"
+#include "OPTadaC_MemoryCells_StaticCyclicBuffer.h"
 
 
 OPTadaC_MemoryCells_StaticCyclicBuffer::OPTadaC_MemoryCells_StaticCyclicBuffer(size_t size_, bool& initDoneWithNoErrors_)
 {
-	buffer = (OPTadaS_MemoryCellElement*)malloc(sizeof(OPTadaS_MemoryCellElement) * size_);
+	buffer = (OPTadaS_MemoryCell_Element*)malloc(sizeof(OPTadaS_MemoryCell_Element) * size_);
 	length = size_;
 	locked = 0;
 	index = 0;
 
 	if (buffer != NULL) {
 		for (int i = 0; i < length; i++) // use constructor for all cell structures
-			buffer[i] = OPTadaS_MemoryCellElement();
-		buffer_last = &buffer[length];
+			buffer[i] = OPTadaS_MemoryCell_Element();
+		buffer_last = &buffer[length - 1];
 		initDoneWithNoErrors_ = true;
 	}
 	else {
@@ -33,13 +33,13 @@ OPTadaC_MemoryCells_StaticCyclicBuffer::~OPTadaC_MemoryCells_StaticCyclicBuffer(
 	}
 }
 
-OPTadaS_MemoryCellElement * OPTadaC_MemoryCells_StaticCyclicBuffer::Get_Element()
+OPTadaS_MemoryCell_Element* OPTadaC_MemoryCells_StaticCyclicBuffer::Get_Element()
 {
 	if (length > locked) { // we have free cell
 		do {
 			// we are looking for a free cell
 			if (buffer[index].size == 0) { // cell is free
-				OPTadaS_MemoryCellElement* FElem = &buffer[index];
+				OPTadaS_MemoryCell_Element* FElem = &buffer[index];
 				FElem->size = 1;
 				FElem->isfree = true;
 				locked++;
@@ -59,10 +59,10 @@ OPTadaS_MemoryCellElement * OPTadaC_MemoryCells_StaticCyclicBuffer::Get_Element(
 	}
 }
 
-bool OPTadaC_MemoryCells_StaticCyclicBuffer::Return_Element(OPTadaS_MemoryCellElement* Elem_)
+bool OPTadaC_MemoryCells_StaticCyclicBuffer::Return_Element(OPTadaS_MemoryCell_Element* elem_)
 {
-	if (Elem_ != NULL && (Elem_ >= buffer && Elem_ <= buffer_last)) { // there is such a link
-		Elem_->size = 0; // cell is free now
+	if (elem_ != NULL && (elem_ >= buffer && elem_ <= buffer_last)) { // there is such a link
+		elem_->size = 0; // cell is free now
 		locked--;
 
 		return true;
@@ -74,5 +74,5 @@ bool OPTadaC_MemoryCells_StaticCyclicBuffer::Return_Element(OPTadaS_MemoryCellEl
 
 size_t OPTadaC_MemoryCells_StaticCyclicBuffer::Get_AllCapturedMemory()
 {
-	return (sizeof(OPTadaC_MemoryCells_StaticCyclicBuffer) + sizeof(OPTadaS_MemoryCellElement) * length);
+	return (sizeof(OPTadaC_MemoryCells_StaticCyclicBuffer) + sizeof(OPTadaS_MemoryCell_Element) * length);
 }

@@ -1,12 +1,12 @@
 #pragma once
 
-#include "OPTada_C_SimpleMemoryBuffer.h"
+#include "OPTadaC_SimpleMemoryBuffer.h"
 
 
 // Класс - стандартный буффер памяти с защитой данных для многопоточности
 // Желательно использовать для одноразовой загрузки данных или для данных на полную перезапись 
 // При запроссе пытается найти ячейку с достаточным объемом, отделяет от нее необходимый кусок и выдает пользователю
-class OPTada_C_MultithreadedSimpleMemoryBuffer : public OPTada_C_SimpleMemoryBuffer
+class OPTada_C_MultithreadedSimpleMemoryBuffer : public OPTadaC_SimpleMemoryBuffer
 {
 protected:
 
@@ -18,7 +18,7 @@ protected:
 
 		EnterCriticalSection(&ThreadSynchronization); // запрет на доступ (для синхронизации)
 
-		OPTadaS_MemoryCellElement * elem = FreeCells_Buffer;
+		OPTadaS_MemoryCell_Element * elem = freeCells_Buffer;
 		if (New_size_ < 1)
 		{
 			LeaveCriticalSection(&ThreadSynchronization); // разрешили доступ следующему потоку
@@ -26,13 +26,13 @@ protected:
 		}
 
 		// добавление коэфициента к размеру
-		size_t test_cell_size = New_size_ % Cell_Size;
+		size_t test_cell_size = New_size_ % cellOfDefragmentation_Size;
 		if (test_cell_size)
 		{
-			New_size_ += Cell_Size - test_cell_size;
+			New_size_ += cellOfDefragmentation_Size - test_cell_size;
 		}
 
-		while (FreeCells_Buffer)
+		while (freeCells_Buffer)
 		{
 			if (elem->size >= New_size_)
 			{ // нашли нужный размер, начинаем делить...
@@ -56,31 +56,31 @@ protected:
 					{ // нету элемента (ближе к началу)
 						if (elem->next_link)
 						{ // есть следующий элемент
-							FreeCells_Buffer = elem->next_link;
+							freeCells_Buffer = elem->next_link;
 							elem->next_link->previous_link = NULL;
 						}
 						else
 						{ // нету следующего элемента
-							FreeCells_Buffer = NULL;
+							freeCells_Buffer = NULL;
 						}
 					}
 
 					// сохранение размера занятой памяти
-					Locked += New_size_;
+					lockedMemory += New_size_;
 					elem->isfree = false;
 					// перенос в заблокированые
-					if (LockedCells_Buffer)
+					if (lockedCells_Buffer)
 					{ // если не NULL
-						LockedCells_Buffer->previous_link = elem;
+						lockedCells_Buffer->previous_link = elem;
 						elem->previous_link = NULL;
-						elem->next_link = LockedCells_Buffer;
-						LockedCells_Buffer = elem;
+						elem->next_link = lockedCells_Buffer;
+						lockedCells_Buffer = elem;
 					}
 					else
 					{ // если NULL - просто добавить 
 						elem->next_link = NULL;
 						elem->previous_link = NULL;
-						LockedCells_Buffer = elem;
+						lockedCells_Buffer = elem;
 					}
 
 					LeaveCriticalSection(&ThreadSynchronization); // разрешили доступ следующему потоку
@@ -90,7 +90,7 @@ protected:
 				{ // если не ноль - обновить free ячейку и создать lock ячейку
 
 				  // добавили новую ячейку для дальнейшего деления
-					OPTadaS_MemoryCellElement * new_elem = Elem_Buffer->Get_Element();
+					OPTadaS_MemoryCell_Element * new_elem = cellBuffer->Get_Element();
 					if (new_elem == NULL)
 					{
 						LeaveCriticalSection(&ThreadSynchronization); // разрешили доступ следующему потоку
@@ -109,7 +109,7 @@ protected:
 						new_elem->next_el = elem;
 						elem->previous_el = new_elem;
 						new_elem->previous_el = NULL;
-						FirstCell_Buffer = new_elem;
+						firstCell_Buffer = new_elem;
 					}
 
 					// отделяем кусочек и меняем ссылки в основном элементе
@@ -119,22 +119,22 @@ protected:
 					elem->link = &elem->link[New_size_];
 
 					// сохранение размера занятой памяти
-					Locked += New_size_;
+					lockedMemory += New_size_;
 					new_elem->isfree = false;
 
 					// перенос в заблокированые
-					if (LockedCells_Buffer)
+					if (lockedCells_Buffer)
 					{ // если не NULL
-						LockedCells_Buffer->previous_link = new_elem;
+						lockedCells_Buffer->previous_link = new_elem;
 						new_elem->previous_link = NULL;
-						new_elem->next_link = LockedCells_Buffer;
-						LockedCells_Buffer = new_elem;
+						new_elem->next_link = lockedCells_Buffer;
+						lockedCells_Buffer = new_elem;
 					}
 					else
 					{ // если NULL - просто добавить 
 						new_elem->next_link = NULL;
 						new_elem->previous_link = NULL;
-						LockedCells_Buffer = new_elem;
+						lockedCells_Buffer = new_elem;
 					}
 
 					LeaveCriticalSection(&ThreadSynchronization); // разрешили доступ следующему потоку
@@ -162,10 +162,11 @@ public:
 
 	// Конструктор OPTada_Memory_C_MultithreadedSimpleMemoryBuffer
 	// Память будет запрошена у ОС, дополнительный буффер будет создан
-	// [in] size_t Size_ // Размер создаваемого буффера (байт)
-	// [in] size_t Elem_Buffer_Size_ // Размер буффера элементов (дополнительный буффер) (колличество элементов)
-	// [in] size_t Cell_Size_ // Размер ячейки (коэфициента деления) для уменьшения фрагментации
-	OPTada_C_MultithreadedSimpleMemoryBuffer(size_t Size_, size_t Elem_Buffer_Size_, size_t Cell_Size_) : OPTada_C_SimpleMemoryBuffer(Size_, Elem_Buffer_Size_, Cell_Size_)
+	// [in] size_t Size_                 // Размер создаваемого буффера (байт)
+	// [in] size_t Elem_Buffer_Size_     // Размер буффера элементов (дополнительный буффер) (колличество элементов)
+	// [in] size_t Cell_Size_            // Размер ячейки (коэфициента деления) для уменьшения фрагментации
+	// [out] bool&  initDoneWithNoErrors // to verify the creation of the buffer
+	OPTada_C_MultithreadedSimpleMemoryBuffer(size_t Size_, size_t Elem_Buffer_Size_, size_t Cell_Size_, bool& initDoneWithNoErrors_) : OPTadaC_SimpleMemoryBuffer(Size_, Elem_Buffer_Size_, Cell_Size_, initDoneWithNoErrors_)
 	{
 		InitializeCriticalSection(&ThreadSynchronization); // инициализация критической секции
 	}
@@ -185,9 +186,9 @@ public:
 		EnterCriticalSection(&ThreadSynchronization); // запрет на доступ (для синхронизации)
 
 		// проходим по всем ячейкам и возвращаем их
-		OPTadaS_MemoryCellElement * cellDell = FirstCell_Buffer->next_el; // передаем ВТОРОЙ элемент
+		OPTadaS_MemoryCell_Element * cellDell = firstCell_Buffer->next_el; // передаем ВТОРОЙ элемент
 
-		if (!Elem_Buffer) // если нету буффера
+		if (!cellBuffer) // если нету буффера
 		{
 			LeaveCriticalSection(&ThreadSynchronization); // разрешили доступ следующему потоку
 			return false;
@@ -198,28 +199,28 @@ public:
 			if (cellDell->next_el) // если существует след элемент
 			{
 				cellDell = cellDell->next_el;
-				Elem_Buffer->Return_Element(cellDell->previous_el);
+				cellBuffer->Return_Element(cellDell->previous_el);
 			}
 			else // если ето последний элемент
 			{
-				Elem_Buffer->Return_Element(cellDell);
+				cellBuffer->Return_Element(cellDell);
 			}
 		}
 
 		// теперь настройка бкфферов заново
-		LockedCells_Buffer = NULL;
-		FreeCells_Buffer = FirstCell_Buffer;
+		lockedCells_Buffer = NULL;
+		freeCells_Buffer = firstCell_Buffer;
 
 		// настройка стартовой ячеки заново
-		if (!FreeCells_Buffer)
+		if (!freeCells_Buffer) //TODO проверить логику
 		{
-			FreeCells_Buffer->isfree = true;
-			FreeCells_Buffer->link = Buffer;
-			FreeCells_Buffer->next_el = NULL;
-			FreeCells_Buffer->previous_el = NULL;
-			FreeCells_Buffer->next_link = NULL;
-			FreeCells_Buffer->previous_link = NULL;
-			FreeCells_Buffer->size = Buffer_Length;
+			freeCells_Buffer->isfree = true;
+			freeCells_Buffer->link = buffer;
+			freeCells_Buffer->next_el = NULL;
+			freeCells_Buffer->previous_el = NULL;
+			freeCells_Buffer->next_link = NULL;
+			freeCells_Buffer->previous_link = NULL;
+			freeCells_Buffer->size = buffer_Length;
 		}
 
 		LeaveCriticalSection(&ThreadSynchronization); // разрешили доступ следующему потоку
@@ -244,9 +245,9 @@ public:
 	{
 		EnterCriticalSection(&ThreadSynchronization); // запрет на доступ (для синхронизации)
 
-		if (Link_ != NULL && (Link_ >= Buffer && Link_ <= &Buffer[Buffer_Length]))
+		if (Link_ != NULL && (Link_ >= buffer && Link_ <= &buffer[buffer_Length]))
 		{ // нашло ссылку в нашем диапазоне буффера
-			OPTadaS_MemoryCellElement * elem = LockedCells_Buffer;
+			OPTadaS_MemoryCell_Element * elem = lockedCells_Buffer;
 			while (elem)
 			{
 				if (elem->link == Link_)
@@ -269,21 +270,21 @@ public:
 					{ // нету элемента (ближе к началу)
 						if (elem->next_link)
 						{ // есть следующий элемент
-							LockedCells_Buffer = elem->next_link;
+							lockedCells_Buffer = elem->next_link;
 							elem->next_link->previous_link = NULL;
 						}
 						else
 						{ // нету следующего элемента
-							LockedCells_Buffer = NULL;
+							lockedCells_Buffer = NULL;
 						}
 					}
 
 					elem->next_link = NULL;
 					elem->previous_link = NULL;
-					Locked -= elem->size; // освободили размер
+					lockedMemory -= elem->size; // освободили размер
 					elem->isfree = true;
 
-					OPTadaS_MemoryCellElement * dell_elem = NULL;
+					OPTadaS_MemoryCell_Element * dell_elem = NULL;
 
 					// ищем соседей для слития (если не нашли - просто перенос в free) - kill sam sel f :(
 					if (elem->previous_el) // поиск элемента слева (предидущий)
@@ -297,7 +298,7 @@ public:
 							elem->previous_el->size += elem->size; // изменили общий размер
 							dell_elem = elem;
 							elem = elem->previous_el;
-							Elem_Buffer->Return_Element(dell_elem); // удаляем элемент
+							cellBuffer->Return_Element(dell_elem); // удаляем элемент
 						}
 					}
 					if (elem->next_el)
@@ -325,12 +326,12 @@ public:
 								{ // нету элемента (ближе к началу)
 									if (elem->next_link)
 									{ // есть следующий элемент
-										FreeCells_Buffer = elem->next_link;
+										freeCells_Buffer = elem->next_link;
 										elem->next_link->previous_link = NULL;
 									}
 									else
 									{ // нету следующего элемента
-										FreeCells_Buffer = NULL;
+										freeCells_Buffer = NULL;
 									}
 								}
 							}
@@ -343,29 +344,29 @@ public:
 							if (elem->previous_el != NULL)
 								elem->previous_el->next_el = elem;
 							else
-								FirstCell_Buffer = elem;
+								firstCell_Buffer = elem;
 
 							elem->size += dell_elem->size; // изменили общий размер
 							elem->link = dell_elem->link;
 
-							Elem_Buffer->Return_Element(dell_elem); // удаляем элемент
+							cellBuffer->Return_Element(dell_elem); // удаляем элемент
 
 						}
 					}
 					if (!dell_elem) // если слить нескем - запихиваем в free
 					{ // перенос в free
-						if (FreeCells_Buffer)
+						if (freeCells_Buffer)
 						{ // если не NULL
-							FreeCells_Buffer->previous_link = elem;
+							freeCells_Buffer->previous_link = elem;
 							elem->previous_link = NULL;
-							elem->next_link = FreeCells_Buffer;
-							FreeCells_Buffer = elem;
+							elem->next_link = freeCells_Buffer;
+							freeCells_Buffer = elem;
 						}
 						else
 						{ // если NULL - просто добавить 
 							elem->next_link = NULL;
 							elem->previous_link = NULL;
-							FreeCells_Buffer = elem;
+							freeCells_Buffer = elem;
 						}
 					}
 

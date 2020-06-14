@@ -20,10 +20,11 @@ bool OPTada_MemoryManager::Init_Mamager(int Size_buff_)
 	new_elem_ = &Elem_buffer[0];
 	new_elem_->BufferType = 2; // установка дл€ первого буфера тип стандартного €чеистого
 	new_elem_->Element_locked = true;
-	new_elem_->Buffer = (OPTada_C_TemplateMemoryBuffer *)malloc(sizeof(OPTada_C_MultithreadedSimpleMemoryBuffer)); // запрос пам€ти
+	new_elem_->Buffer = (OPTadaC_TemplateOfMemoryBuffer *)malloc(sizeof(OPTada_C_MultithreadedSimpleMemoryBuffer)); // запрос пам€ти
 	// создали и инициализировали
-	((OPTada_C_MultithreadedSimpleMemoryBuffer *)new_elem_->Buffer)->OPTada_C_MultithreadedSimpleMemoryBuffer::OPTada_C_MultithreadedSimpleMemoryBuffer(OPTada_Memory_DEF_StandartSizeNewBuffer, OPTada_Memory_DEF_StandartSizeNewBufferElems, OPTada_Memory_DEF_StandartSizeNewBufferCellSize);
-	if (!new_elem_->Buffer->Get_TestBuffer())
+	bool initDoneWithNoErrors_ = false;
+	((OPTada_C_MultithreadedSimpleMemoryBuffer *)new_elem_->Buffer)->OPTada_C_MultithreadedSimpleMemoryBuffer::OPTada_C_MultithreadedSimpleMemoryBuffer(OPTada_Memory_DEF_StandartSizeNewBuffer, OPTada_Memory_DEF_StandartSizeNewBufferElems, OPTada_Memory_DEF_StandartSizeNewBufferCellSize, initDoneWithNoErrors_);
+	if (!new_elem_->Buffer->TestBuffer())
 		return false;
 
 	New_Buffer.type = 2;
@@ -43,7 +44,7 @@ bool OPTada_MemoryManager::Free_Manager()
 			if (elem_->Buffer != NULL)
 			{
 				elem_->Buffer->Clear_Buffer();
-				elem_->Buffer->~OPTada_Memory_C_TemplateMemoryBuffer(); ыыы // не корректный вызов???
+				//TODO elem_->Buffer->~OPTada_Memory_C_TemplateMemoryBuffer(); //TODO ыыы // не корректный вызов???
 				free(elem_->Buffer);
 			}
 			elem_->BufferType = 0;
