@@ -162,10 +162,11 @@ public:
 
 	// Конструктор OPTada_Memory_C_MultithreadedSimpleMemoryBuffer
 	// Память будет запрошена у ОС, дополнительный буффер будет создан
-	// [in] size_t Size_ // Размер создаваемого буффера (байт)
-	// [in] size_t Elem_Buffer_Size_ // Размер буффера элементов (дополнительный буффер) (колличество элементов)
-	// [in] size_t Cell_Size_ // Размер ячейки (коэфициента деления) для уменьшения фрагментации
-	OPTada_C_MultithreadedSimpleMemoryBuffer(size_t Size_, size_t Elem_Buffer_Size_, size_t Cell_Size_) : OPTadaC_SimpleMemoryBuffer(Size_, Elem_Buffer_Size_, Cell_Size_)
+	// [in] size_t Size_                 // Размер создаваемого буффера (байт)
+	// [in] size_t Elem_Buffer_Size_     // Размер буффера элементов (дополнительный буффер) (колличество элементов)
+	// [in] size_t Cell_Size_            // Размер ячейки (коэфициента деления) для уменьшения фрагментации
+	// [out] bool&  initDoneWithNoErrors // to verify the creation of the buffer
+	OPTada_C_MultithreadedSimpleMemoryBuffer(size_t Size_, size_t Elem_Buffer_Size_, size_t Cell_Size_, bool& initDoneWithNoErrors_) : OPTadaC_SimpleMemoryBuffer(Size_, Elem_Buffer_Size_, Cell_Size_, initDoneWithNoErrors_)
 	{
 		InitializeCriticalSection(&ThreadSynchronization); // инициализация критической секции
 	}

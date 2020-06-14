@@ -4,7 +4,7 @@
 
 // tested
 //#include "MamoryManager_x64\OPTadaC_MemoryCells_StaticCyclicBuffer.h"
-
+//#include "MamoryManager_x64\OPTadaC_SimpleMemoryBuffer.h"
 
 #include <iostream>
 #include <stdio.h>
@@ -41,23 +41,101 @@ void testFor_OPTadaC_MemoryCells_StaticCyclicBuffer()
 	Buffer.Return_Element((OPTadaS_MemoryCell_Element*)element2);
 
 	element2 = Buffer.Get_Element();
+
+	Buffer.Return_Element((OPTadaS_MemoryCell_Element*)element1);
+	Buffer.Return_Element((OPTadaS_MemoryCell_Element*)element2);
+	Buffer.Return_Element((OPTadaS_MemoryCell_Element*)element3);
+	Buffer.Return_Element((OPTadaS_MemoryCell_Element*)element4);
+	Buffer.Return_Element((OPTadaS_MemoryCell_Element*)element5);
+	Buffer.Return_Element((OPTadaS_MemoryCell_Element*)element6);
 }
 */
 
-
-
-void test()
+// test for OPTadaC_SimpleMemoryBuffer | OK
+/*
+void testFor_OPTadaC_SimpleMemoryBuffer()
 {
+	bool initDoneWithNoErrors_ = false;
+	OPTadaC_SimpleMemoryBuffer Buffer = OPTadaC_SimpleMemoryBuffer(10, 5, 2, initDoneWithNoErrors_);
+
+	cout << "initDoneWithNoErrors_ - " << initDoneWithNoErrors_ << endl;
+	cout << "test buffer - " << Buffer.TestBuffer() << endl;
+	cout << "All locked memory :" << Buffer.Get_AllModulesLockedMemory() << endl;
+	cout << "Memory size :" << Buffer.Get_BufferMemorySize() << endl;
+	cout << "Locked memory :" << Buffer.Get_LockedMemory() << endl;
+
+	void* pok1 = NULL;
+	void* pok2 = NULL;
+	void* pok3 = NULL;
+	void* pok4 = NULL;
+	void* pok5 = NULL;
+	void* pok6 = NULL;
+
+	// incorrect or specifick input
+	pok1 = Buffer.GetMemory(-1);
+	pok1 = Buffer.GetMemory(1000000);
+	pok1 = Buffer.GetMemory(1000001);
+	
+	// incorrect reff
+	int a;
+	pok1 = &a;
+	Buffer.ReturnMemory(pok1);
+	pok1 = NULL;
+	Buffer.ReturnMemory(pok1);
+
+	// try get memory errors
+	pok1 = Buffer.GetMemory(8);
+	// low memory
+	pok2 = Buffer.GetMemory(3); // we have 2 now
+	// have no enaght memory
+	pok3 = Buffer.GetMemory(11); // we have 10 max
+
+	// refresh buffer
+	Buffer.Clear_Buffer();
+	pok1 = NULL;
+	pok2 = NULL;
+	pok3 = NULL;
+
+	// fragmentaion mamory error +
+	pok1 = Buffer.GetMemory(4); // XX XX 00 00 00
+	pok2 = Buffer.GetMemory(2); // XX XX XX 00 00
+	pok3 = Buffer.GetMemory(4); // XX XX XX XX XX
+	Buffer.ReturnMemory(pok1); // 00 00 XX XX XX
+	Buffer.ReturnMemory(pok3); // 00 00 XX 00 00 
+	// now we have 8 memory (2 * 4 cells)
+	pok4 = Buffer.GetMemory(8); // error
+
+	// refresh buffer
+	Buffer.Clear_Buffer();
+	pok1 = NULL;
+	pok2 = NULL;
+	pok3 = NULL;
+	pok4 = NULL;
+
+	// marege free memory +
+	pok1 = Buffer.GetMemory(4); // XX XX 00 00 00
+	pok2 = Buffer.GetMemory(2); // XX XX XX 00 00
+	pok3 = Buffer.GetMemory(4); // XX XX XX XX XX
+	Buffer.ReturnMemory(pok1); // 00 00 XX XX XX
+	Buffer.ReturnMemory(pok3); // 00 00 XX 00 00 
+	Buffer.ReturnMemory(pok2); // 00 00-00-00 00
+
+	// refresh buffer
+	Buffer.Clear_Buffer();
+	pok1 = NULL;
+	pok2 = NULL;
+	pok3 = NULL;
+	pok4 = NULL;
 
 }
-
+*/
 
 
 void main()
 {
 	cout << "MAIN enter point" << endl;
 
-	test();
+	//testFor_OPTadaC_SimpleMemoryBuffer();
 
 	cout << endl << "- - - - - - - - END - - - - - - - - -" << endl;
 }

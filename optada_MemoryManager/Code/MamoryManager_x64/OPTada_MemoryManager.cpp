@@ -22,7 +22,8 @@ bool OPTada_MemoryManager::Init_Mamager(int Size_buff_)
 	new_elem_->Element_locked = true;
 	new_elem_->Buffer = (OPTadaC_TemplateOfMemoryBuffer *)malloc(sizeof(OPTada_C_MultithreadedSimpleMemoryBuffer)); // запрос памяти
 	// создали и инициализировали
-	((OPTada_C_MultithreadedSimpleMemoryBuffer *)new_elem_->Buffer)->OPTada_C_MultithreadedSimpleMemoryBuffer::OPTada_C_MultithreadedSimpleMemoryBuffer(OPTada_Memory_DEF_StandartSizeNewBuffer, OPTada_Memory_DEF_StandartSizeNewBufferElems, OPTada_Memory_DEF_StandartSizeNewBufferCellSize);
+	bool initDoneWithNoErrors_ = false;
+	((OPTada_C_MultithreadedSimpleMemoryBuffer *)new_elem_->Buffer)->OPTada_C_MultithreadedSimpleMemoryBuffer::OPTada_C_MultithreadedSimpleMemoryBuffer(OPTada_Memory_DEF_StandartSizeNewBuffer, OPTada_Memory_DEF_StandartSizeNewBufferElems, OPTada_Memory_DEF_StandartSizeNewBufferCellSize, initDoneWithNoErrors_);
 	if (!new_elem_->Buffer->TestBuffer())
 		return false;
 

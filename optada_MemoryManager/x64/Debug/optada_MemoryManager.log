@@ -1,7 +1,6 @@
-﻿  OPTadaC_MemoryCells_StaticCyclicBuffer.cpp
-  OPTadaC_SimpleMemoryBuffer.cpp
+﻿  OPTadaC_SimpleMemoryBuffer.cpp
   OPTada_MemoryManager.cpp
   Source.cpp
-D:\GIT\MamoryManager\optada_MemoryManager\Code\Source.cpp(57,1): warning C4326: return type of 'main' should be 'int' instead of 'void'
+D:\GIT\MamoryManager\optada_MemoryManager\Code\Source.cpp(135,1): warning C4326: return type of 'main' should be 'int' instead of 'void'
   Generating Code...
   optada_MemoryManager.vcxproj -> D:\GIT\MamoryManager\optada_MemoryManager\x64\Debug\optada_MemoryManager.exe

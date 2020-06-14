@@ -23,15 +23,31 @@ protected:
 
 
 	// The method searches for free memory, if found, does all the work and allocates
-	void* TakeMemoryMethod(size_t new_size_);
+	inline void* TakeMemoryMethod(size_t new_size_);
+
+	// The method cuts a cell from the buffer
+	// [in] OPTadaS_MemoryCell_Element* cell_elem_  // link on cell element
+	// [in] OPTadaS_MemoryCell_Element** buffer_    // target buffer
+	inline void CutCellFromTheBuffer(OPTadaS_MemoryCell_Element* cell_elem_, OPTadaS_MemoryCell_Element** buffer_);
+
+	// transfer cell to buffer
+	// [in] OPTadaS_MemoryCell_Element* cell_elem_  // link on cell element
+	// [in] OPTadaS_MemoryCell_Element** buffer_    // target buffer
+	inline void TransferCellToBuffer(OPTadaS_MemoryCell_Element* cell_elem_, OPTadaS_MemoryCell_Element** buffer_);
+
+	// The method tries to merge neighboring free cells
+	// [in] OPTadaS_MemoryCell_Element* cell_elem_ // link on cell element
+	// return = true - merge successfull | false - no merger
+	inline bool TryMergeNeighboringFreeCells(OPTadaS_MemoryCell_Element* cell_elem_);
 
 public:
 
 	// The memory will be requested from the OS, an additional buffer will be created
-	// [in] size_t size_                       // The size of the created buffer (bytes)
-	// [in] size_t cellBuffer_Size_            // Size of additional buffer elements (number of elements)
-	// [in] size_t cellOfDefragmentation_Size_ // Cell size (division ratio) to reduce fragmentation
-	OPTadaC_SimpleMemoryBuffer(size_t size_, size_t cellBuffer_Size_, size_t cellOfDefragmentation_Size_);
+	// [in]  size_t size_                       // The size of the created buffer (bytes)
+	// [in]  size_t cellBuffer_Size_            // Size of additional buffer elements (number of elements)
+	// [in]  size_t cellOfDefragmentation_Size_ // Cell size (division ratio) to reduce fragmentation
+	// [out] bool&  initDoneWithNoErrors        // to verify the creation of the buffer
+	OPTadaC_SimpleMemoryBuffer(size_t size_, size_t cellBuffer_Size_, size_t cellOfDefragmentation_Size_, bool& initDoneWithNoErrors_);
 
 	~OPTadaC_SimpleMemoryBuffer();
 
@@ -54,7 +70,7 @@ public:
 	bool ReturnMemory(void* link_);
 
 	// The method tests the buffer for errors when creating
-	// return = true - the buffer is successful | false - creating buffer failed
+	// return = true - the buffer is successful | false - creating buffer failed or with mistakes
 	bool TestBuffer();
 
 	// The method returns the count of locked memory in the buffer (in bytes)
@@ -63,9 +79,9 @@ public:
 
 	// The method returns the amount of occupied memory of self (+ additional buffers) (in bytes)
 	// return = number - the amount of memory used by the system and its components (in bytes)
-	size_t Get_AllCapturedMemory();
+	size_t Get_AllModulesLockedMemory();
 
 	// The method returns the size of the memory buffer (in bytes)
 	// return = number - buffer size(in bytes) | 0 - buffer not created / error
-	size_t Get_BufferOfMemorySize();
+	size_t Get_BufferMemorySize();
 };
