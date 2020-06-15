@@ -4,8 +4,8 @@
 #include "OPTadaC_MultithreadedSimpleMemoryBuffer.h"
 
 
-OPTadaC_MultithreadedSimpleMemoryBuffer::OPTadaC_MultithreadedSimpleMemoryBuffer(size_t size_, size_t elem_Buffer_Size_, size_t cell_Size_, bool& initDoneWithNoErrors_) 
-	: OPTadaC_SimpleMemoryBuffer(size_, elem_Buffer_Size_, cell_Size_, initDoneWithNoErrors_)
+OPTadaC_MultithreadedSimpleMemoryBuffer::OPTadaC_MultithreadedSimpleMemoryBuffer(size_t memoryLength_, size_t cellBuffer_Size_, size_t cellOfDefragmentation_Size_, bool& initDoneWithNoErrors_) 
+	: OPTadaC_SimpleMemoryBuffer(memoryLength_, cellBuffer_Size_, cellOfDefragmentation_Size_, initDoneWithNoErrors_)
 {
 	InitializeCriticalSection(&threadSynchronization); // инициализация критической секции
 }

@@ -11,14 +11,14 @@ OPTadaC_MemoryCells_StaticCyclicBuffer::OPTadaC_MemoryCells_StaticCyclicBuffer(s
 	locked = 0;
 	index = 0;
 
-	if (buffer != NULL) {
+	if (buffer != nullptr) {
 		for (int i = 0; i < length; i++) // use constructor for all cell structures
 			buffer[i] = OPTadaS_MemoryCell_Element();
 		buffer_last = &buffer[length - 1];
 		initDoneWithNoErrors_ = true;
 	}
 	else {
-		buffer_last = NULL;
+		buffer_last = nullptr;
 		length = 0;
 		index = 0;
 		initDoneWithNoErrors_ = false; // can not get memory for buffer
@@ -27,9 +27,9 @@ OPTadaC_MemoryCells_StaticCyclicBuffer::OPTadaC_MemoryCells_StaticCyclicBuffer(s
 
 OPTadaC_MemoryCells_StaticCyclicBuffer::~OPTadaC_MemoryCells_StaticCyclicBuffer()
 {
-	if (buffer != NULL) {
+	if (buffer != nullptr) {
 		free(buffer);
-		buffer = NULL;
+		buffer = nullptr;
 	}
 }
 
@@ -55,19 +55,19 @@ OPTadaS_MemoryCell_Element* OPTadaC_MemoryCells_StaticCyclicBuffer::Get_Element(
 		} while (true);
 	}
 	else { // we have no free cell
-		return NULL; 
+		return nullptr; 
 	}
 }
 
 bool OPTadaC_MemoryCells_StaticCyclicBuffer::Return_Element(OPTadaS_MemoryCell_Element* elem_)
 {
-	if (elem_ != NULL && (elem_ >= buffer && elem_ <= buffer_last)) { // there is such a link
+	if (elem_ != nullptr && (elem_ >= buffer && elem_ <= buffer_last)) { // there is such a link
 		elem_->size = 0; // cell is free now
 		locked--;
 
 		return true;
 	}
-	else { // NULL - there is no such cell in this array
+	else { // nullptr - there is no such cell in this array
 		return false;
 	}
 }

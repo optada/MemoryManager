@@ -139,20 +139,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Code\MamoryManager_x64\OPTadaC_MemoryCells_StaticCyclicBuffer.cpp" />
-    <ClCompile Include="Code\MamoryManager_x64\OPTadaC_SimpleMemoryBuffer.cpp" />
-    <ClCompile Include="Code\MamoryManager_x64\OPTadaC_MultithreadedSimpleMemoryBuffer.cpp" />
     <ClCompile Include="Code\MamoryManager_x64\OPTada_MemoryManager.cpp" />
+    <ClCompile Include="Code\MamoryManager_x64\SupportBuffers\CellBuffer\OPTadaC_MemoryCells_StaticCyclicBuffer.cpp" />
+    <ClCompile Include="Code\MamoryManager_x64\SupportBuffers\OPTadaC_MultithreadedSimpleMemoryBuffer.cpp" />
+    <ClCompile Include="Code\MamoryManager_x64\SupportBuffers\OPTadaC_SimpleMemoryBuffer.cpp" />
     <ClCompile Include="Code\Source.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Code\MamoryManager_x64\OPTadaS_MemoryCell_Element.h" />
     <ClInclude Include="Code\MamoryManager_x64\OPTada_MemoryManager.h" />
     <ClInclude Include="Code\MamoryManager_x64\OPTada_MemoryManager_Settings.h" />
-    <ClInclude Include="Code\MamoryManager_x64\OPTadaC_MemoryCells_StaticCyclicBuffer.h" />
-    <ClInclude Include="Code\MamoryManager_x64\OPTadaC_MultithreadedSimpleMemoryBuffer.h" />
-    <ClInclude Include="Code\MamoryManager_x64\OPTadaC_SimpleMemoryBuffer.h" />
-    <ClInclude Include="Code\MamoryManager_x64\OPTadaC_TemplateOfMemoryBuffer.h" />
+    <ClInclude Include="Code\MamoryManager_x64\SupportBuffers\CellBuffer\OPTadaC_MemoryCells_StaticCyclicBuffer.h" />
+    <ClInclude Include="Code\MamoryManager_x64\SupportBuffers\CellBuffer\OPTadaS_MemoryCell_Element.h" />
+    <ClInclude Include="Code\MamoryManager_x64\SupportBuffers\OPTadaC_MultithreadedSimpleMemoryBuffer.h" />
+    <ClInclude Include="Code\MamoryManager_x64\SupportBuffers\OPTadaC_SimpleMemoryBuffer.h" />
+    <ClInclude Include="Code\MamoryManager_x64\SupportBuffers\OPTadaC_TemplateOfMemoryBuffer.h" />
+    <ClInclude Include="Code\MamoryManager_x64\SupportBuffers\OPTadaS_TemplateMemoryBuffer_Element.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -27,40 +27,43 @@
     <ClCompile Include="Code\Source.cpp">
       <Filter>Main</Filter>
     </ClCompile>
-    <ClCompile Include="Code\MamoryManager_x64\OPTadaC_MemoryCells_StaticCyclicBuffer.cpp">
-      <Filter>MemoryManager\SupportBuffers\CellsBuffer</Filter>
-    </ClCompile>
-    <ClCompile Include="Code\MamoryManager_x64\OPTadaC_SimpleMemoryBuffer.cpp">
-      <Filter>MemoryManager\SupportBuffers\MemoryBuffers\.cpp</Filter>
-    </ClCompile>
     <ClCompile Include="Code\MamoryManager_x64\OPTada_MemoryManager.cpp">
       <Filter>MemoryManager</Filter>
     </ClCompile>
-    <ClCompile Include="Code\MamoryManager_x64\OPTadaC_MultithreadedSimpleMemoryBuffer.cpp">
+    <ClCompile Include="Code\MamoryManager_x64\SupportBuffers\OPTadaC_MultithreadedSimpleMemoryBuffer.cpp">
       <Filter>MemoryManager\SupportBuffers\MemoryBuffers\.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\MamoryManager_x64\SupportBuffers\OPTadaC_SimpleMemoryBuffer.cpp">
+      <Filter>MemoryManager\SupportBuffers\MemoryBuffers\.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\MamoryManager_x64\SupportBuffers\CellBuffer\OPTadaC_MemoryCells_StaticCyclicBuffer.cpp">
+      <Filter>MemoryManager\SupportBuffers\CellsBuffer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\MamoryManager_x64\OPTada_MemoryManager_Settings.h">
       <Filter>MemoryManager</Filter>
     </ClInclude>
-    <ClInclude Include="Code\MamoryManager_x64\OPTadaC_MemoryCells_StaticCyclicBuffer.h">
-      <Filter>MemoryManager\SupportBuffers\CellsBuffer</Filter>
-    </ClInclude>
-    <ClInclude Include="Code\MamoryManager_x64\OPTadaC_TemplateOfMemoryBuffer.h">
-      <Filter>MemoryManager\SupportBuffers\MemoryBuffers</Filter>
-    </ClInclude>
-    <ClInclude Include="Code\MamoryManager_x64\OPTadaC_SimpleMemoryBuffer.h">
-      <Filter>MemoryManager\SupportBuffers\MemoryBuffers\.h</Filter>
-    </ClInclude>
     <ClInclude Include="Code\MamoryManager_x64\OPTada_MemoryManager.h">
       <Filter>MemoryManager</Filter>
     </ClInclude>
-    <ClInclude Include="Code\MamoryManager_x64\OPTadaS_MemoryCell_Element.h">
+    <ClInclude Include="Code\MamoryManager_x64\SupportBuffers\OPTadaC_MultithreadedSimpleMemoryBuffer.h">
+      <Filter>MemoryManager\SupportBuffers\MemoryBuffers\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\MamoryManager_x64\SupportBuffers\OPTadaC_SimpleMemoryBuffer.h">
+      <Filter>MemoryManager\SupportBuffers\MemoryBuffers\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\MamoryManager_x64\SupportBuffers\OPTadaC_TemplateOfMemoryBuffer.h">
+      <Filter>MemoryManager\SupportBuffers</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\MamoryManager_x64\SupportBuffers\OPTadaS_TemplateMemoryBuffer_Element.h">
+      <Filter>MemoryManager\SupportBuffers</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\MamoryManager_x64\SupportBuffers\CellBuffer\OPTadaC_MemoryCells_StaticCyclicBuffer.h">
       <Filter>MemoryManager\SupportBuffers\CellsBuffer</Filter>
     </ClInclude>
-    <ClInclude Include="Code\MamoryManager_x64\OPTadaC_MultithreadedSimpleMemoryBuffer.h">
-      <Filter>MemoryManager\SupportBuffers\MemoryBuffers\.h</Filter>
+    <ClInclude Include="Code\MamoryManager_x64\SupportBuffers\CellBuffer\OPTadaS_MemoryCell_Element.h">
+      <Filter>MemoryManager\SupportBuffers\CellsBuffer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

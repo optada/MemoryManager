@@ -6,7 +6,7 @@
 //#include "MamoryManager_x64\OPTadaC_MemoryCells_StaticCyclicBuffer.h"
 //#include "MamoryManager_x64\OPTadaC_SimpleMemoryBuffer.h"
 //#include "MamoryManager_x64\OPTadaC_MultithreadedSimpleMemoryBuffer.h"
-
+#include "MamoryManager_x64\OPTada_MemoryManager.h"
 
 #include <iostream>
 #include <stdio.h>
@@ -26,12 +26,12 @@ void testFor_OPTadaC_MemoryCells_StaticCyclicBuffer()
 	cout << endl << del;
 	cout << endl << Buffer.Get_AllCapturedMemory();
 	
-	void* element1 = NULL;
-	void* element2 = NULL;
-	void* element3 = NULL;
-	void* element4 = NULL;
-	void* element5 = NULL;
-	void* element6 = NULL;
+	void* element1 = nullptr;
+	void* element2 = nullptr;
+	void* element3 = nullptr;
+	void* element4 = nullptr;
+	void* element5 = nullptr;
+	void* element6 = nullptr;
 
 	element1 = Buffer.Get_Element();
 	element2 = Buffer.Get_Element();
@@ -66,12 +66,12 @@ void testFor_OPTadaC_SimpleMemoryBuffer()
 	cout << "Memory size :" << Buffer.Get_BufferMemorySize() << endl;
 	cout << "Locked memory :" << Buffer.Get_LockedMemory() << endl;
 
-	void* pok1 = NULL;
-	void* pok2 = NULL;
-	void* pok3 = NULL;
-	void* pok4 = NULL;
-	void* pok5 = NULL;
-	void* pok6 = NULL;
+	void* pok1 = nullptr;
+	void* pok2 = nullptr;
+	void* pok3 = nullptr;
+	void* pok4 = nullptr;
+	void* pok5 = nullptr;
+	void* pok6 = nullptr;
 
 	// incorrect or specifick input
 	pok1 = Buffer.GetMemory(-1); // ! unsigned parameter
@@ -82,7 +82,7 @@ void testFor_OPTadaC_SimpleMemoryBuffer()
 	int a;
 	pok1 = &a;
 	Buffer.ReturnMemory(pok1);
-	pok1 = NULL;
+	pok1 = nullptr;
 	Buffer.ReturnMemory(pok1);
 
 	// try get memory errors
@@ -94,9 +94,9 @@ void testFor_OPTadaC_SimpleMemoryBuffer()
 
 	// refresh buffer
 	Buffer.Clear_Buffer();
-	pok1 = NULL;
-	pok2 = NULL;
-	pok3 = NULL;
+	pok1 = nullptr;
+	pok2 = nullptr;
+	pok3 = nullptr;
 
 	// fragmentaion mamory error +
 	pok1 = Buffer.GetMemory(4); // XX XX 00 00 00
@@ -105,14 +105,14 @@ void testFor_OPTadaC_SimpleMemoryBuffer()
 	Buffer.ReturnMemory(pok1); // 00 00 XX XX XX
 	Buffer.ReturnMemory(pok3); // 00 00 XX 00 00 
 	// now we have 8 memory (2 * 4 cells)
-	pok4 = Buffer.GetMemory(8); // error (NULL)
+	pok4 = Buffer.GetMemory(8); // error (nullptr)
 
 	// refresh buffer
 	Buffer.Clear_Buffer();
-	pok1 = NULL;
-	pok2 = NULL;
-	pok3 = NULL;
-	pok4 = NULL;
+	pok1 = nullptr;
+	pok2 = nullptr;
+	pok3 = nullptr;
+	pok4 = nullptr;
 
 	// marege free memory +
 	pok1 = Buffer.GetMemory(4); // XX XX 00 00 00
@@ -124,10 +124,10 @@ void testFor_OPTadaC_SimpleMemoryBuffer()
 
 	// refresh buffer
 	Buffer.Clear_Buffer();
-	pok1 = NULL;
-	pok2 = NULL;
-	pok3 = NULL;
-	pok4 = NULL;
+	pok1 = nullptr;
+	pok2 = nullptr;
+	pok3 = nullptr;
+	pok4 = nullptr;
 
 }
 */
@@ -145,12 +145,12 @@ void testFor_OPTadaC_MultithreadedSimpleMemoryBuffer()
 	cout << "Memory size :" << Buffer.Get_BufferMemorySize() << endl;
 	cout << "Locked memory :" << Buffer.Get_LockedMemory() << endl;
 
-	void* pok1 = NULL;
-	void* pok2 = NULL;
-	void* pok3 = NULL;
-	void* pok4 = NULL;
-	void* pok5 = NULL;
-	void* pok6 = NULL;
+	void* pok1 = nullptr;
+	void* pok2 = nullptr;
+	void* pok3 = nullptr;
+	void* pok4 = nullptr;
+	void* pok5 = nullptr;
+	void* pok6 = nullptr;
 
 	// incorrect or specifick input
 	pok1 = Buffer.GetMemory(-1); // ! unsigned parameter
@@ -161,7 +161,7 @@ void testFor_OPTadaC_MultithreadedSimpleMemoryBuffer()
 	int a;
 	pok1 = &a;
 	Buffer.ReturnMemory(pok1);
-	pok1 = NULL;
+	pok1 = nullptr;
 	Buffer.ReturnMemory(pok1);
 
 	// try get memory errors
@@ -173,9 +173,9 @@ void testFor_OPTadaC_MultithreadedSimpleMemoryBuffer()
 
 	// refresh buffer
 	Buffer.Clear_Buffer();
-	pok1 = NULL;
-	pok2 = NULL;
-	pok3 = NULL;
+	pok1 = nullptr;
+	pok2 = nullptr;
+	pok3 = nullptr;
 
 	// fragmentaion mamory error +
 	pok1 = Buffer.GetMemory(4); // XX XX 00 00 00
@@ -184,14 +184,14 @@ void testFor_OPTadaC_MultithreadedSimpleMemoryBuffer()
 	Buffer.ReturnMemory(pok1); // 00 00 XX XX XX
 	Buffer.ReturnMemory(pok3); // 00 00 XX 00 00
 	// now we have 8 memory (2 * 4 cells)
-	pok4 = Buffer.GetMemory(8); // error (NULL)
+	pok4 = Buffer.GetMemory(8); // error (nullptr)
 
 	// refresh buffer
 	Buffer.Clear_Buffer();
-	pok1 = NULL;
-	pok2 = NULL;
-	pok3 = NULL;
-	pok4 = NULL;
+	pok1 = nullptr;
+	pok2 = nullptr;
+	pok3 = nullptr;
+	pok4 = nullptr;
 
 	// marege free memory +
 	pok1 = Buffer.GetMemory(4); // XX XX 00 00 00
@@ -203,10 +203,10 @@ void testFor_OPTadaC_MultithreadedSimpleMemoryBuffer()
 
 	// refresh buffer
 	Buffer.Clear_Buffer();
-	pok1 = NULL;
-	pok2 = NULL;
-	pok3 = NULL;
-	pok4 = NULL;
+	pok1 = nullptr;
+	pok2 = nullptr;
+	pok3 = nullptr;
+	pok4 = nullptr;
 
 }
 */
@@ -215,7 +215,10 @@ void testFor_OPTadaC_MultithreadedSimpleMemoryBuffer()
 void main()
 {
 	cout << "MAIN enter point" << endl;
-
+	{
+		bool initDoneWithNoErrors_ = false;
+		OPTadaC_MultithreadedSimpleMemoryBuffer Buffer = OPTadaC_MultithreadedSimpleMemoryBuffer(10, 5, 2, initDoneWithNoErrors_);
+	}
 
 	cout << endl << "- - - - - - - - END - - - - - - - - -" << endl;
 }
@@ -251,10 +254,10 @@ int timer()
 	/*int re = sizeof(OPTada_S_CyclicBufferElement_Memory);
 	OPTada_C_CiclicBuffer_Memory asd(50003);
 
-	OPTada_S_CyclicBufferElement_Memory* one = NULL;
-	OPTada_S_CyclicBufferElement_Memory* two = NULL;
-	OPTada_S_CyclicBufferElement_Memory* tree = NULL;
-	OPTada_S_CyclicBufferElement_Memory* fore = NULL;
+	OPTada_S_CyclicBufferElement_Memory* one = nullptr;
+	OPTada_S_CyclicBufferElement_Memory* two = nullptr;
+	OPTada_S_CyclicBufferElement_Memory* tree = nullptr;
+	OPTada_S_CyclicBufferElement_Memory* fore = nullptr;
 
 
 
@@ -446,7 +449,7 @@ void main()
 
 	timer();
 	
-	/*OPTada_C_TemplateBuffer * g = NULL;
+	/*OPTada_C_TemplateBuffer * g = nullptr;
 	g = (OPTada_C_TemplateBuffer *) new B();
 	B * r;
 	r = (B *) g;
@@ -460,10 +463,10 @@ void main()
 /*int re = sizeof(OPTada_S_CiclicBufferElement);
 	OPTada_C_CiclicBuffer_Memory asd(100000);
 
-	OPTada_S_CiclicBufferElement* one = NULL;
-	OPTada_S_CiclicBufferElement* two = NULL;
-	OPTada_S_CiclicBufferElement* tree = NULL;
-	OPTada_S_CiclicBufferElement* fore = NULL;
+	OPTada_S_CiclicBufferElement* one = nullptr;
+	OPTada_S_CiclicBufferElement* two = nullptr;
+	OPTada_S_CiclicBufferElement* tree = nullptr;
+	OPTada_S_CiclicBufferElement* fore = nullptr;
 
 	
 	one = asd.Get_Element();
