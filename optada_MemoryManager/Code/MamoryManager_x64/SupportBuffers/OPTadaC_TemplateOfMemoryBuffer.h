@@ -3,7 +3,9 @@
 
 #pragma once
 
-#include "OPTadaC_MemoryCells_StaticCyclicBuffer.h"
+#include "windows.h" // to synchronize threads + (malloc|free)
+
+#include "CellBuffer\OPTadaC_MemoryCells_StaticCyclicBuffer.h"
 
 
 // class - template for various memory buffers
@@ -32,9 +34,9 @@ public:
 	// virtual | The method returns the amount of occupied memory in the buffer (in bytes)
 	virtual size_t Get_LockedMemory() = 0; 
 
+	// virtual | The method returns the size of the memory buffer (in bytes)
+	virtual size_t Get_BufferMemorySize() = 0;
+
 	// virtual | The method returns the amount of occupied memory of self (+ additional buffers) (in bytes)
 	virtual size_t Get_AllModulesLockedMemory() = 0; 
-
-	// virtual | The method returns the size of the memory buffer (in bytes)
-	virtual size_t Get_BufferMemorySize() = 0; 
 };

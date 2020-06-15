@@ -13,11 +13,11 @@ class OPTadaC_SimpleMemoryBuffer : public OPTadaC_TemplateOfMemoryBuffer
 {
 protected:
 
-	OPTadaC_MemoryCells_StaticCyclicBuffer* cellBuffer = NULL; // Buffer with elements - cells
+	OPTadaC_MemoryCells_StaticCyclicBuffer* cellBuffer = nullptr; // Buffer with elements - cells
 
-	OPTadaS_MemoryCell_Element* firstCell_Buffer   = NULL; // Pointer to the first cell
-	OPTadaS_MemoryCell_Element* freeCells_Buffer   = NULL; // Free Cell Buffer
-	OPTadaS_MemoryCell_Element* lockedCells_Buffer = NULL; // Locked Cell Buffer
+	OPTadaS_MemoryCell_Element* firstCell_Buffer   = nullptr; // Pointer to the first cell
+	OPTadaS_MemoryCell_Element* freeCells_Buffer   = nullptr; // Free Cell Buffer
+	OPTadaS_MemoryCell_Element* lockedCells_Buffer = nullptr; // Locked Cell Buffer
 
 	size_t cellOfDefragmentation_Size = 0; // coefficient of division of information (to reduce fragmentation) (byte)
 
@@ -43,13 +43,13 @@ protected:
 public:
 
 	// The memory will be requested from the OS, an additional buffer will be created
-	// [in]  size_t size_                       // The size of the created buffer (bytes)
+	// [in]  size_t memoryLength_               // The size of the created buffer (bytes)
 	// [in]  size_t cellBuffer_Size_            // Size of additional buffer elements (number of elements)
 	// [in]  size_t cellOfDefragmentation_Size_ // Cell size (division ratio) to reduce fragmentation
 	// [out] bool&  initDoneWithNoErrors        // to verify the creation of the buffer
-	OPTadaC_SimpleMemoryBuffer(size_t size_, size_t cellBuffer_Size_, size_t cellOfDefragmentation_Size_, bool& initDoneWithNoErrors_);
+	OPTadaC_SimpleMemoryBuffer(size_t memoryLength_, size_t cellBuffer_Size_, size_t cellOfDefragmentation_Size_, bool& initDoneWithNoErrors_);
 
-	~OPTadaC_SimpleMemoryBuffer();
+	virtual ~OPTadaC_SimpleMemoryBuffer();
 
 
 	// !- memory is marked free and does not call destructors -!
@@ -60,7 +60,7 @@ public:
 	// !- not initialized, only memory allocated -!
 	// The method will try to find the closest piece of memory and return it (allocated for use) not an array
 	// [in] size_t new_Length_ // requested memory length (in bytes)
-	// return = returns a pointer to memory | NULL - if failed
+	// return = returns a pointer to memory | nullptr - if failed
 	void* GetMemory(size_t new_Length_);
 
 	// !- the destructor is not called, the memory is marked as "free" -!
@@ -77,11 +77,11 @@ public:
 	// return = count of memory used (locked) in this buffer
 	size_t Get_LockedMemory();
 
-	// The method returns the amount of occupied memory of self (+ additional buffers) (in bytes)
-	// return = number - the amount of memory used by the system and its components (in bytes)
-	size_t Get_AllModulesLockedMemory();
-
 	// The method returns the size of the memory buffer (in bytes)
 	// return = number - buffer size(in bytes) | 0 - buffer not created / error
 	size_t Get_BufferMemorySize();
+
+	// The method returns the amount of occupied memory of self (+ additional buffers) (in bytes)
+	// return = number - the amount of memory used by the system and its components (in bytes)
+	size_t Get_AllModulesLockedMemory();
 };

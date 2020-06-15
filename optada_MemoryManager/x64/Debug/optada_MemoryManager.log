@@ -1,3 +1,2 @@
-﻿  Source.cpp
-D:\GIT\MamoryManager\optada_MemoryManager\Code\Source.cpp(216,1): warning C4326: return type of 'main' should be 'int' instead of 'void'
+﻿  OPTada_MemoryManager.cpp
   optada_MemoryManager.vcxproj -> D:\GIT\MamoryManager\optada_MemoryManager\x64\Debug\optada_MemoryManager.exe

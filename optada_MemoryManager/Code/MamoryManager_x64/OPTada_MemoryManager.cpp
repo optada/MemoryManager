@@ -1,100 +1,308 @@
+// Created by OPTada // Free for use //
+// - - - - - - - - - - - - - - - - - //
+
 #include "OPTada_MemoryManager.h"
 
-bool OPTada_MemoryManager::Init_Mamager(int Size_buff_)
+
+OPTadaS_Key_MemoryManager* OPTada_MemoryManager::initKeyForBuffer(int bufferNomber_)
 {
-	if (Size_buff_ < 1)
-		return false;
-	Size_buff_ += 1;
-	Elem_buffer = (OPTada_Memory_S_MemoryManagerElement_Memory *)malloc(sizeof(OPTada_Memory_S_MemoryManagerElement_Memory) * Size_buff_); // получили пам€ть
-	if (Elem_buffer == NULL)
-		return false;
-	Size_buff = Size_buff_;
+	// get memory for key
+	OPTadaS_Key_MemoryManager* newKey = (OPTadaS_Key_MemoryManager*)malloc(sizeof(OPTadaS_Key_MemoryManager));
+	if (!newKey) {
+		return nullptr;
+	}
 
-	OPTada_Memory_S_MemoryManagerElement_Memory * new_elem_ = NULL;
-	for (int i = 0; i < Size_buff; i++)
-	{
-		new_elem_ = &Elem_buffer[i];
-		new_elem_->OPTada_Memory_S_MemoryManagerElement_Memory::OPTada_Memory_S_MemoryManagerElement_Memory(); // запуск конструкторов дл€ структур
+	// init key 
+	newKey->OPTadaS_Key_MemoryManager::OPTadaS_Key_MemoryManager();
+	newKey->bufferNomber = bufferNomber_;
+	newKey->memoryManagerSaveLink = this;
+
+	return newKey;
+}
+
+
+OPTada_MemoryManager::~OPTada_MemoryManager()
+{
+	Free_Manager();
+}
+
+
+bool OPTada_MemoryManager::Init_Mamager(int countOfBuffers_)
+{
+	if (buffer_OfMemoryBuffers) {
+		return false;
+	}
+
+	if (countOfBuffers_ < 1) {
+		return false;
+	}
+
+	InitializeCriticalSection(&threadSynchronization); // critical section initialization
+
+	// get memory for buffer list
+	buffer_OfMemoryBuffers = (OPTadaS_TemplateMemoryBuffer_Element*)malloc(sizeof(OPTadaS_TemplateMemoryBuffer_Element) * countOfBuffers_); 
+	if (buffer_OfMemoryBuffers == nullptr) {
+		return false;
+	}
+	count_OfMemoryBuffers = countOfBuffers_;
+	count_createdBuffers = 0;
+	
+	// init templates
+	OPTadaS_TemplateMemoryBuffer_Element * new_elem_ = nullptr;
+	for (int i = 0; i < count_OfMemoryBuffers; i++) {
+
+		new_elem_ = &buffer_OfMemoryBuffers[i];
+		new_elem_->OPTadaS_TemplateMemoryBuffer_Element::OPTadaS_TemplateMemoryBuffer_Element();
 	}	
-
-	new_elem_ = &Elem_buffer[0];
-	new_elem_->BufferType = 2; // установка дл€ первого буфера тип стандартного €чеистого
-	new_elem_->Element_locked = true;
-	new_elem_->Buffer = (OPTadaC_TemplateOfMemoryBuffer *)malloc(sizeof(OPTadaC_MultithreadedSimpleMemoryBuffer)); // запрос пам€ти
-	// создали и инициализировали
-	bool initDoneWithNoErrors_ = false;
-	((OPTadaC_MultithreadedSimpleMemoryBuffer *)new_elem_->Buffer)->OPTadaC_MultithreadedSimpleMemoryBuffer::OPTadaC_MultithreadedSimpleMemoryBuffer(OPTada_Memory_DEF_StandartSizeNewBuffer, OPTada_Memory_DEF_StandartSizeNewBufferElems, OPTada_Memory_DEF_StandartSizeNewBufferCellSize, initDoneWithNoErrors_);
-	if (!new_elem_->Buffer->TestBuffer())
-		return false;
-
-	New_Buffer.type = 2;
-	New_Buffer.nomer = 0;
 
 	return true;
 }
 
 bool OPTada_MemoryManager::Free_Manager()
 {
-	OPTada_Memory_S_MemoryManagerElement_Memory * elem_ = NULL;
-	for (int i = 0; i < Size_buff; i++)
-	{
-		elem_ = &Elem_buffer[i];
-		if (elem_->Element_locked == true)
-		{
-			if (elem_->Buffer != NULL)
-			{
-				elem_->Buffer->Clear_Buffer();
-				//TODO elem_->Buffer->~OPTada_Memory_C_TemplateMemoryBuffer(); //TODO ыыы // не корректный вызов???
-				free(elem_->Buffer);
+	EnterCriticalSection(&threadSynchronization); // access lock (for synchronization)
+
+	OPTadaS_TemplateMemoryBuffer_Element* elem_ = nullptr;
+	for (int i = 0; i < count_OfMemoryBuffers; i++) {
+
+		elem_ = &buffer_OfMemoryBuffers[i];
+
+		if (elem_->isLocked == true) {
+			if (elem_->buffer != nullptr) {
+				elem_->buffer->Clear_Buffer();
+				elem_->buffer->~OPTadaC_TemplateOfMemoryBuffer(); // destroy buffer (virtual)
+				free(elem_->buffer);
+				elem_->buffer = nullptr;
 			}
-			elem_->BufferType = 0;
-			elem_->Element_locked = false;
+			elem_->bufferID = -1;
+			elem_->isLocked = false;
 		}
 	}
 
-	New_Buffer.type = -1;
-	New_Buffer.nomer = -1;
-	Size_buff = 0;
-	if (Elem_buffer)
-	{
-		free(Elem_buffer);
+	count_OfMemoryBuffers = 0;
+	count_createdBuffers = 0;
+
+	if (buffer_OfMemoryBuffers) {
+		free(buffer_OfMemoryBuffers);
+		buffer_OfMemoryBuffers = nullptr;
 	}
+
+	LeaveCriticalSection(&threadSynchronization); // allowed access to the next stream
+
+	DeleteCriticalSection(&threadSynchronization); // delete critical section
 
 	return true;
 }
 
-OPTada_Memory_S_MemoryManedger * OPTada_MemoryManager::CreateNewBuffer(int type_, size_t Size_, size_t Elem_Buffer_Size_, size_t Cell_Size_)
+
+OPTadaS_Key_MemoryManager* OPTada_MemoryManager::CreateNewMemoryBuffer(int bufferID_, size_t memoryLength_, size_t cellBuffer_Size_, size_t cellOfDefragmentation_Size_, OPTadaE_BufferTypes_ForMemoryManager bufferType_)
 {
-	OPTada_Memory_S_MemoryManagerElement_Memory * elem_ = NULL;
-	for (int i = 0; i < Size_buff; i++)
-	{
-		elem_ = &Elem_buffer[i];
-		if (elem_->Element_locked == false)
-		{
-			elem_->Element_locked = true;
-			elem_->BufferType = type_;
-			switch (type_) // type
-			{
-			case 1:
-			{
-				// создание и сразу возврат указател€ + не забыть освободить синхронизацию потоков
-			}
-				break;
-			case 2:
-			{
-				// создание многопоточного буфера и сразу возврат указател€ + не забыть освободить синхронизацию потоков
-			}
-				break;
-			default:
-			{
-				elem_->BufferType = 0;
-				elem_->Buffer = NULL;
-				elem_->Element_locked = false;
-				return NULL;
-			}
-				break;
+	// transferring repeating pieces of code from this method to separate ones is possible
+	// I didnТt do this because of the uncertainty regarding initialization of possibly added memory buffers
+
+	EnterCriticalSection(&threadSynchronization); // access lock (for synchronization)
+
+	OPTadaS_TemplateMemoryBuffer_Element* elem_ = nullptr;
+
+	if (count_OfMemoryBuffers - count_createdBuffers > 0 && buffer_OfMemoryBuffers) {	// we can create new buffer
+
+		for (int i = 0; i < count_OfMemoryBuffers; i++) {
+
+			elem_ = &buffer_OfMemoryBuffers[i];
+			if (elem_->isLocked == false) { // we can use this element
+
+				// switch bufferType_
+				switch (bufferType_)
+				{
+
+				case ENUM_SimpleMemoryBuffer: {
+					
+					// get memory for buffer
+					OPTadaC_SimpleMemoryBuffer* newMemoryBuffer = (OPTadaC_SimpleMemoryBuffer*)malloc(sizeof(OPTadaC_SimpleMemoryBuffer));
+					if (!newMemoryBuffer) {
+						LeaveCriticalSection(&threadSynchronization); // allowed access to the next stream
+						return nullptr;
+					}
+
+					// init memory buffer
+					bool initDoneWithNoErrors_ = false;
+					newMemoryBuffer->OPTadaC_SimpleMemoryBuffer::OPTadaC_SimpleMemoryBuffer(memoryLength_, cellBuffer_Size_, cellOfDefragmentation_Size_, initDoneWithNoErrors_);
+					if (!initDoneWithNoErrors_ || !newMemoryBuffer->TestBuffer()) {
+						if (newMemoryBuffer) {
+							free(newMemoryBuffer);
+						}
+						LeaveCriticalSection(&threadSynchronization); // allowed access to the next stream
+						return nullptr;
+					}
+
+					// setup memoryBuffer_element
+					elem_->isLocked = true;
+					elem_->bufferID = bufferID_;
+					elem_->buffer = newMemoryBuffer;
+
+					// create key for buffer
+					OPTadaS_Key_MemoryManager* newKey = initKeyForBuffer(i);
+					if (!newKey) {
+						if (newMemoryBuffer) {
+							free(newMemoryBuffer);
+						}
+						LeaveCriticalSection(&threadSynchronization); // allowed access to the next stream
+						return nullptr;
+					}
+
+					count_createdBuffers++;
+					return newKey;
+
+				} break;
+
+				case ENUM_MultithreadedSimpleMemoryBuffer: {
+
+					// get memory for buffer
+					OPTadaC_MultithreadedSimpleMemoryBuffer* newMemoryBuffer = (OPTadaC_MultithreadedSimpleMemoryBuffer*)malloc(sizeof(OPTadaC_SimpleMemoryBuffer));
+					if (!newMemoryBuffer) {
+						LeaveCriticalSection(&threadSynchronization); // allowed access to the next stream
+						return nullptr;
+					}
+
+					// init memory buffer
+					bool initDoneWithNoErrors_ = false;
+					newMemoryBuffer->OPTadaC_MultithreadedSimpleMemoryBuffer::OPTadaC_MultithreadedSimpleMemoryBuffer(memoryLength_, cellBuffer_Size_, cellOfDefragmentation_Size_, initDoneWithNoErrors_);
+					if (!initDoneWithNoErrors_ || !newMemoryBuffer->TestBuffer()) {
+						if (newMemoryBuffer) {
+							free(newMemoryBuffer);
+						}
+						LeaveCriticalSection(&threadSynchronization); // allowed access to the next stream
+						return nullptr;
+					}
+
+					// setup memoryBuffer_element
+					elem_->isLocked = true;
+					elem_->bufferID = bufferID_;
+					elem_->buffer = newMemoryBuffer;
+
+					// create key for buffer
+					OPTadaS_Key_MemoryManager* newKey = initKeyForBuffer(i);
+					if (!newKey) {
+						if (newMemoryBuffer) {
+							free(newMemoryBuffer);
+						}
+						LeaveCriticalSection(&threadSynchronization); // allowed access to the next stream
+						return nullptr;
+					}
+
+					count_createdBuffers++;
+					return newKey;
+
+				} break;
+
+				default: {
+					LeaveCriticalSection(&threadSynchronization); // allowed access to the next stream
+					return nullptr;
+				} break;
+
+				} // switch end
 			}
 		}
 	}
-	return NULL;
+
+	LeaveCriticalSection(&threadSynchronization); // allowed access to the next stream
+
+	return nullptr;
+}
+
+bool OPTada_MemoryManager::DeleteMemoryBuffer(OPTadaS_Key_MemoryManager** key_Buffer_)
+{
+	// check key
+	if (!(*key_Buffer_) || (*key_Buffer_)->memoryManagerSaveLink != this) {
+		return false;
+	}
+
+	OPTadaS_TemplateMemoryBuffer_Element* elem_ = &buffer_OfMemoryBuffers[(*key_Buffer_)->bufferNomber];
+	if (elem_->buffer != nullptr) {
+		elem_->buffer->Clear_Buffer();
+		elem_->buffer->~OPTadaC_TemplateOfMemoryBuffer(); // destroy buffer (virtual)
+		free(elem_->buffer);
+		elem_->buffer = nullptr;
+	}
+	elem_->bufferID = -1;
+	elem_->isLocked = false;
+
+	count_createdBuffers--;
+
+	// kill key
+	if ((*key_Buffer_)) {
+		free((*key_Buffer_)); // !WARNING!
+	}
+	(*key_Buffer_) = nullptr;
+
+	return true;
+}
+
+bool OPTada_MemoryManager::Clear_Buffer(OPTadaS_Key_MemoryManager* key_Buffer_)
+{
+	// check key
+	if (!key_Buffer_ || key_Buffer_->memoryManagerSaveLink != this) {
+		return false;
+	}
+
+	return (&buffer_OfMemoryBuffers[key_Buffer_->bufferNomber])->buffer->Clear_Buffer();
+}
+
+void* OPTada_MemoryManager::GetMemory(OPTadaS_Key_MemoryManager* key_Buffer_, size_t size_)
+{
+	// check key
+	if (!key_Buffer_ || key_Buffer_->memoryManagerSaveLink != this) {
+		return nullptr;
+	}
+
+	return (&buffer_OfMemoryBuffers[key_Buffer_->bufferNomber])->buffer->GetMemory(size_);
+}
+
+bool OPTada_MemoryManager::ReturnMemory(OPTadaS_Key_MemoryManager* key_Buffer_, void* link_)
+{
+	// check key
+	if (!key_Buffer_ || key_Buffer_->memoryManagerSaveLink != this) {
+		return false;
+	}
+
+	return (&buffer_OfMemoryBuffers[key_Buffer_->bufferNomber])->buffer->ReturnMemory(link_);
+}
+
+
+size_t OPTada_MemoryManager::Get_LockedMemory(OPTadaS_Key_MemoryManager* key_Buffer_)
+{
+	// check key
+	if (!key_Buffer_ || key_Buffer_->memoryManagerSaveLink != this) {
+		return false;
+	}
+
+	return (&buffer_OfMemoryBuffers[key_Buffer_->bufferNomber])->buffer->Get_LockedMemory();
+}
+
+size_t OPTada_MemoryManager::Get_BufferMemorySize(OPTadaS_Key_MemoryManager* key_Buffer_)
+{
+	// check key
+	if (!key_Buffer_ || key_Buffer_->memoryManagerSaveLink != this) {
+		return false;
+	}
+
+	return (&buffer_OfMemoryBuffers[key_Buffer_->bufferNomber])->buffer->Get_BufferMemorySize();
+}
+
+size_t OPTada_MemoryManager::Get_AllModulesLockedMemory()
+{
+	size_t allCapturedMemory = 0;
+
+	// me 
+	allCapturedMemory += sizeof(OPTada_MemoryManager) + (sizeof(OPTadaS_TemplateMemoryBuffer_Element) * count_OfMemoryBuffers);
+
+	// all buffers
+	for (int i = 0; i < count_OfMemoryBuffers; i++) {
+
+		if ((&buffer_OfMemoryBuffers[i])->isLocked == true) { // we have buffer here
+			allCapturedMemory += (&buffer_OfMemoryBuffers[i])->buffer->Get_AllModulesLockedMemory();
+		}
+	}
+
+	return size_t();
 }

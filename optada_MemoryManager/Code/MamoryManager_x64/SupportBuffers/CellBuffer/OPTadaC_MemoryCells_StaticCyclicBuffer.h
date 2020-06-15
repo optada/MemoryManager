@@ -3,7 +3,8 @@
 
 #pragma once
 
-#include "OPTada_MemoryManager_Settings.h"
+#include "windows.h" // (malloc|free)
+
 #include "OPTadaS_MemoryCell_Element.h"
 
 
@@ -12,8 +13,8 @@ class OPTadaC_MemoryCells_StaticCyclicBuffer
 {
 private:
 
-	OPTadaS_MemoryCell_Element* buffer      = NULL; // element buffer
-	OPTadaS_MemoryCell_Element* buffer_last = NULL; // pointer to the beginning of the last element in the buffer
+	OPTadaS_MemoryCell_Element* buffer      = nullptr; // element buffer
+	OPTadaS_MemoryCell_Element* buffer_last = nullptr; // pointer to the beginning of the last element in the buffer
 
 	size_t length = 0; // total number of cells
 	size_t locked = 0; // number of captured cells
@@ -29,7 +30,7 @@ public:
 
 
 	// Request for a free item
-	// return = link on the element | NULL - can not take element (error)
+	// return = link on the element | nullptr - can not take element (error)
 	OPTadaS_MemoryCell_Element* Get_Element();
 
 	// Returns an item (free it) !- trash remains in the cell -!

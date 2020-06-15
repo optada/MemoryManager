@@ -1,122 +1,144 @@
+// Created by OPTada // Free for use //
+// - - - - - - - - - - - - - - - - - //
+
 #pragma once
 
-#include "OPTadaC_TemplateOfMemoryBuffer.h"
-#include "OPTadaC_SimpleMemoryBuffer.h"
-#include "OPTadaC_MultithreadedSimpleMemoryBuffer.h"
+#include "OPTada_MemoryManager_Settings.h"
+
+#include "SupportBuffers\OPTadaS_TemplateMemoryBuffer_Element.h"
+
+#include "SupportBuffers\OPTadaC_TemplateOfMemoryBuffer.h"
+#include "SupportBuffers\OPTadaC_SimpleMemoryBuffer.h"
+#include "SupportBuffers\OPTadaC_MultithreadedSimpleMemoryBuffer.h"
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // ВНИМАНИЕ!!! ПРОВЕРКИ НА ОШИБКИ ЕСТЬ, НО НЕТУ ЛОГИКИ ДЕЙСТВИЙ ПРИ ОШИБКАХ В КОНСТРУКТОРАХ!!! //
 // НЕОБХОДИМО ПРОВЕРИТЬ БУФФЕР ПОСЛЕ СОЗДАНИЯ												   //
 //		СОЗДАТЬ БУФФЕР																		   //
 //		ЗАПРОСИТЬ МИНИМАЛЬНУЮ ЯЧЕЙКУ ПАМЯТИ													   //
-// ЕСЛИ ПРИ ЗАПРОСЕ ПАМЯТИ ВЫ ПОЛУЧИЛИ NULL - СКОРЕЕ ВСЕГО ОШИБКА ПРИ СОЗДАНИИ БУФФЕРА!!!!	   //
+// ЕСЛИ ПРИ ЗАПРОСЕ ПАМЯТИ ВЫ ПОЛУЧИЛИ nullptr - СКОРЕЕ ВСЕГО ОШИБКА ПРИ СОЗДАНИИ БУФФЕРА!!!!  //
 // Добавлена проверка при создании буффера на ошибки                                           //
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-// структура для доступа к буфферу памяти +
-struct OPTada_Memory_S_MemoryManedger
+// structure for accessing the memory buffer
+// !- DO NOT CHANGE DATA IN THIS STRUCTURE -!
+struct OPTadaS_Key_MemoryManager
 {
-	int nomer = -1; // указатель на определенный буффер в менеджере памяти
-	int type = -1; // если -1 - не инициализирован, если 1 - < то тип памяти (зачем? я - хз, для деструктора наверное)
+	int bufferNomber            = -1;      // memory buffer number in the memory manager
+	void* memoryManagerSaveLink = nullptr; // link to the memory manager for checking the key
 };
 
-// структура для менеджера памяти +
-struct OPTada_Memory_S_MemoryManagerElement_Memory
-{
-public:
-	OPTadaC_TemplateOfMemoryBuffer * Buffer = NULL; // ссылка на общий класс (элемент - буффер)
-	bool Element_locked = false; // false - ячейка свободна | true - заблокирована (занята)
-	int BufferType = 0; // тип буффера
+
+// enum list-types of memory buffers
+enum OPTadaE_BufferTypes_ForMemoryManager {
+	NONE                                 = 0, // -
+	ENUM_SimpleMemoryBuffer              = 1, // OPTadaC_SimpleMemoryBuffer.h
+	ENUM_MultithreadedSimpleMemoryBuffer = 2, // OPTadaC_MultithreadedSimpleMemoryBuffer.h
 };
 
-//TODO // добавить контроль многопоточности при создании новых буферов
 
-// менеджер памяти
-// !! требует инициализации !!
+// MemoryManager
+// !- need initialithation -!
+// after init - Thread-safety
+// !- before delete - use free_manager() method -!
 class OPTada_MemoryManager
 {
 private:
 
-	OPTada_Memory_S_MemoryManagerElement_Memory* Elem_buffer = NULL; // Буффер ячеек - элементов
-	int Size_buff = 0; // Колличиство ячеек в буффере (если 0 - буффер не инициализирован)
+	OPTadaS_TemplateMemoryBuffer_Element* buffer_OfMemoryBuffers = nullptr; // Buffer cells - elements
+	int count_OfMemoryBuffers                                    = 0;       // The number of cells in the buffer_OfMemoryBuffers
+	int count_createdBuffers                                     = 0;       // how many buffers was created
+
+	CRITICAL_SECTION threadSynchronization; // critical section for thread synchronization
+
+
+	// method initializes the access key to the buffer
+	// [in] int bufferNomber_ // buffer nomber in mass
+	// return = true - link on key | false - nullptr
+	OPTadaS_Key_MemoryManager* initKeyForBuffer(int bufferNomber_);
 
 public:
 
-	OPTada_Memory_S_MemoryManedger New_Buffer; // указатель на нулевой буффер (для общего использования)
+	~OPTada_MemoryManager();
 
-	// инициализирует менеджер памяти (если он был инициализирован - возвратит ошибку)
-	// [in] int Size_buff_ // Колличество буфферов которые будут созданы (+1 нулевой new)
-	// return = true - успешно | false - ошибка
-	bool Init_Mamager(int Size_buff_);
 
-	// освобождает всю захваченую память в менеджере (удаляет все буфферы и освобождает память)
-	// return = true - успешно | false - ошибка
+	// initializes the memory manager
+	// [in] int countOfBuffers_ // The number of buffers-elements to be created.
+	// return = true - successful | false - error
+	bool Init_Mamager(int countOfBuffers_);
+
+	// frees all captured memory in the manager (removes all buffers and frees memory)
+	// return = true - successful | false - error
 	bool Free_Manager();
 
 
-	// Метод создает новый буффер по указанной ячейке памяти (кроме 0) и возвращает Buffer_MemoryManedger *
-	// [in] int type_ // тип создаваемого буффера
-	//		1 - стандартный
-	//		2 - стандартный с поддержкой многопоточности
-	// [in] size_t Size_ // Объем памяти в создаваемом буффере
-	// [in] size_t Elem_Buffer_Size_ // Колличество ячеек-запросов в создаваемом буффере
-	// return = при удаче вернет указатель на структуру для обращения к созданному буферу | NULL - при ошибке
-	OPTada_Memory_S_MemoryManedger * CreateNewBuffer(int type_, size_t Size_, size_t Elem_Buffer_Size_, size_t Cell_Size_);
+	// The method creates a new buffer and returns Buffer_MemoryManedger *
+	// [in] int bufferID_                                    // you can use it like a indificator
+	// [in] size_t memoryLength_                             // The amount of memory in the created buffer
+	// [in] size_t cellBuffer_Size_                          // Number of request cells in the created buffer
+	// [in] size_t cellOfDefragmentation_Size_               // Cell size (division ratio) to reduce fragmentation
+	// [in] OPTadaE_BufferTypes_ForMemoryManager bufferType_ // type of memory buffer
+	// return = if successful, will return a pointer to the structure for accessing the created buffer | nullptr - on error
+	OPTadaS_Key_MemoryManager* CreateNewMemoryBuffer(int bufferID_, size_t memoryLength_, size_t cellBuffer_Size_, size_t cellOfDefragmentation_Size_, OPTadaE_BufferTypes_ForMemoryManager bufferType_);
+
+	// !- METHOD WILL KILL YOUR KEY -!
+	// method clears and completely deletes the transferred memory buffer
+	// [in] OPTadaS_Key_MemoryManager * key_Buffer_ // memory buffer key
+	// return = true - успешно | false - ошибка
+	bool DeleteMemoryBuffer(OPTadaS_Key_MemoryManager** key_Buffer_);
 
 
-	// Метод выделяет память запрашиваемого размера (цельный кусок без дополнительной информации)
-	// [in] OPTada_Memory_S_MemoryManedger * Link_Buffer_ // Структура для указания на необходимый буффер
-	// [in] size_t Size_ // запрашиваемый объем памяти
-	// return = указатель на память в случае успеха | NULL - при ошибке
-	void * GetMemory(OPTada_Memory_S_MemoryManedger * Link_Buffer_, size_t Size_);
+	// !- memory is marked free and does not call destructors -!
+	// The method clears all the memory in the buffer for further work with it again
+	// [in] OPTadaS_Key_MemoryManager* key_Buffer_ // memory buffer key
+	// return = true - successful | false - error
+	bool Clear_Buffer(OPTadaS_Key_MemoryManager* key_Buffer_);
+
+	// The method allocates memory of the requested size (a single piece without additional information)
+	// [in] OPTadaS_Key_MemoryManager* key_Buffer_ // memory buffer key
+	// [in] size_t size_                            // requested memory
+	// return = pointer to memory if successful | nullptr - on error
+	void* GetMemory(OPTadaS_Key_MemoryManager* key_Buffer_, size_t size_);
+
+	// !- the destructor is not called, the memory is marked as "free" -!
+	// The method will mark the specified memory location as "free"
+	// [in] OPTadaS_Key_MemoryManager* key_Buffer_ // Structure to indicate the required buffer
+	// [in] void* link_                            // Pointer to memory to be freed
+	// return = true - successful | false - error
+	bool ReturnMemory(OPTadaS_Key_MemoryManager* key_Buffer_, void* link_);
 
 
-	// !!! ВНИМАНИЕ !!! деструктор не вызывается, память помечается как "свободная"
-	// Метод пометит указанный участок памяти как "свободная"
-	// [in] OPTada_Memory_S_MemoryManedger * Link_Buffer_ // Структура для указания на необходимый буффер
-	// [in] void * Link_ // Указатель на память которую нужно освободить
-	// return = true - удачно | false - ошибка
-	bool ReturnMemory(OPTada_Memory_S_MemoryManedger * Link_Buffer_, void * Link_);
+	// The method returns the count of locked memory in the buffer (in bytes)
+	// [in] OPTadaS_Key_MemoryManager* key_Buffer_ // Structure to indicate the required buffer, if nullptr - from all buffers
+	// return = count of memory used (locked) in this buffer
+	size_t Get_LockedMemory(OPTadaS_Key_MemoryManager* key_Buffer_);
 
+	// The method returns the size of the memory buffer (in bytes)
+	// [in] OPTadaS_Key_MemoryManager* key_Buffer_ // Structure to indicate the required buffer, if nullptr - from all buffers
+	// return = number - buffer size(in bytes) | 0 - buffer not created / error
+	size_t Get_BufferMemorySize(OPTadaS_Key_MemoryManager* key_Buffer_);
 
-	// !!! ВНИМАНИЕ !!! память помечается свободной и не вызывает деструктор(ы)
-	// Метод очищает всю память в буффере для дальнейшей работы с ней заново
-	// [in] OPTada_Memory_S_MemoryManedger * Link_Buffer_ // Структура для указания на необходимый буффер
-	// return = true - удачно | false - ошибка
-	bool Clear_Buffer(OPTada_Memory_S_MemoryManedger * Link_Buffer_);
-
-
-	// Метод возвращает колличество занятой памяти в буффере (в байтах)
-	// [in] OPTada_Memory_S_MemoryManedger * Link_Buffer_ // Структура для указания на необходимый буффер, если NULL - со всех буфферов
-	// return = колличество занятой памяти в етом буффере
-	size_t Get_LockedMemory(OPTada_Memory_S_MemoryManedger * Link_Buffer_);
-
-	// Метод возвращает колличество занятой памяти вообще (+ дополнительные буфферы и размер етого класса) (в байтах)
-	// return = число - колличество памяти занятой у системы етим классим и его компонентами
+	// The method returns the amount of occupied memory of self (+ additional buffers) (in bytes)
+	// return = number - the amount of memory used by the system and its components (in bytes)
 	size_t Get_AllModulesLockedMemory();
-
-	// Метод возвращает размер буффера (в байтах)
-	// [in] OPTada_Memory_S_MemoryManedger * Link_Buffer_ // Структура для указания на необходимый буффер
-	// return = число - размер буффера (в байтах) | 0 - буффер не создан/ошибка
-	size_t Get_Size(OPTada_Memory_S_MemoryManedger * Link_Buffer_);
-
-	 
-	//// Конструктор OPTada_GSC_MemoryManager
-	//OPTada_GSC_MemoryManager();
-	//// Деструктор OPTada_GSC_MemoryManager
-	//~OPTada_GSC_MemoryManager();
 };
+
+
+
+
+
 
 
 //void *operator new(size_t size)
 //{
-//	return NULL;
+//	return nullptr;
 //}
 
 //void *operator new(size_t size, OPTada_Memory_S_MemoryManedger * Link_Buffer_)
 //{
-//	return NULL;
+//	return nullptr;
 //}
 
 //// !!! ВНИМАНИЕ !!! деструктор не вызывается, память помечается как "свободная"
@@ -136,7 +158,7 @@ public:
 //// Метод попытается найти ближайший кусок памяти и вернуть его (выделить для использования) для массива
 //// [in] size_t New_Length_ // необходимая длина куска памяти (в байтах)
 //// [in] size_t Col_mass_ // колличество элементов в данном участке памяти (для вызова деструкторов)
-//// return = если удачно вернет указатель на память | NULL - если не удалось
+//// return = если удачно вернет указатель на память | nullptr - если не удалось
 //void * GetMemoryMass(size_t New_Length_, size_t Col_mass_)
 //{
 //	size_t * link;
@@ -149,10 +171,10 @@ public:
 //		}
 //		else
 //		{
-//			return NULL;
+//			return nullptr;
 //		}
 //	}
-//	return NULL;
+//	return nullptr;
 //}
 
 
