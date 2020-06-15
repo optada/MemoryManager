@@ -211,14 +211,38 @@ void testFor_OPTadaC_MultithreadedSimpleMemoryBuffer()
 }
 */
 
+// test for OPTada_MemoryMeneger |
+
+void testFor_OPTada_MemoryManager()
+{
+
+	void* point1 = nullptr;
+	void* point2 = nullptr;
+	void* point3 = nullptr;
+	void* point4 = nullptr;
+	void* point5 = nullptr;
+	void* point6 = nullptr;
+
+	OPTadaS_Key_MemoryManager* key1 = nullptr;
+	OPTadaS_Key_MemoryManager* key2 = nullptr;
+	OPTadaS_Key_MemoryManager* key3 = nullptr;
+	OPTadaS_Key_MemoryManager* key4 = nullptr;
+
+	OPTada_MemoryManager manager;
+	manager.Init_Mamager(3);
+	OPTadaS_Key_MemoryManager* key = manager.CreateNewMemoryBuffer(13, 50, 5, 5, OPTadaE_BufferTypes_ForMemoryManager::ENUM_MultithreadedSimpleMemoryBuffer);
+	point1 = manager.GetMemory(key, 10);
+	manager.Free_Manager();
+
+
+	void* endpoint = nullptr;
+}
 
 void main()
 {
 	cout << "MAIN enter point" << endl;
-	{
-		bool initDoneWithNoErrors_ = false;
-		OPTadaC_MultithreadedSimpleMemoryBuffer Buffer = OPTadaC_MultithreadedSimpleMemoryBuffer(10, 5, 2, initDoneWithNoErrors_);
-	}
+
+	testFor_OPTada_MemoryManager();
 
 	cout << endl << "- - - - - - - - END - - - - - - - - -" << endl;
 }

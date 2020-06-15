@@ -7,36 +7,36 @@
 OPTadaC_MultithreadedSimpleMemoryBuffer::OPTadaC_MultithreadedSimpleMemoryBuffer(size_t memoryLength_, size_t cellBuffer_Size_, size_t cellOfDefragmentation_Size_, bool& initDoneWithNoErrors_) 
 	: OPTadaC_SimpleMemoryBuffer(memoryLength_, cellBuffer_Size_, cellOfDefragmentation_Size_, initDoneWithNoErrors_)
 {
-	InitializeCriticalSection(&threadSynchronization); // инициализация критической секции
+	InitializeCriticalSection(&threadSynchronization); // critical section initialization
 }
 
 OPTadaC_MultithreadedSimpleMemoryBuffer::~OPTadaC_MultithreadedSimpleMemoryBuffer()
 {
-	DeleteCriticalSection(&threadSynchronization); // удаление критической секции
+	DeleteCriticalSection(&threadSynchronization); // critical section delete
 }
 
 
 bool OPTadaC_MultithreadedSimpleMemoryBuffer::Clear_Buffer()
 {
-	EnterCriticalSection(&threadSynchronization); // запрет на доступ (для синхронизации)
+	EnterCriticalSection(&threadSynchronization); // access lock (for synchronization)
 	bool returnResult = OPTadaC_SimpleMemoryBuffer::Clear_Buffer();
-	LeaveCriticalSection(&threadSynchronization); // разрешили доступ следующему потоку
+	LeaveCriticalSection(&threadSynchronization); // allowed access to the next stream
 	return returnResult;
 }
 
 void* OPTadaC_MultithreadedSimpleMemoryBuffer::GetMemory(size_t new_Length_)
 {
-	EnterCriticalSection(&threadSynchronization); // запрет на доступ (для синхронизации)
+	EnterCriticalSection(&threadSynchronization); // access lock (for synchronization)
 	void* newLink = TakeMemoryMethod(new_Length_);
-	LeaveCriticalSection(&threadSynchronization); // разрешили доступ следующему потоку
+	LeaveCriticalSection(&threadSynchronization); // allowed access to the next stream
 	return newLink;
 }
 
 bool OPTadaC_MultithreadedSimpleMemoryBuffer::ReturnMemory(void* link_)
 {
-	EnterCriticalSection(&threadSynchronization); // запрет на доступ (для синхронизации)
+	EnterCriticalSection(&threadSynchronization); // access lock (for synchronization)
 	bool returnResult = OPTadaC_SimpleMemoryBuffer::ReturnMemory(link_);
-	LeaveCriticalSection(&threadSynchronization); // разрешили доступ следующему потоку
+	LeaveCriticalSection(&threadSynchronization); // allowed access to the next stream
 	return returnResult;
 }
 
