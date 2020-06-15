@@ -65,7 +65,7 @@ public:
 
 	// !- the destructor is not called, the memory is marked as "free" -!
 	// The method will mark the specified memory location as "free"
-	// [in] void * link_ // Memory pointer to free
+	// [in] void* link_ // Memory pointer to free
 	// return = true - successful | false - error
 	bool ReturnMemory(void* link_);
 

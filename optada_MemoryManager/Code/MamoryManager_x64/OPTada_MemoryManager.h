@@ -2,7 +2,7 @@
 
 #include "OPTadaC_TemplateOfMemoryBuffer.h"
 #include "OPTadaC_SimpleMemoryBuffer.h"
-#include "OPTada_C_MultithreadedSimpleMemoryBuffer.h"
+#include "OPTadaC_MultithreadedSimpleMemoryBuffer.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // бмхлюмхе!!! опнбепйх мю ньхайх еярэ, мн мерс кнцхйх деиярбхи опх ньхайюу б йнмярпсйрнпюу!!! //
