@@ -321,30 +321,33 @@ bool OPTadaC_SimpleMemoryBuffer::ReturnMemory(void* link_)
 
 bool OPTadaC_SimpleMemoryBuffer::TestBuffer()
 {
-	if (buffer != NULL && buffer_Length > 0 && firstCell_Buffer != NULL && freeCells_Buffer != NULL && cellBuffer != NULL && cellOfDefragmentation_Size > 0)
-	{
+	if (buffer != NULL && buffer_Length > 0 && firstCell_Buffer != NULL && freeCells_Buffer != NULL 
+		&& cellBuffer != NULL && cellOfDefragmentation_Size > 0) {
 		return true;
 	}
-	else
-	{
+	else {
 		return false;
 	}
 }
 
 size_t OPTadaC_SimpleMemoryBuffer::Get_LockedMemory()
 {
-	if (buffer_Length > 0)
+	if (buffer_Length > 0) {
 		return lockedMemory;
-	else
+	}
+	else {
 		return 0;
+	}
 }
 
 size_t OPTadaC_SimpleMemoryBuffer::Get_AllModulesLockedMemory()
 {
-	if (buffer_Length > 0)
+	if (buffer_Length > 0) {
 		return (cellBuffer->Get_AllCapturedMemory() + buffer_Length + sizeof(OPTadaC_SimpleMemoryBuffer));
-	else
+	}
+	else {
 		return 0;
+	}
 }
 
 size_t OPTadaC_SimpleMemoryBuffer::Get_BufferMemorySize()

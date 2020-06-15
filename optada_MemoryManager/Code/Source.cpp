@@ -5,7 +5,7 @@
 // tested
 //#include "MamoryManager_x64\OPTadaC_MemoryCells_StaticCyclicBuffer.h"
 //#include "MamoryManager_x64\OPTadaC_SimpleMemoryBuffer.h"
-#include "MamoryManager_x64\OPTadaC_MultithreadedSimpleMemoryBuffer.h"
+//#include "MamoryManager_x64\OPTadaC_MultithreadedSimpleMemoryBuffer.h"
 
 
 #include <iostream>
@@ -133,7 +133,7 @@ void testFor_OPTadaC_SimpleMemoryBuffer()
 */
 
 // test for OPTadaC_MultithreadedSimpleMemoryBuffer | OK
-
+/*
 void testFor_OPTadaC_MultithreadedSimpleMemoryBuffer()
 {
 	bool initDoneWithNoErrors_ = false;
@@ -209,15 +209,13 @@ void testFor_OPTadaC_MultithreadedSimpleMemoryBuffer()
 	pok4 = NULL;
 
 }
-
+*/
 
 
 void main()
 {
 	cout << "MAIN enter point" << endl;
 
-	//testFor_OPTadaC_SimpleMemoryBuffer();
-	testFor_OPTadaC_MultithreadedSimpleMemoryBuffer();
 
 	cout << endl << "- - - - - - - - END - - - - - - - - -" << endl;
 }
