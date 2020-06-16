@@ -4,18 +4,14 @@
 #include "OPTadaC_SimpleMemoryBuffer.h"
 
 
-inline void* OPTadaC_SimpleMemoryBuffer::TakeMemoryMethod(size_t new_size_)
+inline void* OPTadaC_SimpleMemoryBuffer::TakeMemoryMethod(size_t& new_size_)
 {
 	OPTadaS_MemoryCell_Element* cell_elem = freeCells_Buffer;
-	if (new_size_ < 1 || (new_size_ + cellOfDefragmentation_Size) < new_size_) {
-		return nullptr;
-	}
 
 	// adding a coefficient to the size(to reduce defragmentation)
 	size_t test_cell_size = new_size_ % cellOfDefragmentation_Size;
-	if (test_cell_size) {
-		new_size_ += cellOfDefragmentation_Size - test_cell_size;
-	}
+	new_size_ += cellOfDefragmentation_Size - test_cell_size;
+
 
 	// do we have enaght memory?
 	if (buffer_Length - lockedMemory < new_size_) {
@@ -278,12 +274,12 @@ bool OPTadaC_SimpleMemoryBuffer::Clear_Buffer()
 }
 
 
-void* OPTadaC_SimpleMemoryBuffer::GetMemory(size_t new_Length_)
+inline void* OPTadaC_SimpleMemoryBuffer::GetMemory(size_t& new_Length_)
 {
 	return TakeMemoryMethod(new_Length_); // main algoritm
 }
 
-bool OPTadaC_SimpleMemoryBuffer::ReturnMemory(void* link_)
+inline bool OPTadaC_SimpleMemoryBuffer::ReturnMemory(void* link_)
 {
 	if (link_ != nullptr && (link_ >= buffer && link_ <= &buffer[buffer_Length])) { 
 		// reference to our buffer range
@@ -300,11 +296,8 @@ bool OPTadaC_SimpleMemoryBuffer::ReturnMemory(void* link_)
 				lockedMemory -= cell_elem->size; // freed up size
 				cell_elem->isfree = true;
 
-				// looking for neighbors to merge - kill sam sel f :(
-				bool mergerWasMade = TryMergeNeighboringFreeCells(cell_elem);
-
-				// if we can't merge - we push cell in free
-				if (!mergerWasMade) { 
+				// looking for neighbors to merge - kill me pls :(
+				if (!TryMergeNeighboringFreeCells(cell_elem)) {
 					TransferCellToBuffer(cell_elem, &freeCells_Buffer);
 				}
 

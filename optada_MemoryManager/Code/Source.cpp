@@ -291,7 +291,8 @@ void timer()
 
 	OPTada_MemoryManager manager;
 	manager.Init_Mamager(3);
-	OPTadaS_Key_MemoryManager* key = manager.CreateNewMemoryBuffer(10, 100000000, 1010000, 8, OPTadaE_BufferTypes_ForMemoryManager::ENUM_SimpleMemoryBuffer);
+	OPTadaS_Key_MemoryManager* key = manager.CreateNewMemoryBuffer(10, 100000000, 10000010, 8, OPTadaE_BufferTypes_ForMemoryManager::ENUM_SimpleMemoryBuffer);
+	cout << endl << "GetAllModulesLockedMemory memory managaer (in bytes) = " << manager.Get_AllModulesLockedMemory() <<  endl;
 
 	TestClass* link = nullptr;
 
@@ -300,9 +301,9 @@ void timer()
 	start = clock();
 	// The code whose runtime is to be measured
 
-	for (int i = 0; i < 1000000; i++) {
+	for (int i = 0; i < 10000000; i++) {
 		link = new TestClass();
-		//delete (link);
+		delete (link);
 	}
 
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -315,12 +316,12 @@ void timer()
 	start = clock();
 	// The code whose runtime is to be measured
 
-	for (int i = 0; i < 1000000; i++) {
+	for (int i = 0; i < 10000000; i++) {
 		link = (TestClass*)manager.GetMemory(key, sizeof(TestClass));
 		if (link) {
 			link->TestClass::TestClass();
-			//link->~TestClass();
-			//manager.ReturnMemory(key, link);
+			link->~TestClass();
+			manager.ReturnMemory(key, link);
 		}
 		else {
 			cout << endl << "We Can't take memory !!!" << endl;

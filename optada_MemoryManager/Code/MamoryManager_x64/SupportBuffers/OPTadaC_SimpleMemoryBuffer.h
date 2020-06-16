@@ -23,7 +23,7 @@ protected:
 
 
 	// The method searches for free memory, if found, does all the work and allocates
-	inline void* TakeMemoryMethod(size_t new_size_);
+	inline void* TakeMemoryMethod(size_t& new_size_);
 
 	// The method cuts a cell from the buffer
 	// [in] OPTadaS_MemoryCell_Element* cell_elem_  // link on cell element
@@ -60,15 +60,15 @@ public:
 
 	// !- not initialized, only memory allocated -!
 	// The method will try to find the closest piece of memory and return it (allocated for use) not an array
-	// [in] size_t new_Length_ // requested memory length (in bytes)
+	// [in] size_t& new_Length_ // requested memory length (in bytes)
 	// return = returns a pointer to memory | nullptr - if failed
-	void* GetMemory(size_t new_Length_);
+	inline void* GetMemory(size_t& new_Length_);
 
 	// !- the destructor is not called, the memory is marked as "free" -!
 	// The method will mark the specified memory location as "free"
 	// [in] void* link_ // Memory pointer to free
 	// return = true - successful | false - error
-	bool ReturnMemory(void* link_);
+	inline bool ReturnMemory(void* link_);
 
 
 	// The method tests the buffer for errors when creating

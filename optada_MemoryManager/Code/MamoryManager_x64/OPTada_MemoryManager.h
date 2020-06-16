@@ -88,7 +88,7 @@ public:
 
 	// The method allocates memory of the requested size (a single piece without additional information)
 	// [in] OPTadaS_Key_MemoryManager* key_Buffer_ // memory buffer key
-	// [in] size_t size_                            // requested memory
+	// [in] size_t& size_                            // requested memory
 	// return = pointer to memory if successful | nullptr - on error
 	void* GetMemory(OPTadaS_Key_MemoryManager* key_Buffer_, size_t size_);
 

@@ -24,11 +24,13 @@ public:
 	// virtual | The method clears all the memory in the buffer for further work with it again | !- The memory is marked free and does not call destructors -!
 	virtual bool Clear_Buffer() = 0; 
 
+
 	// virtual | The method will try to find the closest cell of memory and return it (give for use)
-	virtual void* GetMemory(size_t new_Length_) = 0; 
+	virtual inline void* GetMemory(size_t& new_Length_) = 0; 
 
 	// virtual | The method will mark the specified memory location as "free"
-	virtual bool ReturnMemory(void* link_) = 0;
+	virtual inline bool ReturnMemory(void* link_) = 0;
+
 
 	// virtual | The method tests the buffer for errors when creating
 	virtual bool TestBuffer() = 0; 

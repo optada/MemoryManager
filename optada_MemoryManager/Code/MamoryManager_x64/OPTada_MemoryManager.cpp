@@ -240,10 +240,13 @@ bool OPTada_MemoryManager::DeleteMemoryBuffer(OPTadaS_Key_MemoryManager** key_Bu
 
 bool OPTada_MemoryManager::Clear_Buffer(OPTadaS_Key_MemoryManager* key_Buffer_)
 {
+
+#ifdef OPTada_IFDEF_MEMORYMANAGER_USE_MORE_SAFETY
 	// check key
 	if (!key_Buffer_ || key_Buffer_->memoryManagerSaveLink != this) {
 		return false;
 	}
+#endif // OPTada_IFDEF_MEMORYMANAGER_USE_MORE_SAFETY
 
 	return (&buffer_OfMemoryBuffers[key_Buffer_->bufferNomber])->buffer->Clear_Buffer();
 }
@@ -251,20 +254,26 @@ bool OPTada_MemoryManager::Clear_Buffer(OPTadaS_Key_MemoryManager* key_Buffer_)
 
 void* OPTada_MemoryManager::GetMemory(OPTadaS_Key_MemoryManager* key_Buffer_, size_t size_)
 {
+
+#ifdef OPTada_IFDEF_MEMORYMANAGER_USE_MORE_SAFETY
 	// check key
 	if (!key_Buffer_ || key_Buffer_->memoryManagerSaveLink != this) {
 		return nullptr;
 	}
+#endif // OPTada_IFDEF_MEMORYMANAGER_USE_MORE_SAFETY
 
 	return (&buffer_OfMemoryBuffers[key_Buffer_->bufferNomber])->buffer->GetMemory(size_);
 }
 
 bool OPTada_MemoryManager::ReturnMemory(OPTadaS_Key_MemoryManager* key_Buffer_, void* link_)
 {
+
+#ifdef OPTada_IFDEF_MEMORYMANAGER_USE_MORE_SAFETY
 	// check key
 	if (!key_Buffer_ || key_Buffer_->memoryManagerSaveLink != this) {
 		return false;
 	}
+#endif // OPTada_IFDEF_MEMORYMANAGER_USE_MORE_SAFETY
 
 	return (&buffer_OfMemoryBuffers[key_Buffer_->bufferNomber])->buffer->ReturnMemory(link_);
 }
@@ -272,20 +281,26 @@ bool OPTada_MemoryManager::ReturnMemory(OPTadaS_Key_MemoryManager* key_Buffer_, 
 
 size_t OPTada_MemoryManager::Get_LockedMemory(OPTadaS_Key_MemoryManager* key_Buffer_)
 {
+
+#ifdef OPTada_IFDEF_MEMORYMANAGER_USE_MORE_SAFETY
 	// check key
 	if (!key_Buffer_ || key_Buffer_->memoryManagerSaveLink != this) {
 		return false;
 	}
+#endif // OPTada_IFDEF_MEMORYMANAGER_USE_MORE_SAFETY
 
 	return (&buffer_OfMemoryBuffers[key_Buffer_->bufferNomber])->buffer->Get_LockedMemory();
 }
 
 size_t OPTada_MemoryManager::Get_BufferMemorySize(OPTadaS_Key_MemoryManager* key_Buffer_)
 {
+
+#ifdef OPTada_IFDEF_MEMORYMANAGER_USE_MORE_SAFETY
 	// check key
 	if (!key_Buffer_ || key_Buffer_->memoryManagerSaveLink != this) {
 		return false;
 	}
+#endif // OPTada_IFDEF_MEMORYMANAGER_USE_MORE_SAFETY
 
 	return (&buffer_OfMemoryBuffers[key_Buffer_->bufferNomber])->buffer->Get_BufferMemorySize();
 }
@@ -305,5 +320,5 @@ size_t OPTada_MemoryManager::Get_AllModulesLockedMemory()
 		}
 	}
 
-	return size_t();
+	return allCapturedMemory;
 }
