@@ -166,6 +166,7 @@ inline bool OPTadaC_SimpleMemoryBuffer::TryMergeNeighboringFreeCells(OPTadaS_Mem
 			cell_elem_ = cell_elem_->previous_el;
 
 			// cut out from the free buffer
+			TransferCellToBuffer(dell_elem->previous_el, &freeCells_Buffer);
 			CutCellFromTheBuffer(dell_elem, &freeCells_Buffer);
 			cellBuffer->Return_Element(dell_elem); // delete cell
 		}
@@ -231,13 +232,14 @@ OPTadaC_SimpleMemoryBuffer::~OPTadaC_SimpleMemoryBuffer()
 
 	if (buffer != nullptr) {
 		free(buffer);
+		buffer = nullptr;
 	}
 }
 
 bool OPTadaC_SimpleMemoryBuffer::Clear_Buffer()
 {
 	// we go through all the cells and return them
-	OPTadaS_MemoryCell_Element * cellDell = firstCell_Buffer->next_el; // second cell
+	OPTadaS_MemoryCell_Element* cellDell = firstCell_Buffer->next_el; // second cell
 
 	// have no buffer of cells ERROR
 	if (!cellBuffer) { 
@@ -274,6 +276,7 @@ bool OPTadaC_SimpleMemoryBuffer::Clear_Buffer()
 
 	return true;
 }
+
 
 void* OPTadaC_SimpleMemoryBuffer::GetMemory(size_t new_Length_)
 {
@@ -318,6 +321,7 @@ bool OPTadaC_SimpleMemoryBuffer::ReturnMemory(void* link_)
 		return false;
 	}
 }
+
 
 bool OPTadaC_SimpleMemoryBuffer::TestBuffer()
 {

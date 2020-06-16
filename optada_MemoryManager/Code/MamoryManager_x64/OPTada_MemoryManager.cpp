@@ -48,7 +48,7 @@ bool OPTada_MemoryManager::Init_Mamager(int countOfBuffers_)
 	count_createdBuffers = 0;
 	
 	// init templates
-	OPTadaS_TemplateMemoryBuffer_Element * new_elem_ = nullptr;
+	OPTadaS_TemplateMemoryBuffer_Element* new_elem_ = nullptr;
 	for (int i = 0; i < count_OfMemoryBuffers; i++) {
 
 		new_elem_ = &buffer_OfMemoryBuffers[i];
@@ -158,7 +158,7 @@ OPTadaS_Key_MemoryManager* OPTada_MemoryManager::CreateNewMemoryBuffer(int buffe
 				case ENUM_MultithreadedSimpleMemoryBuffer: {
 
 					// get memory for buffer
-					OPTadaC_MultithreadedSimpleMemoryBuffer* newMemoryBuffer = (OPTadaC_MultithreadedSimpleMemoryBuffer*)malloc(sizeof(OPTadaC_SimpleMemoryBuffer));
+					OPTadaC_MultithreadedSimpleMemoryBuffer* newMemoryBuffer = (OPTadaC_MultithreadedSimpleMemoryBuffer*)malloc(sizeof(OPTadaC_MultithreadedSimpleMemoryBuffer));
 					if (!newMemoryBuffer) {
 						LeaveCriticalSection(&threadSynchronization); // allowed access to the next stream
 						return nullptr;
@@ -218,16 +218,16 @@ bool OPTada_MemoryManager::DeleteMemoryBuffer(OPTadaS_Key_MemoryManager** key_Bu
 	}
 
 	OPTadaS_TemplateMemoryBuffer_Element* elem_ = &buffer_OfMemoryBuffers[(*key_Buffer_)->bufferNomber];
-	if (elem_->buffer != nullptr) {
-		elem_->buffer->Clear_Buffer();
-		elem_->buffer->~OPTadaC_TemplateOfMemoryBuffer(); // destroy buffer (virtual)
-		free(elem_->buffer);
+	if (elem_ != nullptr && elem_->buffer != nullptr) {
+		void* dellElem = elem_->buffer;
+		((OPTadaC_TemplateOfMemoryBuffer*)dellElem)->Clear_Buffer();
+		((OPTadaC_TemplateOfMemoryBuffer*)dellElem)->~OPTadaC_TemplateOfMemoryBuffer(); // destroy buffer (virtual)
+		free(dellElem);
 		elem_->buffer = nullptr;
+		elem_->bufferID = -1;
+		elem_->isLocked = false;
+		count_createdBuffers--;
 	}
-	elem_->bufferID = -1;
-	elem_->isLocked = false;
-
-	count_createdBuffers--;
 
 	// kill key
 	if ((*key_Buffer_)) {
@@ -247,6 +247,7 @@ bool OPTada_MemoryManager::Clear_Buffer(OPTadaS_Key_MemoryManager* key_Buffer_)
 
 	return (&buffer_OfMemoryBuffers[key_Buffer_->bufferNomber])->buffer->Clear_Buffer();
 }
+
 
 void* OPTada_MemoryManager::GetMemory(OPTadaS_Key_MemoryManager* key_Buffer_, size_t size_)
 {

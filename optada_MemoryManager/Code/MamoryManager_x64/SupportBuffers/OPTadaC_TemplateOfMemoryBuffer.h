@@ -19,6 +19,8 @@ protected:
 
 public:
 
+	virtual ~OPTadaC_TemplateOfMemoryBuffer() = 0 {};
+
 	// virtual | The method clears all the memory in the buffer for further work with it again | !- The memory is marked free and does not call destructors -!
 	virtual bool Clear_Buffer() = 0; 
 

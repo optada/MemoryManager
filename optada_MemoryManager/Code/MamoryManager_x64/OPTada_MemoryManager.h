@@ -12,16 +12,6 @@
 #include "SupportBuffers\OPTadaC_MultithreadedSimpleMemoryBuffer.h"
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// ВНИМАНИЕ!!! ПРОВЕРКИ НА ОШИБКИ ЕСТЬ, НО НЕТУ ЛОГИКИ ДЕЙСТВИЙ ПРИ ОШИБКАХ В КОНСТРУКТОРАХ!!! //
-// НЕОБХОДИМО ПРОВЕРИТЬ БУФФЕР ПОСЛЕ СОЗДАНИЯ												   //
-//		СОЗДАТЬ БУФФЕР																		   //
-//		ЗАПРОСИТЬ МИНИМАЛЬНУЮ ЯЧЕЙКУ ПАМЯТИ													   //
-// ЕСЛИ ПРИ ЗАПРОСЕ ПАМЯТИ ВЫ ПОЛУЧИЛИ nullptr - СКОРЕЕ ВСЕГО ОШИБКА ПРИ СОЗДАНИИ БУФФЕРА!!!!  //
-// Добавлена проверка при создании буффера на ошибки                                           //
-/////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 // structure for accessing the memory buffer
 // !- DO NOT CHANGE DATA IN THIS STRUCTURE -!
 struct OPTadaS_Key_MemoryManager
@@ -42,7 +32,6 @@ enum OPTadaE_BufferTypes_ForMemoryManager {
 // MemoryManager
 // !- need initialithation -!
 // after init - Thread-safety
-// !- before delete - use free_manager() method -!
 class OPTada_MemoryManager
 {
 private:
@@ -96,6 +85,7 @@ public:
 	// return = true - successful | false - error
 	bool Clear_Buffer(OPTadaS_Key_MemoryManager* key_Buffer_);
 
+
 	// The method allocates memory of the requested size (a single piece without additional information)
 	// [in] OPTadaS_Key_MemoryManager* key_Buffer_ // memory buffer key
 	// [in] size_t size_                            // requested memory
@@ -124,58 +114,3 @@ public:
 	// return = number - the amount of memory used by the system and its components (in bytes)
 	size_t Get_AllModulesLockedMemory();
 };
-
-
-
-
-
-
-
-//void *operator new(size_t size)
-//{
-//	return nullptr;
-//}
-
-//void *operator new(size_t size, OPTada_Memory_S_MemoryManedger * Link_Buffer_)
-//{
-//	return nullptr;
-//}
-
-//// !!! ВНИМАНИЕ !!! деструктор не вызывается, память помечается как "свободная"
-//// Метод пометит указанный участок памяти как "свободная" (для памяти на массив)
-//// будет использован сдвиг указателя
-//// [in] void * Link_ // Указатель на память которую нужно освободить
-//// return = true - удачно | false - ошибка 
-//bool ReturnMemoryMass(void * Link_)
-//{
-//	size_t * del_link = (size_t *)Link_;
-//	return ReturnMemory((--del_link));
-//}
-
-
-
-//// !!! ВНИМАНИЕ !!! не инициализируется, только выделяется память.
-//// Метод попытается найти ближайший кусок памяти и вернуть его (выделить для использования) для массива
-//// [in] size_t New_Length_ // необходимая длина куска памяти (в байтах)
-//// [in] size_t Col_mass_ // колличество элементов в данном участке памяти (для вызова деструкторов)
-//// return = если удачно вернет указатель на память | nullptr - если не удалось
-//void * GetMemoryMass(size_t New_Length_, size_t Col_mass_)
-//{
-//	size_t * link;
-//	if (Col_mass_ > 0)
-//	{ // ето массив
-//		if ((link = (size_t *)TakeMemoryMethod(sizeof(size_t) + New_Length_))) // выделили еще 8 байт для хранения размера массива
-//		{
-//			*link = Col_mass_;
-//			return (++link);
-//		}
-//		else
-//		{
-//			return nullptr;
-//		}
-//	}
-//	return nullptr;
-//}
-
-
-

@@ -33,6 +33,7 @@ public:
 	// return = true - successful | false - error
 	bool Clear_Buffer();
 
+
 	// !- not initialized, only memory allocated -!
 	// The method will try to find the closest piece of memory and return it (allocated for use) not an array
 	// [in] size_t new_Length_ // requested memory length (in bytes)
@@ -44,6 +45,7 @@ public:
 	// [in] void* link_ // Memory pointer to free
 	// return = true - successful | false - error
 	bool ReturnMemory(void* link_);
+
 
 	// The method returns the amount of occupied memory of self (+ additional buffers) (in bytes)
 	// return = number - the amount of memory used by the system and its components (in bytes)

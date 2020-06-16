@@ -1,12 +1,6 @@
+// Created by OPTada // Free for use //
+// - - - - - - - - - - - - - - - - - //
 
-// #include "MamoryManager_x64\OPTada_MemoryManager.h"
-
-
-// tested
-//#include "MamoryManager_x64\OPTadaC_MemoryCells_StaticCyclicBuffer.h"
-//#include "MamoryManager_x64\OPTadaC_SimpleMemoryBuffer.h"
-//#include "MamoryManager_x64\OPTadaC_MultithreadedSimpleMemoryBuffer.h"
-#include "MamoryManager_x64\OPTada_MemoryManager.h"
 
 #include <iostream>
 #include <stdio.h>
@@ -16,6 +10,7 @@
 using namespace std;
 
 
+// #include "MamoryManager_x64\SupportBuffers\CellBuffer\OPTadaC_MemoryCells_StaticCyclicBuffer.h"
 // test for OPTadaC_MemoryCells_StaticCyclicBuffer | OK
 /*
 void testFor_OPTadaC_MemoryCells_StaticCyclicBuffer()
@@ -53,6 +48,7 @@ void testFor_OPTadaC_MemoryCells_StaticCyclicBuffer()
 }
 */
 
+// #include "MamoryManager_x64\SupportBuffers\OPTadaC_SimpleMemoryBuffer.h"
 // test for OPTadaC_SimpleMemoryBuffer | OK
 /*
 void testFor_OPTadaC_SimpleMemoryBuffer()
@@ -76,7 +72,7 @@ void testFor_OPTadaC_SimpleMemoryBuffer()
 	// incorrect or specifick input
 	pok1 = Buffer.GetMemory(-1); // ! unsigned parameter
 	pok1 = Buffer.GetMemory(1000000); // fragmetation +0 (2b - fragmet cell)
-	pok1 = Buffer.GetMemory(1000001); // fragmetation +0 (2b - fragmet cell)
+	pok1 = Buffer.GetMemory(1000001); // fragmetation +1 (2b - fragmet cell)
 	
 	// incorrect reff
 	int a;
@@ -132,6 +128,7 @@ void testFor_OPTadaC_SimpleMemoryBuffer()
 }
 */
 
+// #include "MamoryManager_x64\SupportBuffers\OPTadaC_MultithreadedSimpleMemoryBuffer.h"
 // test for OPTadaC_MultithreadedSimpleMemoryBuffer | OK
 /*
 void testFor_OPTadaC_MultithreadedSimpleMemoryBuffer()
@@ -155,7 +152,7 @@ void testFor_OPTadaC_MultithreadedSimpleMemoryBuffer()
 	// incorrect or specifick input
 	pok1 = Buffer.GetMemory(-1); // ! unsigned parameter
 	pok1 = Buffer.GetMemory(1000000); // fragmetation +0 (2b - fragmet cell)
-	pok1 = Buffer.GetMemory(1000001); // fragmetation +0 (2b - fragmet cell)
+	pok1 = Buffer.GetMemory(1000001); // fragmetation +1 (2b - fragmet cell)
 
 	// incorrect reff
 	int a;
@@ -211,11 +208,11 @@ void testFor_OPTadaC_MultithreadedSimpleMemoryBuffer()
 }
 */
 
-// test for OPTada_MemoryMeneger |
-
+#include "MamoryManager_x64\OPTada_MemoryManager.h"
+// test for OPTada_MemoryMeneger | OK
+/*
 void testFor_OPTada_MemoryManager()
 {
-
 	void* point1 = nullptr;
 	void* point2 = nullptr;
 	void* point3 = nullptr;
@@ -227,26 +224,187 @@ void testFor_OPTada_MemoryManager()
 	OPTadaS_Key_MemoryManager* key2 = nullptr;
 	OPTadaS_Key_MemoryManager* key3 = nullptr;
 	OPTadaS_Key_MemoryManager* key4 = nullptr;
+	OPTadaS_Key_MemoryManager* key5 = nullptr;
+	OPTadaS_Key_MemoryManager* key6 = nullptr;
 
 	OPTada_MemoryManager manager;
+	OPTada_MemoryManager manager2;
+
+	// init, free, new buffer, delete buffer, get memory, create key, check key
 	manager.Init_Mamager(3);
-	OPTadaS_Key_MemoryManager* key = manager.CreateNewMemoryBuffer(13, 50, 5, 5, OPTadaE_BufferTypes_ForMemoryManager::ENUM_MultithreadedSimpleMemoryBuffer);
-	point1 = manager.GetMemory(key, 10);
+	manager2.Init_Mamager(1);
+
+	key1 = manager.CreateNewMemoryBuffer(13, 500000000, 5, 5, OPTadaE_BufferTypes_ForMemoryManager::ENUM_MultithreadedSimpleMemoryBuffer);
+	key2 = manager.CreateNewMemoryBuffer(12, 500000000, 5, 5, OPTadaE_BufferTypes_ForMemoryManager::ENUM_SimpleMemoryBuffer);
+	key3 = manager.CreateNewMemoryBuffer(11, 500000000, 5, 5, OPTadaE_BufferTypes_ForMemoryManager::ENUM_MultithreadedSimpleMemoryBuffer);
+
+	key4 = manager2.CreateNewMemoryBuffer(11, 1000000, 5, 5, OPTadaE_BufferTypes_ForMemoryManager::ENUM_MultithreadedSimpleMemoryBuffer);
+	key5 = manager2.CreateNewMemoryBuffer(11, 1000000, 5, 5, OPTadaE_BufferTypes_ForMemoryManager::ENUM_MultithreadedSimpleMemoryBuffer);
+	manager2.DeleteMemoryBuffer(&key4);
+	key5 = manager2.CreateNewMemoryBuffer(11, 1000000, 5, 5, OPTadaE_BufferTypes_ForMemoryManager::ENUM_MultithreadedSimpleMemoryBuffer);
+
+	point1 = manager.GetMemory(key1, 10);
+	point1 = manager.GetMemory(key1, 100);
+	point1 = manager.GetMemory(key1, 1010);
+
+	manager.Clear_Buffer(key1);
+
+	manager.DeleteMemoryBuffer(&key4);
+
+	manager.DeleteMemoryBuffer(&key3);
+	manager.DeleteMemoryBuffer(&key2);
 	manager.Free_Manager();
 
+	manager.DeleteMemoryBuffer(&key1);
 
 	void* endpoint = nullptr;
 }
+*/
+
+
+// class for testing
+class TestClass 
+{
+public:
+
+	int  i = 0;
+	char a = 's';
+
+	TestClass() 
+	{
+		i = 3;
+		a = 'd';
+	}
+
+	~TestClass()
+	{
+		i = 2;
+		a = 'x';
+	}
+};
+
+
+void timer()
+{
+	clock_t start, end;
+	// create and init code here
+
+	OPTada_MemoryManager manager;
+	manager.Init_Mamager(3);
+	OPTadaS_Key_MemoryManager* key = manager.CreateNewMemoryBuffer(10, 100000000, 1010000, 8, OPTadaE_BufferTypes_ForMemoryManager::ENUM_SimpleMemoryBuffer);
+
+	TestClass* link = nullptr;
+
+	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	cout << endl << "Classic new \ delete:" << endl;
+	start = clock();
+	// The code whose runtime is to be measured
+
+	for (int i = 0; i < 1000000; i++) {
+		link = new TestClass();
+		//delete (link);
+	}
+
+	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	end = clock();
+	printf("The above code block was executed in %.4f second(s)\n", ((double)end - start) / ((double)CLOCKS_PER_SEC));
+	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	cout << endl << "Memory manager" << endl;
+	start = clock();
+	// The code whose runtime is to be measured
+
+	for (int i = 0; i < 1000000; i++) {
+		link = (TestClass*)manager.GetMemory(key, sizeof(TestClass));
+		if (link) {
+			link->TestClass::TestClass();
+			//link->~TestClass();
+			//manager.ReturnMemory(key, link);
+		}
+		else {
+			cout << endl << "We Can't take memory !!!" << endl;
+			break;
+		}
+	}
+
+	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	end = clock();
+	printf("The above code block was executed in %.4f second(s)\n", ((double)end - start) / ((double)CLOCKS_PER_SEC));
+	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+	manager.Free_Manager();
+
+	int s;
+	cin >> s;
+}
+
+
 
 void main()
 {
-	cout << "MAIN enter point" << endl;
+	cout << " ---> MAIN enter point <---" << endl << endl;
 
-	testFor_OPTada_MemoryManager();
+	// you can test manager here.
+	timer();
 
 	cout << endl << "- - - - - - - - END - - - - - - - - -" << endl;
 }
 
+
+
+
+
+
+
+
+
+
+//void *operator new(size_t size)
+//{
+//	return nullptr;
+//}
+
+//void *operator new(size_t size, OPTada_Memory_S_MemoryManedger * Link_Buffer_)
+//{
+//	return nullptr;
+//}
+
+//// !!! ВНИМАНИЕ !!! деструктор не вызывается, память помечается как "свободная"
+//// Метод пометит указанный участок памяти как "свободная" (для памяти на массив)
+//// будет использован сдвиг указателя
+//// [in] void * Link_ // Указатель на память которую нужно освободить
+//// return = true - удачно | false - ошибка 
+//bool ReturnMemoryMass(void * Link_)
+//{
+//	size_t * del_link = (size_t *)Link_;
+//	return ReturnMemory((--del_link));
+//}
+
+
+
+//// !!! ВНИМАНИЕ !!! не инициализируется, только выделяется память.
+//// Метод попытается найти ближайший кусок памяти и вернуть его (выделить для использования) для массива
+//// [in] size_t New_Length_ // необходимая длина куска памяти (в байтах)
+//// [in] size_t Col_mass_ // колличество элементов в данном участке памяти (для вызова деструкторов)
+//// return = если удачно вернет указатель на память | nullptr - если не удалось
+//void * GetMemoryMass(size_t New_Length_, size_t Col_mass_)
+//{
+//	size_t * link;
+//	if (Col_mass_ > 0)
+//	{ // ето массив
+//		if ((link = (size_t *)TakeMemoryMethod(sizeof(size_t) + New_Length_))) // выделили еще 8 байт для хранения размера массива
+//		{
+//			*link = Col_mass_;
+//			return (++link);
+//		}
+//		else
+//		{
+//			return nullptr;
+//		}
+//	}
+//	return nullptr;
+//}
 
 
 
@@ -270,106 +428,6 @@ void main()
 OPTada_MemoryManager MemoryManager; // инициализированный менеджер (перенести в глобальные)
 
 
-int timer()
-{
-	//OPTada_C_CiclicBuffer_Memory asd(1); 
-	//OPTada_S_CiclicBufferElement *ff;
-
-	/*int re = sizeof(OPTada_S_CyclicBufferElement_Memory);
-	OPTada_C_CiclicBuffer_Memory asd(50003);
-
-	OPTada_S_CyclicBufferElement_Memory* one = nullptr;
-	OPTada_S_CyclicBufferElement_Memory* two = nullptr;
-	OPTada_S_CyclicBufferElement_Memory* tree = nullptr;
-	OPTada_S_CyclicBufferElement_Memory* fore = nullptr;
-
-
-
-	
-
-
-
-
-	CRITICAL_SECTION ThreadSynchronization; // критическая секция для синхронизации потоков
-
-	InitializeCriticalSection(&ThreadSynchronization); // инициализация критической секции
-
-	DeleteCriticalSection(&ThreadSynchronization); // удаление критической секции
-
-	EnterCriticalSection(&ThreadSynchronization); // запрет на доступ (для синхронизации)
-
-	LeaveCriticalSection(&ThreadSynchronization); // разрешили доступ следующему потоку
-
-
-
-
-	one = asd.Get_Element();
-	one->Length = 4;
-	one->Size = 1;
-	two = asd.Get_Element();
-	two->Length = 7;
-	two->Size = 2;
-	for (int i = 0; i < 50000; i++)
-	{
-		fore = asd.Get_Element();
-		fore->Size = 4;
-	}
-	tree = asd.Get_Element();
-	tree->Length = 8;
-	tree->Size = 3;
-	
-	asd.Return_Element(one);
-	one = asd.Get_Element();
-	one->Length = 4;
-	one->Size = 1;
-
-	asd.Return_Element(tree);
-
-	//OPTada_Memory_C_SimpleMemoryBuffer * buf = (OPTada_Memory_C_SimpleMemoryBuffer *)malloc(sizeof(OPTada_Memory_C_SimpleMemoryBuffer));
-	//buf->OPTada_Memory_C_SimpleMemoryBuffer::OPTada_Memory_C_SimpleMemoryBuffer(10000000, 10000000);
-
-	//OPTada_C_CyclicBuffer_Memory asd(100000);
-
-	//rrq * ff;
-
-	//CRITICAL_SECTION cs; // крит секция
-	//InitializeCriticalSection(&cs);
-
-	//mutex mut; // мютекс
-
-	clock_t start, end;
-
-	start = clock();
-
-	//for (int i = 0; i < 10000000; i++)
-	//{
-	//	ff = (rrq *)buf->GetMemory(1);
-	//	ff->rrq::rrq();
-	//}
-
-	/*tree = asd.Get_Element();
-	tree->Length = 8;
-	tree->Size = 3;*/
-/*
-	//for (int i = 0; i < 10000000; i++)
-	//{
-	//	/*ff = new OPTada_S_CiclicBufferElement;
-	//	delete (ff);
-	//}
-	// Код, время выполнения которого нужно измерить 
-	
-
-*/
-/*
-	end = clock();
-
-	printf("The above code block was executed in %.4f second(s)\n", ((double)end - start) / ((double)CLOCKS_PER_SEC));
-
-
-	int s;
-	cin >> s;
-	return 0;
-}
 
 
 
