@@ -63,7 +63,7 @@ public:
 	bool Free_Manager();
 
 
-	// The method creates a new buffer and returns Buffer_MemoryManedger *
+	// The method creates a new buffer and returns key for it
 	// [in] int bufferID_                                    // you can use it like a indificator
 	// [in] size_t memoryLength_                             // The amount of memory in the created buffer
 	// [in] size_t cellBuffer_Size_                          // Number of request cells in the created buffer
@@ -75,7 +75,7 @@ public:
 	// !- METHOD WILL KILL YOUR KEY -!
 	// method clears and completely deletes the transferred memory buffer
 	// [in] OPTadaS_Key_MemoryManager * key_Buffer_ // memory buffer key
-	// return = true - успешно | false - ошибка
+	// return = true - successful | false - error
 	bool DeleteMemoryBuffer(OPTadaS_Key_MemoryManager** key_Buffer_);
 
 

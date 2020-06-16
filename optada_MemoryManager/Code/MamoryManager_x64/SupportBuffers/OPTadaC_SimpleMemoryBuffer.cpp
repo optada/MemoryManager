@@ -94,7 +94,7 @@ inline void OPTadaC_SimpleMemoryBuffer::CutCellFromTheBuffer(OPTadaS_MemoryCell_
 			cell_elem_->next_link->previous_link = cell_elem_->previous_link;
 			cell_elem_->previous_link->next_link = cell_elem_->next_link;
 		}
-		else { // нету следующего элемента
+		else { // have no next elem
 			cell_elem_->previous_link->next_link = nullptr;
 		}
 	}
@@ -103,7 +103,7 @@ inline void OPTadaC_SimpleMemoryBuffer::CutCellFromTheBuffer(OPTadaS_MemoryCell_
 			(*buffer_) = cell_elem_->next_link;
 			cell_elem_->next_link->previous_link = nullptr;
 		}
-		else { // no next item
+		else { // have no next item
 			(*buffer_) = nullptr;
 		}
 	}

@@ -1,9 +1,1 @@
-﻿  OPTada_MemoryManager.cpp
-  OPTadaC_MemoryCells_StaticCyclicBuffer.cpp
-  OPTadaC_MultithreadedSimpleMemoryBuffer.cpp
-  OPTadaC_SimpleMemoryBuffer.cpp
-  Source.cpp
-D:\GIT\MamoryManager\optada_MemoryManager\Code\Source.cpp(300,18): warning C4129: ' ': unrecognized character escape sequence
-D:\GIT\MamoryManager\optada_MemoryManager\Code\Source.cpp(346,1): warning C4326: return type of 'main' should be 'int' instead of 'void'
-  Generating Code...
-  optada_MemoryManager.vcxproj -> D:\GIT\MamoryManager\optada_MemoryManager\x64\Debug\optada_MemoryManager.exe
+﻿
