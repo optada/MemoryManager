@@ -24,7 +24,8 @@ bool OPTadaC_MultithreadedSimpleMemoryBuffer::Clear_Buffer()
 	return returnResult;
 }
 
-void* OPTadaC_MultithreadedSimpleMemoryBuffer::GetMemory(size_t new_Length_)
+
+inline void* OPTadaC_MultithreadedSimpleMemoryBuffer::GetMemory(size_t& new_Length_)
 {
 	EnterCriticalSection(&threadSynchronization); // access lock (for synchronization)
 	void* newLink = TakeMemoryMethod(new_Length_);
@@ -32,13 +33,14 @@ void* OPTadaC_MultithreadedSimpleMemoryBuffer::GetMemory(size_t new_Length_)
 	return newLink;
 }
 
-bool OPTadaC_MultithreadedSimpleMemoryBuffer::ReturnMemory(void* link_)
+inline bool OPTadaC_MultithreadedSimpleMemoryBuffer::ReturnMemory(void* link_)
 {
 	EnterCriticalSection(&threadSynchronization); // access lock (for synchronization)
 	bool returnResult = OPTadaC_SimpleMemoryBuffer::ReturnMemory(link_);
 	LeaveCriticalSection(&threadSynchronization); // allowed access to the next stream
 	return returnResult;
 }
+
 
 size_t OPTadaC_MultithreadedSimpleMemoryBuffer::Get_AllModulesLockedMemory()
 {

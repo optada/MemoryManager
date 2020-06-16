@@ -4,18 +4,14 @@
 #include "OPTadaC_SimpleMemoryBuffer.h"
 
 
-inline void* OPTadaC_SimpleMemoryBuffer::TakeMemoryMethod(size_t new_size_)
+inline void* OPTadaC_SimpleMemoryBuffer::TakeMemoryMethod(size_t& new_size_)
 {
 	OPTadaS_MemoryCell_Element* cell_elem = freeCells_Buffer;
-	if (new_size_ < 1 || (new_size_ + cellOfDefragmentation_Size) < new_size_) {
-		return nullptr;
-	}
 
 	// adding a coefficient to the size(to reduce defragmentation)
 	size_t test_cell_size = new_size_ % cellOfDefragmentation_Size;
-	if (test_cell_size) {
-		new_size_ += cellOfDefragmentation_Size - test_cell_size;
-	}
+	new_size_ += cellOfDefragmentation_Size - test_cell_size;
+
 
 	// do we have enaght memory?
 	if (buffer_Length - lockedMemory < new_size_) {
@@ -98,7 +94,7 @@ inline void OPTadaC_SimpleMemoryBuffer::CutCellFromTheBuffer(OPTadaS_MemoryCell_
 			cell_elem_->next_link->previous_link = cell_elem_->previous_link;
 			cell_elem_->previous_link->next_link = cell_elem_->next_link;
 		}
-		else { // нету следующего элемента
+		else { // have no next elem
 			cell_elem_->previous_link->next_link = nullptr;
 		}
 	}
@@ -107,7 +103,7 @@ inline void OPTadaC_SimpleMemoryBuffer::CutCellFromTheBuffer(OPTadaS_MemoryCell_
 			(*buffer_) = cell_elem_->next_link;
 			cell_elem_->next_link->previous_link = nullptr;
 		}
-		else { // no next item
+		else { // have no next item
 			(*buffer_) = nullptr;
 		}
 	}
@@ -166,6 +162,7 @@ inline bool OPTadaC_SimpleMemoryBuffer::TryMergeNeighboringFreeCells(OPTadaS_Mem
 			cell_elem_ = cell_elem_->previous_el;
 
 			// cut out from the free buffer
+			TransferCellToBuffer(dell_elem->previous_el, &freeCells_Buffer);
 			CutCellFromTheBuffer(dell_elem, &freeCells_Buffer);
 			cellBuffer->Return_Element(dell_elem); // delete cell
 		}
@@ -231,13 +228,14 @@ OPTadaC_SimpleMemoryBuffer::~OPTadaC_SimpleMemoryBuffer()
 
 	if (buffer != nullptr) {
 		free(buffer);
+		buffer = nullptr;
 	}
 }
 
 bool OPTadaC_SimpleMemoryBuffer::Clear_Buffer()
 {
 	// we go through all the cells and return them
-	OPTadaS_MemoryCell_Element * cellDell = firstCell_Buffer->next_el; // second cell
+	OPTadaS_MemoryCell_Element* cellDell = firstCell_Buffer->next_el; // second cell
 
 	// have no buffer of cells ERROR
 	if (!cellBuffer) { 
@@ -275,12 +273,13 @@ bool OPTadaC_SimpleMemoryBuffer::Clear_Buffer()
 	return true;
 }
 
-void* OPTadaC_SimpleMemoryBuffer::GetMemory(size_t new_Length_)
+
+inline void* OPTadaC_SimpleMemoryBuffer::GetMemory(size_t& new_Length_)
 {
 	return TakeMemoryMethod(new_Length_); // main algoritm
 }
 
-bool OPTadaC_SimpleMemoryBuffer::ReturnMemory(void* link_)
+inline bool OPTadaC_SimpleMemoryBuffer::ReturnMemory(void* link_)
 {
 	if (link_ != nullptr && (link_ >= buffer && link_ <= &buffer[buffer_Length])) { 
 		// reference to our buffer range
@@ -297,11 +296,8 @@ bool OPTadaC_SimpleMemoryBuffer::ReturnMemory(void* link_)
 				lockedMemory -= cell_elem->size; // freed up size
 				cell_elem->isfree = true;
 
-				// looking for neighbors to merge - kill sam sel f :(
-				bool mergerWasMade = TryMergeNeighboringFreeCells(cell_elem);
-
-				// if we can't merge - we push cell in free
-				if (!mergerWasMade) { 
+				// looking for neighbors to merge - kill me pls :(
+				if (!TryMergeNeighboringFreeCells(cell_elem)) {
 					TransferCellToBuffer(cell_elem, &freeCells_Buffer);
 				}
 
@@ -318,6 +314,7 @@ bool OPTadaC_SimpleMemoryBuffer::ReturnMemory(void* link_)
 		return false;
 	}
 }
+
 
 bool OPTadaC_SimpleMemoryBuffer::TestBuffer()
 {
