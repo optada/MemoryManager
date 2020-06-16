@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="OPTada_MemoryManager">
+    <Position X="0.5" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACgwgAAFAAAAgYAACABAAAQAAACAAAABgAAAAA=</HashCode>
+      <FileName>Code\MamoryManager_x64\OPTada_MemoryManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OPTadaC_TemplateOfMemoryBuffer">
+    <Position X="3.75" Y="2" Width="4" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAggAAABAAAIAAEAQAAAAAAAAACAABABgQAAAA=</HashCode>
+      <FileName>Code\MamoryManager_x64\SupportBuffers\OPTadaC_TemplateOfMemoryBuffer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OPTadaC_MemoryCells_StaticCyclicBuffer">
+    <Position X="13" Y="0.5" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAEACABEgAIAgAAEAAAAAAAAAAAAAAAABAAAABAAA=</HashCode>
+      <FileName>Code\MamoryManager_x64\SupportBuffers\CellBuffer\OPTadaC_MemoryCells_StaticCyclicBuffer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OPTadaC_MultithreadedSimpleMemoryBuffer">
+    <Position X="8.25" Y="5.75" Width="4" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAgIAAABAAAAAIAAAAAAAAAAAAAAAAABgAAAAA=</HashCode>
+      <FileName>Code\MamoryManager_x64\SupportBuffers\OPTadaC_MultithreadedSimpleMemoryBuffer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OPTadaC_SimpleMemoryBuffer">
+    <Position X="8.25" Y="0.5" Width="4" />
+    <TypeIdentifier>
+      <HashCode>CABAAAEggAAABAAAIACMAAAABAAAAgQCAgAABgABAAA=</HashCode>
+      <FileName>Code\MamoryManager_x64\SupportBuffers\OPTadaC_SimpleMemoryBuffer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="OPTadaS_Key_MemoryManager">
+    <Position X="0.5" Y="5.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEA=</HashCode>
+      <FileName>Code\MamoryManager_x64\OPTada_MemoryManager.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="OPTadaS_TemplateMemoryBuffer_Element">
+    <Position X="0.5" Y="7" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAABAAAAAAAg=</HashCode>
+      <FileName>Code\MamoryManager_x64\SupportBuffers\OPTadaS_TemplateMemoryBuffer_Element.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="OPTadaS_MemoryCell_Element">
+    <Position X="13" Y="3.75" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAAAAAAAAAIAACAABAAAAAAAAAAAAAAgAIEA=</HashCode>
+      <FileName>Code\MamoryManager_x64\SupportBuffers\CellBuffer\OPTadaS_MemoryCell_Element.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="OPTadaE_BufferTypes_ForMemoryManager">
+    <Position X="3.75" Y="0.5" Width="4" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAAAQEAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Code\MamoryManager_x64\OPTada_MemoryManager.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
