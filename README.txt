@@ -1,4 +1,4 @@
-HI! My nick - OPTada. This project - (Memory manager), is my pet-project. 
+HI! My nick is - OPTada. This project - (Memory manager), is my pet-project. 
 GitHub   : https://github.com/optada/MemoryManager
 
 my mail@ : druzhinin.optada@gmail.com
